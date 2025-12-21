@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="275" height="280" viewBox="0 0 275 280">
+  <rect width="275" height="280" fill="#1e2430"/>
+  <g shape-rendering="geometricPrecision">
+    <polygon points="219,65 197,60 197,134 149,136 148,213 220,193" fill="#9EA2A7"/>
+    <polygon points="149,47 149,123 184,123 184,56" fill="#B9BCC0"/>
+    <polygon points="148,46 76,66 76,193 100,199 101,123 148,123" fill="#FFFFFF"/>
+    <polygon points="112,135 112,202 148,212 148,135" fill="#FFFFFF"/>
+    <!-- the inner cut uses the same color as the background -->
+    <polygon points="195,57 183,54 184,125 102,125 99,201 111,204 112,133 194,133" fill="#1e2430"/>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "services": "Usluge",
+    "references": "Reference",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "title": "Your partner in construction",
+    "subtitle": "Let's build together"
+  },
+  "stats": {
+    "projects": "Uspesni projekti",
+    "rebarArea": "Detalji armature (m²)",
+    "clients": "Zadovoljni klijenti"
+  },
+  "expertise": {
+    "title": "Expertise",
+    "lead": "Statički proračuni, armirački detalji i BIM podrška — od koncepta do isporuke, fokusirano na jasnoću, brzinu i koordinaciju.",
+    "items": {
+      "precast": {
+        "title": "Betonske prefabrikovane konstrukcije",
+        "body": "Projektovanje prefabrikovanih elemenata (zidovi, ploče, grede, stubovi) uz BIM koordinaciju i razradu armature, spojeva i montaže. Fokus: proizvodljivost, tolerancije i brza montaža."
+      },
+      "concrete": {
+        "title": "Betonske konstrukcije",
+        "body": "Projektovanje armiranobetonskih konstrukcija sa jasnim proračunom, racionalnim detaljima i pouzdanom dokumentacijom. Optimizacija preseka i armature uz koordinaciju sa arhitekturom i instalacijama."
+      },
+      "steel": {
+        "title": "Čelične konstrukcije",
+        "body": "Razrada čeličnih nosača i spojeva, varijante rešenja i koordinacija sa drugim disciplinama. Fokus: precizni detalji, konstruktivna logika i efikasna izrada."
+      },
+      "management": {
+        "title": "Project management",
+        "body": "Planiranje isporuka, praćenje zadataka i komunikacija kroz jasne tokove odobravanja. Fokus: rokovi, transparentnost i kontrola kvaliteta kroz ceo projekat."
+      }
+    }
+  }
+}

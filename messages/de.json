@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "services": "Leistungen",
+    "references": "Referenzen",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "title": "Your partner in construction",
+    "subtitle": "Let's build together"
+  },
+  "stats": {
+    "projects": "Erfolgreiche Projekte",
+    "rebarArea": "Bewehrungsplanung (m²)",
+    "clients": "Zufriedene Kunden"
+  },
+  "expertise": {
+    "title": "Expertise",
+    "lead": "Tragwerksplanung, Berechnungen und BIM-Support — vom Konzept bis zur Lieferung, mit Fokus auf Klarheit, Tempo und Koordination.",
+    "items": {
+      "precast": {
+        "title": "Fertigteilbeton-Konstruktionen",
+        "body": "Planung von Fertigteilen (Wände, Decken, Träger, Stützen) inkl. BIM-Koordination sowie Bewehrungs-, Verbindungs- und Montage-Details. Fokus: Herstellbarkeit, Toleranzen, schnelle Montage."
+      },
+      "concrete": {
+        "title": "Stahlbeton-Konstruktionen",
+        "body": "Stahlbetonplanung mit klaren Nachweisen, wirtschaftlicher Detailausbildung und zuverlässiger Dokumentation. Optimierung von Querschnitten und Bewehrung mit Koordination aller Gewerke."
+      },
+      "steel": {
+        "title": "Stahlkonstruktionen",
+        "body": "Ausarbeitung von Stahltragwerken und Anschlüssen, Variantenbildung und Koordination. Fokus: präzise Details, gute Ausführbarkeit und effiziente Fertigung."
+      },
+      "management": {
+        "title": "Projektmanagement",
+        "body": "Lieferplanung, Aufgabenverfolgung und klare Kommunikationsprozesse. Fokus: Termine, Transparenz und Qualitätskontrolle über den gesamten Projektverlauf."
+      }
+    }
+  }
+}

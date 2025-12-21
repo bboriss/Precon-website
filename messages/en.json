@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "services": "Services",
+    "references": "References",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Your partner in construction",
+    "subtitle": "Let's build together"
+  },
+  "stats": {
+    "projects": "Successful projects",
+    "rebarArea": "Rebar detailing (m²)",
+    "clients": "Satisfied clients"
+  },
+  "expertise": {
+    "title": "Expertise",
+    "lead": "Structural design, calculations and BIM support — from concept to delivery, focused on clarity, speed and coordination.",
+    "items": {
+      "precast": {
+        "title": "Precast concrete structures",
+        "body": "Design of precast elements (walls, slabs, beams, columns) with BIM coordination and detailing of reinforcement, connections and erection. Focus: producibility, tolerances and fast assembly."
+      },
+      "concrete": {
+        "title": "Reinforced concrete structures",
+        "body": "RC structural design with clear calculations, rational detailing and reliable documentation. Section and reinforcement optimization with coordination across disciplines."
+      },
+      "steel": {
+        "title": "Steel structures",
+        "body": "Steel framing and connection detailing, solution variants and interdisciplinary coordination. Focus: precise details, constructability and efficient fabrication."
+      },
+      "management": {
+        "title": "Project management",
+        "body": "Delivery planning, task tracking and clear communication workflows. Focus: deadlines, transparency and quality control throughout the project."
+      }
+    }
+  }
+}
