@@ -1,7 +1,7 @@
-import {getTranslations} from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-import {Container} from "@/components/Container";
+import { Container } from "@/components/Container";
 import AutoScrollToExpertise from "@/components/AutoScrollToExpertise";
 import HeroVideo from "@/components/HeroVideo";
 
@@ -10,16 +10,16 @@ type ItemKey = "precast" | "concrete" | "steel" | "management";
 export default async function Page({
   params
 }: {
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 }) {
-  const {locale} = await params;
-  const t = await getTranslations({locale});
+  const { locale } = await params;
+  const t = await getTranslations({ locale });
 
-  const items: Array<{key: ItemKey; image: string}> = [
-    {key: "precast", image: "/precast.webp"},
-    {key: "concrete", image: "/concrete.webp"},
-    {key: "steel", image: "/steel.webp"},
-    {key: "management", image: "/management.webp"}
+  const items: Array<{ key: ItemKey; image: string }> = [
+    { key: "precast", image: "/precast.webp" },
+    { key: "concrete", image: "/concrete.webp" },
+    { key: "steel", image: "/steel.webp" },
+    { key: "management", image: "/management.webp" }
   ];
 
   return (
@@ -28,15 +28,15 @@ export default async function Page({
       <AutoScrollToExpertise targetId="expertise" delayMs={350} />
 
       <HeroVideo
-  src="/hero.mp4"
-  title={t("hero.title")}
-  subtitle={t("hero.subtitle")}
-  stats={[
-    {value: "120+", label: t("stats.projects")},
-    {value: "150 000 m²", label: t("stats.rebarArea")},
-    {value: "10+", label: t("stats.clients")}
-  ]}
-/>
+        src="/hero.mp4"
+        title={t("hero.title")}
+        subtitle={t("hero.subtitle")} // npr. "Let's build together"
+        stats={[
+          { value: 120, label: t("stats.projects"), suffix: "+" },
+          { value: 150000, label: t("stats.rebarArea"), suffix: "m²" },
+          { value: 10, label: t("stats.clients"), suffix: "+" }
+        ]}
+      />
 
 
       {/* EXPERTISE */}

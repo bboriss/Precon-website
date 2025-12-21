@@ -1,27 +1,21 @@
-import {Container} from "@/components/Container";
-import StatsCounters from "@/components/StatsCounters";
-
-type Stat = {
-  value: string;
-  label: string;
-};
+import StatsCounters, {StatItem} from "@/components/StatsCounters";
 
 export default function HeroVideo({
   src,
   title,
   subtitle,
-  stats = []
+  stats
 }: {
   src: string;
   title: string;
   subtitle: string;
-  stats?: Stat[];
+  stats: StatItem[];
 }) {
   return (
     <section className="w-full">
       <div className="relative w-full overflow-hidden bg-black">
-        {/* visina kao pre (sekcija, ne full screen) */}
         <div className="relative h-[52vh] min-h-[360px] w-full md:h-[62vh] md:min-h-[520px]">
+          {/* VIDEO */}
           <video
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
@@ -33,40 +27,45 @@ export default function HeroVideo({
             <source src={src} type="video/mp4" />
           </video>
 
-          {/* overlay */}
-          <div className="absolute inset-0 bg-black/50" />
+          {/* DARK OVERLAY */}
+          <div className="absolute inset-0 bg-black/50 z-0" />
 
-          {/* tekst (malo vise nego pre) */}
-          <div className="absolute inset-0 flex items-center">
-            <Container>
-              <div className="max-w-3xl py-10 md:-translate-y-6">
-                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
-                  {title}
-                </h1>
+          {/* CONTENT LAYER (FULL HEIGHT) */}
+          <div className="absolute inset-0 z-10">
+            {/* ovaj wrapper garantuje visinu */}
+            <div className="mx-auto h-full max-w-7xl px-6 lg:px-8">
+              <div className="relative h-full">
+                {/* ===== TEXT (ka sredini, ne tik ispod header-a) ===== */}
+                <div className="absolute left-0 top-1/2 -translate-y-[55%] sm:-translate-y-1/2 md:top-[44%] lg:top-1/2">
 
-                <p className="mt-3 text-base font-semibold text-[var(--accent)] sm:text-lg">
-                  {subtitle}
-                </p>
-              </div>
-            </Container>
-          </div>
+                  <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+                    {title}
+                  </h1>
+                  <p className="mt-3 text-base font-medium text-[var(--accent)] sm:text-lg">
+                    {subtitle}
+                  </p>
+                </div>
 
-          {/* COUNTERS dole desno */}
-          {stats.length ? (
-            <div className="absolute bottom-6 right-6 left-6 md:left-auto md:bottom-8 md:right-10">
-              <div
-                className={[
-                  "inline-block",
-                  "rounded-2xl border border-white/10",
-                  "bg-black/35 backdrop-blur-md",
-                  "px-5 py-4",
-                  "shadow-lg"
-                ].join(" ")}
-              >
-                <StatsCounters stats={stats} durationMs={3000} />
+                {/* ===== COUNTER (UVEK PRI DNU) ===== */}
+                <div className="absolute inset-x-0 bottom-6 md:bottom-8">
+  <div className="flex justify-center sm:justify-start lg:justify-end lg:translate-x-6">
+    <div
+      className={[
+        "w-full max-w-[92vw] sm:max-w-[560px] lg:w-auto lg:max-w-none",
+        "rounded-2xl border border-white/10",
+        "bg-black/30 backdrop-blur-sm",
+        "px-3 py-2 sm:px-6 sm:py-4"
+      ].join(" ")}
+    >
+      <StatsCounters stats={stats} />
+    </div>
+  </div>
+</div>
+
               </div>
             </div>
-          ) : null}
+          </div>
+          {/* /content */}
         </div>
       </div>
     </section>

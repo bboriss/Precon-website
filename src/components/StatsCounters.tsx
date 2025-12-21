@@ -2,198 +2,160 @@
 
 import {useEffect, useMemo, useRef, useState} from "react";
 
-export type Stat = {
-  value: string; // npr "120+", "150 000 m²", "10+"
-  label: string;
+export type StatItem = {
+  value: number; // target number (e.g. 120, 150000, 10)
+  label: string; // translated label
+  suffix?: string; // "+", "m²", etc.
 };
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReduced(mq.matches);
-    onChange();
-    mq.addEventListener?.("change", onChange);
-    return () => mq.removeEventListener?.("change", onChange);
-  }, []);
-
-  return reduced;
-}
-
-function parseValue(raw: string) {
-  const m = raw.match(/[\d\s.,]+/);
-  const numPart = (m?.[0] ?? "0").replace(/[^\d]/g, "");
-  const n = Number(numPart || "0");
-  const suffix = raw.replace(m?.[0] ?? "", "").trim();
-  const digits = String(n).length;
-  return {target: n, suffix, digits};
-}
-
-function formatInt(n: number) {
-  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-}
-
-// easing da broji prirodnije (brže na početku, sporije pred kraj)
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-// “lep” korak: 1/2/5 * 10^k, tako da broj ne “treperi” previše
-function niceStep(rawStep: number) {
-  if (!Number.isFinite(rawStep) || rawStep <= 0) return 1;
-  const pow = Math.pow(10, Math.floor(Math.log10(rawStep)));
-  const x = rawStep / pow;
-
-  let m = 1;
-  if (x <= 1) m = 1;
-  else if (x <= 2) m = 2;
-  else if (x <= 5) m = 5;
-  else m = 10;
-
-  return m * pow;
+function formatWithSpaces(n: number) {
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export default function StatsCounters({
   stats,
   durationMs = 3000,
-  fps = 30
+  className = ""
 }: {
-  stats: Stat[];
+  stats: StatItem[];
   durationMs?: number;
-  fps?: number;
+  className?: string;
 }) {
-  const reducedMotion = usePrefersReducedMotion();
-  const hostRef = useRef<HTMLDivElement | null>(null);
-  const startedRef = useRef(false);
+  const targets = useMemo(
+    () => stats.map((s) => Math.max(0, Math.round(s.value))),
+    [stats]
+  );
 
-  const parsed = useMemo(() => stats.map((s) => parseValue(s.value)), [stats]);
+  // ~32-40 “vidljivih” promena, ali ne previše rerendera
+  const stepSizes = useMemo(() => {
+    const desiredSteps = 38;
+    return targets.map((t) => {
+      if (t <= 10) return 1;
+      const step = Math.ceil(t / desiredSteps);
+      if (t <= 200) return Math.max(2, step);
+      if (t <= 5000) return Math.max(10, step);
+      return Math.max(100, step);
+    });
+  }, [targets]);
 
-  const [shown, setShown] = useState<number[]>(() => parsed.map(() => 0));
+  // min width samo za BROJ (suffix je poseban span) => nema "rupe"
+  const minCh = useMemo(() => {
+    return targets.map((t) => {
+      const base = formatWithSpaces(t).length;
+      return Math.max(3, base);
+    });
+  }, [targets]);
 
-  // fiksne sirine po stat-u (da ne “skace” layout)
-  const widthsCh = useMemo(() => {
-    return parsed.map((p) => Math.max(3, p.digits + 2));
-  }, [parsed]);
+  const [shown, setShown] = useState<number[]>(() => targets.map(() => 0));
+
+  const rafRef = useRef<number | null>(null);
+  const startRef = useRef<number | null>(null);
+  const lastTickRef = useRef<number>(0);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    startRef.current = null;
+    lastTickRef.current = 0;
 
-    const el = hostRef.current;
-    if (!el) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.some((e) => e.isIntersecting);
-        if (!hit) return;
-        if (startedRef.current) return;
+    // sve setState radimo “scheduled” (RAF), nema sync setState u effect-u
+    rafRef.current = requestAnimationFrame(() => {
+      setShown(targets.map(() => 0));
 
-        startedRef.current = true;
-        io.disconnect();
+      const reduce =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        const finals = parsed.map((p) => p.target);
+      if (reduce) {
+        requestAnimationFrame(() => setShown([...targets]));
+        return;
+      }
 
-        // koliki “smooth” update-count želimo ukupno
-        const totalTicks = Math.max(12, Math.round((durationMs / 1000) * fps));
+      const tick = (ts: number) => {
+        if (startRef.current === null) startRef.current = ts;
 
-        // za svaki stat odredi korak tako da ~totalTicks puta promeni vrednost
-        const units = finals.map((target) => {
-          // cilj: oko 60–100 promena maks (zavisi od duration & fps)
-          const desiredStep = target / totalTicks;
-          // ali ne idi ispod 1
-          return Math.max(1, niceStep(desiredStep));
+        // throttle ~30fps (smanjuje rerendere)
+        if (ts - lastTickRef.current < 33) {
+          rafRef.current = requestAnimationFrame(tick);
+          return;
+        }
+        lastTickRef.current = ts;
+
+        const elapsed = ts - (startRef.current ?? ts);
+        const p = Math.min(1, elapsed / durationMs);
+        const e = easeOutCubic(p);
+
+        const next = targets.map((t, idx) => {
+          const raw = t * e;
+          const step = stepSizes[idx] ?? 1;
+          const snapped = Math.round(raw / step) * step;
+          return Math.min(t, snapped);
         });
 
-        const tickMs = Math.max(16, Math.round(1000 / fps));
-        const start = performance.now();
-        let last = finals.map(() => -1);
-        let timer: number | undefined;
+        setShown(next);
 
-        const run = () => {
-          const now = performance.now();
-          const t = Math.min(1, (now - start) / durationMs);
-          const k = easeOutCubic(t);
+        if (p < 1) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          setShown([...targets]); // final snap
+        }
+      };
 
-          // izračunaj nove vrednosti (snapped na "unit")
-          const next = finals.map((target, idx) => {
-            const unit = units[idx];
-            const raw = target * k;
-            const snapped = Math.round(raw / unit) * unit;
-            return Math.min(target, snapped);
-          });
+      rafRef.current = requestAnimationFrame(tick);
+    });
 
-          // setState samo ako se stvarno nešto promenilo
-          let changed = false;
-          for (let i = 0; i < next.length; i++) {
-            if (next[i] !== last[i]) {
-              changed = true;
-              break;
-            }
-          }
-          if (changed) {
-            last = next;
-            setShown(next);
-          }
-
-          if (t >= 1) {
-            // obavezno final
-            setShown(finals);
-            return;
-          }
-
-          timer = window.setTimeout(run, tickMs);
-        };
-
-        run();
-
-        return () => {
-          if (timer) window.clearTimeout(timer);
-        };
-      },
-      {threshold: 0.35}
-    );
-
-    io.observe(el);
-    return () => io.disconnect();
-  }, [parsed, durationMs, fps, reducedMotion]);
-
-  const shownFinal = reducedMotion ? parsed.map((p) => p.target) : shown;
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [targets, durationMs, stepSizes]);
 
   return (
-    <div ref={hostRef} className="w-full">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {stats.map((s, idx) => {
-          const p = parsed[idx];
-          const val = shownFinal[idx] ?? 0;
+    <div
+      className={[
+        // uvek 1 red (3 kolone) – i na mobilnom i na tablet/desktop
+        // gap manji na mobilnom da ne preklapa
+        "grid w-full grid-cols-3 gap-2 sm:gap-4",
+        className
+      ].join(" ")}
+    >
+      {stats.map((s, i) => (
+        <div key={i} className="min-w-0">
+          <div className="flex items-baseline gap-[2px] text-white tabular-nums">
+            <span
+              className={[
+                "inline-block font-semibold tracking-tight leading-none",
+                // malo manje na mobilnom da stane i "150 000 m²"
+                "text-[22px] sm:text-3xl md:text-4xl"
+              ].join(" ")}
+              style={{minWidth: `${minCh[i]}ch`}}
+            >
+              {formatWithSpaces(shown[i] ?? 0)}
+            </span>
 
-          return (
-            <div key={idx} className="text-left">
-              <div className="flex items-baseline gap-2">
-                <span
-                  className="text-4xl font-semibold tracking-tight text-white"
-                  style={{
-                    display: "inline-block",
-                    width: `${widthsCh[idx]}ch`,
-                    fontVariantNumeric: "tabular-nums"
-                  }}
-                >
-                  {formatInt(val)}
-                </span>
+            {s.suffix ? (
+              <span
+                className={[
+                  // suffix tik uz broj (bez velikog razmaka)
+                  "font-semibold text-white/90 leading-none",
+                  // na mobilnom mali, da ne gura layout
+                  "text-[11px] sm:text-base md:text-lg"
+                ].join(" ")}
+              >
+                {s.suffix}
+              </span>
+            ) : null}
+          </div>
 
-                {p.suffix && (
-                  <span className="text-2xl font-semibold text-white">
-                    {p.suffix}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-2 text-sm font-medium text-white/70">
-                {s.label}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+          <div className="mt-1 text-[10px] sm:text-xs md:text-sm text-white/70 leading-snug">
+            {s.label}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

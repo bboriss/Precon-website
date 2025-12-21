@@ -1,7 +1,8 @@
 "use client";
 
-import {useEffect} from "react";
 import Link from "next/link";
+import Image from "next/image";
+import {useEffect} from "react";
 
 type NavItem = {href: string; label: string};
 type LocaleOpt = {locale: string; label: string};
@@ -9,123 +10,119 @@ type LocaleOpt = {locale: string; label: string};
 export default function MobileMenu({
   open,
   onClose,
-  brand,
+  locale,
   nav,
-  locales,
-  currentLocale
+  locales
 }: {
   open: boolean;
   onClose: () => void;
-  brand: React.ReactNode;
+  locale: string;
   nav: NavItem[];
   locales: LocaleOpt[];
-  currentLocale: string;
 }) {
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
-  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [open, onClose]);
+
+  const base = `/${locale}`;
 
   return (
-    <div
-      className={[
-        "fixed inset-0 z-[80]",
-        open ? "pointer-events-auto" : "pointer-events-none"
-      ].join(" ")}
-      aria-hidden={!open}
-    >
-      {/* backdrop */}
+    <>
+      {/* overlay */}
       <div
         onClick={onClose}
         className={[
-          "absolute inset-0 bg-black/45 transition-opacity duration-200",
-          open ? "opacity-100" : "opacity-0"
+          "fixed inset-0 z-[80] bg-black/40 transition-opacity",
+          open ? "opacity-100" : "pointer-events-none opacity-0"
         ].join(" ")}
       />
 
       {/* panel */}
       <div
         className={[
-          "absolute right-0 top-0 h-full w-full",
+          "fixed inset-y-0 right-0 z-[90] w-full max-w-none",
           "bg-[var(--ink)] text-white",
-          "transition-transform duration-200 ease-out",
+          "transform transition-transform duration-300",
           open ? "translate-x-0" : "translate-x-full"
         ].join(" ")}
+        aria-hidden={!open}
       >
-        {/* top bar */}
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-          <div className="flex items-center gap-3">{brand}</div>
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
+            <Link href={base} className="flex items-center gap-3" onClick={onClose}>
+              <div className="relative h-9 w-9">
+                <Image
+                  src="/logo.svg"
+                  alt="PRECON Design"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="text-base font-semibold tracking-wide">
+                PRECON <span className="font-semibold">Design</span>
+              </div>
+            </Link>
 
-          {/* X bez kruga */}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close menu"
-            className="text-white/80 hover:text-[var(--accent)] transition-colors text-2xl leading-none"
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="px-5 py-6">
-          {/* nav links */}
-          <div className="space-y-6">
-            {nav.map((n) => (
-              <Link
-                key={n.href}
-                href={n.href}
-                onClick={onClose}
-                className="block text-2xl font-semibold text-white/90 hover:text-[var(--accent)] transition-colors"
-              >
-                {n.label}
-              </Link>
-            ))}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close menu"
+              className="p-2 text-white/80 hover:text-[var(--accent)] transition-colors"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
           </div>
 
-          <div className="mt-10 border-t border-white/10 pt-6">
-            <div className="text-xs tracking-widest text-white/50 uppercase">
-              Language
+          <div className="flex-1 overflow-auto px-6 py-8">
+            <div className="space-y-6">
+              {nav.map((n) => (
+                <Link
+                  key={n.href}
+                  href={`${base}${n.href}`}
+                  onClick={onClose}
+                  className="block text-2xl font-semibold text-white/90 hover:text-[var(--accent)] transition-colors"
+                >
+                  {n.label}
+                </Link>
+              ))}
             </div>
 
-            <div className="mt-4 space-y-2">
-              {locales.map((l) => {
-                const active = l.locale === currentLocale;
-                return (
+            <div className="mt-10 border-t border-white/10 pt-6">
+              <div className="text-xs tracking-widest text-white/50">LANGUAGE</div>
+              <div className="mt-4 space-y-2">
+                {locales.map((l) => (
                   <Link
                     key={l.locale}
                     href={`/${l.locale}`}
                     onClick={onClose}
                     className={[
-                      "flex items-center justify-between rounded-2xl px-4 py-3",
-                      "border border-white/10",
-                      active ? "bg-white/10" : "bg-white/0",
-                      "hover:bg-white/10 transition-colors"
+                      "block rounded-2xl px-4 py-3 text-base transition-colors",
+                      l.locale === locale
+                        ? "bg-white/10 text-white"
+                        : "text-white/80 hover:bg-white/10 hover:text-[var(--accent)]"
                     ].join(" ")}
                   >
-                    <span className="text-base font-medium">{l.label}</span>
-                    {/* bez SR/EN sa desne strane: samo check */}
-                    <span className={active ? "text-[var(--accent)]" : "text-transparent"}>
-                      ✓
-                    </span>
+                    {l.label}
                   </Link>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
