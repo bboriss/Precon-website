@@ -1,29 +1,23 @@
-"use client";
-
 import Link from "next/link";
-import {usePathname} from "next/navigation";
 
 export default function NavLink({
   href,
   label,
-  onClick
+  className = ""
 }: {
   href: string;
   label: string;
-  onClick?: () => void;
+  className?: string;
 }) {
-  const pathname = usePathname();
-  const active = pathname === href || pathname?.startsWith(href + "/");
-
   return (
     <Link
       href={href}
-      onClick={onClick}
       className={[
-        "text-sm font-semibold tracking-wide",
-        active ? "text-white" : "text-white/85",
-        "hover:text-[var(--accent)]",
-        "transition-colors"
+        "text-sm font-semibold text-white/90 transition-colors",
+        // forsiraj narandzasti hover (ako nesto u global css pregažuje)
+        "hover:!text-[var(--accent)]",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+        className
       ].join(" ")}
     >
       {label}
