@@ -5,16 +5,16 @@
     "contact": "Kontakt"
   },
   "hero": {
-    "title": "Vaš partner u građevinarstvu",
-    "subtitle": "Gradimo zajedno"
+    "title": "Vaš partner u gradnji",
+    "subtitle": "Hajde da gradimo zajedno"
   },
   "stats": {
-    "projects": "Uspešni projekti",
+    "projects": "Uspesni projekti",
     "rebarArea": "Detalji armature (m²)",
     "clients": "Zadovoljni klijenti"
   },
   "expertise": {
-    "title": "Stručnost",
+    "title": "Expertise",
     "lead": "Statički proračuni, armirački detalji i BIM podrška — od koncepta do isporuke, fokusirano na jasnoću, brzinu i koordinaciju.",
     "items": {
       "precast": {
@@ -22,20 +22,20 @@
         "body": "Projektovanje prefabrikovanih elemenata (zidovi, ploče, grede, stubovi) uz BIM koordinaciju i razradu armature, spojeva i montaže. Fokus: proizvodljivost, tolerancije i brza montaža."
       },
       "concrete": {
-        "title": "Armiranobetonske konstrukcije",
-        "body": "Projektovanje armiranobetonskih konstrukcija sa jasnim proračunom, racionalnim detaljima i pouzdanom dokumentacijom. Optimizacija preseka i armature uz koordinaciju sa drugim disciplinama."
+        "title": "Betonske konstrukcije",
+        "body": "Projektovanje armiranobetonskih konstrukcija sa jasnim proračunom, racionalnim detaljima i pouzdanom dokumentacijom. Optimizacija preseka i armature uz koordinaciju sa arhitekturom i instalacijama."
       },
       "steel": {
         "title": "Čelične konstrukcije",
         "body": "Razrada čeličnih nosača i spojeva, varijante rešenja i koordinacija sa drugim disciplinama. Fokus: precizni detalji, konstruktivna logika i efikasna izrada."
       },
       "management": {
-        "title": "Upravljanje projektima",
-        "body": "Planiranje isporuka, praćenje zadataka i jasni tokovi komunikacije. Fokus: rokovi, transparentnost i kontrola kvaliteta tokom celog projekta."
+        "title": "Project management",
+        "body": "Planiranje isporuka, praćenje zadataka i komunikacija kroz jasne tokove odobravanja. Fokus: rokovi, transparentnost i kontrola kvaliteta kroz ceo projekat."
       },
-      "software": {
-        "title": "Prilagođena softverska rešenja",
-        "body": "Automatizacija i alati po meri za CAD/BIM i inženjerske procese — AutoLISP, C# i JavaScript. Fokus: stabilni procesi, ušteda vremena i manje grešaka."
+      "code": {
+        "title": "Custom software solutions",
+        "body": "Automatizacija i alati po meri — AutoLISP za AutoCAD, C# dodaci i utilities, kao i JavaScript/TypeScript web alati. Fokus: brža produkcija, manje grešaka i konzistentan rezultat."
       }
     }
   }

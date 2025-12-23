@@ -33,9 +33,9 @@
         "title": "Project management",
         "body": "Delivery planning, task tracking and clear communication workflows. Focus: deadlines, transparency and quality control throughout the project."
       },
-      "software": {
+      "code": {
         "title": "Custom software solutions",
-        "body": "Automation and tailored tools for CAD/BIM and engineering workflows — AutoLISP, C# and JavaScript. Focus: robust processes, time savings and fewer errors."
+        "body": "Automation and tools tailored to your workflow — AutoLISP for AutoCAD, C# add-ins and utilities, and JavaScript/TypeScript web tools. Focus: faster production, fewer errors and consistent output."
       }
     }
   }
