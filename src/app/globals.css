@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 :root{
-  --ink: #1e2430;     /* header bg */
-  --paper: #f4f5f7;   /* page bg */
+  --ink: #1e2430;
+  --paper: #f4f5f7;
   --card: #ffffff;
   --text: #0b0f16;
   --muted: rgba(11,15,22,.7);
-  --accent: #f5a623;  /* narandžasta */
+  --accent: #f5a623;
+
+  --header-h: 5rem; /* h-16 */
 }
+
 
 html, body {
   height: 100%;

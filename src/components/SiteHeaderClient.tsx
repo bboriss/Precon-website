@@ -27,10 +27,11 @@ export default function SiteHeaderClient({
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[var(--ink)] text-white">
       <Container>
+        {/* visina header-a ostaje ista (h-16), samo uvecavamo elemente na md+ */}
         <div className="flex h-16 items-center justify-between">
           {/* LEFT */}
           <Link href={base} className="flex items-center gap-3">
-            <div className="relative h-9 w-9">
+            <div className="relative h-9 w-9 md:h-10 md:w-10 lg:h-11 lg:w-11">
               <Image
                 src="/logo.svg"
                 alt="PRECON Design"
@@ -40,25 +41,31 @@ export default function SiteHeaderClient({
               />
             </div>
 
-            <div className="text-base font-semibold tracking-wide">
+            <div className="text-base md:text-lg lg:text-xl font-semibold tracking-wide">
               PRECON <span className="font-semibold">Design</span>
             </div>
           </Link>
 
           {/* RIGHT DESKTOP */}
-          <div className="hidden items-center gap-6 md:flex">
-            <nav className="flex items-center gap-8">
+          <div className="hidden items-center gap-7 md:flex">
+            <nav className="flex items-center gap-9">
               {nav.map((n) => (
-                <NavLink key={n.href} href={`${base}${n.href}`} label={n.label} />
+                <NavLink
+                  key={n.href}
+                  href={`${base}${n.href}`}
+                  label={n.label}
+                />
               ))}
             </nav>
 
+            {/* Locale: slova u narandzasto (button u dropdownu ce preuzeti) */}
             <LocaleDropdown currentLocale={locale} options={locales} compact />
           </div>
 
           {/* RIGHT MOBILE */}
           <div className="flex items-center gap-3 md:hidden">
             <LocaleDropdown currentLocale={locale} options={locales} compact />
+
             <button
               type="button"
               aria-label="Open menu"

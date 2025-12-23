@@ -3,8 +3,8 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 
 export type StatItem = {
-  value: number; // target number (e.g. 120, 150000, 10)
-  label: string; // translated label
+  value: number;   // target number (e.g. 120, 150000, 10)
+  label: string;   // translated label
   suffix?: string; // "+", "m²", etc.
 };
 
@@ -30,7 +30,7 @@ export default function StatsCounters({
     [stats]
   );
 
-  // ~32-40 “vidljivih” promena, ali ne previše rerendera
+  // ~32–40 “vidljivih” promena, ali bez previše rerendera
   const stepSizes = useMemo(() => {
     const desiredSteps = 38;
     return targets.map((t) => {
@@ -42,7 +42,7 @@ export default function StatsCounters({
     });
   }, [targets]);
 
-  // min width samo za BROJ (suffix je poseban span) => nema "rupe"
+  // širina samo za broj (suffix je poseban)
   const minCh = useMemo(() => {
     return targets.map((t) => {
       const base = formatWithSpaces(t).length;
@@ -56,18 +56,26 @@ export default function StatsCounters({
   const startRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
 
+  // min-width "anti-jump" samo od sm naviše (na xs ume da gura i preklapa)
+  const [useFixedWidth, setUseFixedWidth] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const onChange = () => setUseFixedWidth(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   useEffect(() => {
     startRef.current = null;
     lastTickRef.current = 0;
 
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
-    // sve setState radimo “scheduled” (RAF), nema sync setState u effect-u
     rafRef.current = requestAnimationFrame(() => {
       setShown(targets.map(() => 0));
 
       const reduce =
-        typeof window !== "undefined" &&
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -79,7 +87,7 @@ export default function StatsCounters({
       const tick = (ts: number) => {
         if (startRef.current === null) startRef.current = ts;
 
-        // throttle ~30fps (smanjuje rerendere)
+        // throttle ~30fps
         if (ts - lastTickRef.current < 33) {
           rafRef.current = requestAnimationFrame(tick);
           return;
@@ -102,7 +110,7 @@ export default function StatsCounters({
         if (p < 1) {
           rafRef.current = requestAnimationFrame(tick);
         } else {
-          setShown([...targets]); // final snap
+          setShown([...targets]);
         }
       };
 
@@ -117,45 +125,75 @@ export default function StatsCounters({
   return (
     <div
       className={[
-        // uvek 1 red (3 kolone) – i na mobilnom i na tablet/desktop
-        // gap manji na mobilnom da ne preklapa
-        "grid w-full grid-cols-3 gap-2 sm:gap-4",
+        // srednja kolona šira => nema preklapanja na mobile + razmaci “deluju” jednako
+        "grid w-full grid-cols-[1fr_1.55fr_1fr]",
+        "gap-x-3 sm:gap-x-5",
+        "items-start justify-items-center",
         className
       ].join(" ")}
     >
-      {stats.map((s, i) => (
-        <div key={i} className="min-w-0">
-          <div className="flex items-baseline gap-[2px] text-white tabular-nums">
-            <span
-              className={[
-                "inline-block font-semibold tracking-tight leading-none",
-                // malo manje na mobilnom da stane i "150 000 m²"
-                "text-[22px] sm:text-3xl md:text-4xl"
-              ].join(" ")}
-              style={{minWidth: `${minCh[i]}ch`}}
-            >
-              {formatWithSpaces(shown[i] ?? 0)}
-            </span>
+      {stats.map((s, i) => {
+        const suf = (s.suffix ?? "").trim();
+        const isPlus = suf === "+";
 
-            {s.suffix ? (
+        return (
+          <div key={i} className="min-w-0 w-full text-center">
+            {/* VALUE ROW */}
+            <div className="inline-flex items-baseline text-white tabular-nums">
               <span
                 className={[
-                  // suffix tik uz broj (bez velikog razmaka)
-                  "font-semibold text-white/90 leading-none",
-                  // na mobilnom mali, da ne gura layout
-                  "text-[11px] sm:text-base md:text-lg"
+                  "font-semibold tracking-tight leading-none",
+                  // mobile malo manje da sve stane
+                  "text-xl sm:text-3xl md:text-4xl"
                 ].join(" ")}
+                style={
+                  useFixedWidth ? {minWidth: `${minCh[i]}ch`} : undefined
+                }
               >
-                {s.suffix}
+                {formatWithSpaces(shown[i] ?? 0)}
               </span>
-            ) : null}
-          </div>
 
-          <div className="mt-1 text-[10px] sm:text-xs md:text-sm text-white/70 leading-snug">
-            {s.label}
+              {s.suffix ? (
+                isPlus ? (
+                  // "+" treba da bude “po sredini” kao broj (ne spušten)
+                  <span
+                    className={[
+                      "ml-1 font-semibold text-white/90 leading-none",
+                      "text-xl sm:text-3xl md:text-4xl"
+                    ].join(" ")}
+                  >
+                    +
+                  </span>
+                ) : (
+                  // m² ostaje manji i tik uz broj
+                  <span
+                    className={[
+                      "ml-1 font-semibold text-white/90 leading-none",
+                      "text-xs sm:text-base md:text-lg",
+                      "align-super"
+                    ].join(" ")}
+                  >
+                    {s.suffix}
+                  </span>
+                )
+              ) : null}
+            </div>
+
+            {/* LABEL */}
+            <div
+              className={[
+                "mt-1 text-white/70 leading-snug",
+                // mobile: manji + 1 red (bez prelamanja)
+                "text-[10px] sm:text-xs md:text-sm",
+                "whitespace-nowrap overflow-hidden text-ellipsis"
+              ].join(" ")}
+              title={s.label}
+            >
+              {s.label}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

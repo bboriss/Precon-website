@@ -1,9 +1,9 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-type Opt = {locale: string; label: string};
+type Opt = { locale: string; label: string };
 
 export default function LocaleDropdown({
   currentLocale,
@@ -18,6 +18,7 @@ export default function LocaleDropdown({
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   const current = options.find((o) => o.locale === currentLocale) ?? options[0];
+  const code = (current?.locale || "en").toUpperCase();
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -35,17 +36,16 @@ export default function LocaleDropdown({
     };
   }, []);
 
-  const code = (current?.locale || "en").toUpperCase();
-
   return (
     <div ref={wrapRef} className="relative">
+      {/* HEADER BUTTON (SR/EN) - narandžasto stalno */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={[
           "rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold",
-          "text-white/90 transition-colors",
-          "hover:text-[var(--accent)] hover:bg-white/10",
+          "text-[var(--accent)] transition-colors",
+          "hover:bg-white/10",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         ].join(" ")}
         aria-haspopup="menu"
@@ -56,9 +56,10 @@ export default function LocaleDropdown({
 
       {open ? (
         <div
-          role="menu"
-          className="absolute right-0 mt-2 w-48 overflow-hidden rounded-2xl border border-white/10 bg-[var(--ink)] shadow-lg"
-        >
+  role="menu"
+  className="absolute right-0 mt-2 w-48 overflow-hidden rounded-2xl border border-white/10 bg-[var(--ink)] text-white shadow-lg"
+>
+
           <div className="p-2">
             {options.map((o) => (
               <Link
@@ -67,9 +68,12 @@ export default function LocaleDropdown({
                 onClick={() => setOpen(false)}
                 className={[
                   "block rounded-xl px-3 py-2 text-sm transition-colors",
+                  // items beli, hover narandžasti
                   o.locale === currentLocale
-                    ? "bg-white/10 text-white"
-                    : "text-white/80 hover:bg-white/10 hover:text-[var(--accent)]"
+  ? "bg-white/10 text-white"
+  : "text-white hover:bg-white/10 hover:text-[var(--accent)]"
+
+
                 ].join(" ")}
               >
                 {o.label}
