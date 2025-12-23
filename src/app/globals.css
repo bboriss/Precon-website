@@ -9,6 +9,14 @@
   --accent: #f5a623;
 
   --header-h: 5rem; /* h-16 */
+/* Expertise section background (malo tamnije, u tonu header-a) */
+  --section-bg: color-mix(in oklab, var(--ink) 14%, white);
+    --section-bg: #eef0f3; /* siva pozadina za Expertise; menjaj po ukusu */
+
+
+  /* svetla geometrija (menjaj procente po ukusu) */
+  --geom:  color-mix(in oklab, var(--ink) 18%, white);
+  --geom2: color-mix(in oklab, var(--ink) 10%, white);
 }
 
 
