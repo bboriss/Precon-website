@@ -5,12 +5,12 @@
     "contact": "Contact"
   },
   "hero": {
-    "title": "Your partner in construction",
-    "subtitle": "Let's build together"
+    "title": "Uw partner in de bouw",
+    "subtitle": "Laten we samen bouwen"
   },
   "stats": {
     "projects": "Succesvolle projecten",
-    "rebarArea": "Wapening (m²)",
+    "rebarArea": "Wapeningsdetails (m²)",
     "clients": "Tevreden klanten"
   },
   "expertise": {
@@ -22,8 +22,8 @@
         "body": "Ontwerp van prefab elementen (wanden, vloeren, liggers, kolommen) met BIM-coördinatie en detaillering van wapening, verbindingen en montage. Focus: maakbaarheid, toleranties en snelle montage."
       },
       "concrete": {
-        "title": "Betonconstructies",
-        "body": "Ontwerp van gewapende betonconstructies met heldere berekeningen, rationele detaillering en betrouwbare documentatie. Optimalisatie van doorsneden en wapening met afstemming tussen disciplines."
+        "title": "Gewapend betonconstructies",
+        "body": "Constructief ontwerp in gewapend beton met heldere berekeningen, rationele detaillering en betrouwbare documentatie. Optimalisatie van doorsneden en wapening met afstemming tussen disciplines."
       },
       "steel": {
         "title": "Staalconstructies",
@@ -32,6 +32,10 @@
       "management": {
         "title": "Projectmanagement",
         "body": "Planning van deliverables, taakopvolging en duidelijke communicatie. Focus: deadlines, transparantie en kwaliteitscontrole doorheen het project."
+      },
+      "software": {
+        "title": "Maatwerk softwareoplossingen",
+        "body": "Automatisering en tools op maat voor CAD/BIM en engineering-workflows — AutoLISP, C# en JavaScript. Focus: efficiëntere processen, tijdwinst en minder fouten."
       }
     }
   }

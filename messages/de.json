@@ -5,16 +5,16 @@
     "contact": "Kontakt"
   },
   "hero": {
-    "title": "Your partner in construction",
-    "subtitle": "Let's build together"
+    "title": "Ihr Partner im Bauwesen",
+    "subtitle": "Lassen Sie uns gemeinsam bauen"
   },
   "stats": {
     "projects": "Erfolgreiche Projekte",
-    "rebarArea": "Bewehrungsplanung (m²)",
+    "rebarArea": "Bewehrungsdetails (m²)",
     "clients": "Zufriedene Kunden"
   },
   "expertise": {
-    "title": "Expertise",
+    "title": "Kompetenz",
     "lead": "Tragwerksplanung, Berechnungen und BIM-Support — vom Konzept bis zur Lieferung, mit Fokus auf Klarheit, Tempo und Koordination.",
     "items": {
       "precast": {
@@ -32,6 +32,10 @@
       "management": {
         "title": "Projektmanagement",
         "body": "Lieferplanung, Aufgabenverfolgung und klare Kommunikationsprozesse. Fokus: Termine, Transparenz und Qualitätskontrolle über den gesamten Projektverlauf."
+      },
+      "software": {
+        "title": "Individuelle Softwarelösungen",
+        "body": "Automatisierung und maßgeschneiderte Tools für CAD/BIM und Berechnungs-Workflows — AutoLISP, C# und JavaScript. Fokus: robuste Prozesse, Zeitersparnis und weniger Fehler."
       }
     }
   }
