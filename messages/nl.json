@@ -33,10 +33,16 @@
         "title": "Projectmanagement",
         "body": "Planning van deliverables, taakopvolging en duidelijke communicatie. Focus: deadlines, transparantie en kwaliteitscontrole doorheen het project."
       },
-      "code": {
+      "software": {
         "title": "Maatwerk softwareoplossingen",
-        "body": "Automatisering en tools op maat — AutoLISP voor AutoCAD, C# add-ins en utilities, en JavaScript/TypeScript webtools. Focus: sneller produceren, minder fouten en consistente output."
+        "body": "Automatisering en tooling voor engineering-workflows: AutoLISP voor AutoCAD-productiviteit, C#/.NET-plugins en utilities, en JavaScript (Node.js + web) voor dashboards, calculators en bestandsverwerking."
       }
     }
+  },
+  "about": {
+    "title": "Over ons",
+    "p1": "PRECON Design is een ingenieursbureau in Niš (Servië), gericht op constructief ontwerp, wapeningsdetails en BIM-ondersteuning voor internationale partners.",
+    "p2": "Geografisch zijn we uitstekend gepositioneerd voor samenwerking met Europese teams — snelle communicatie, duidelijke standaarden en nette documentatie gedurende de hele projectcyclus.",
+    "p3": "Niš is een universiteitsstad met een sterke technische basis en een constante instroom van jong talent, waardoor we stabiel kunnen groeien en betrouwbaar kunnen leveren, ook bij korte deadlines."
   }
 }

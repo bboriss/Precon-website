@@ -1,17 +1,18 @@
-import {getTranslations} from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import HeroVideo from "@/components/HeroVideo";
-import ExpertiseSection, {ExpertiseItem} from "@/components/ExpertiseSection";
-
-type ItemKey = "precast" | "concrete" | "steel" | "management" | "software";
+import ExpertiseSection, { ExpertiseItem } from "@/components/ExpertiseSection";
+import AboutUsSection from "@/components/AboutUsSection";
 
 export default async function Page({
   params
 }: {
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 }) {
-  const {locale} = await params;
-  const t = await getTranslations({locale});
+  const { locale } = await params;
+
+  // t is a function: t("some.key")
+  const t = await getTranslations({ locale });
 
   const items: ExpertiseItem[] = [
     {
@@ -38,19 +39,12 @@ export default async function Page({
       title: t("expertise.items.management.title"),
       body: t("expertise.items.management.body")
     },
-
-    // ✅ NOVO: Custom Software Solutions (slika: code.webp)
+    // ✅ Make software item consistent via i18n keys
     {
       key: "software",
       image: "/code.webp",
-      title:
-        locale === "sr"
-          ? "Custom software rešenja"
-          : "Custom software solutions",
-      body:
-        locale === "sr"
-          ? "Automatizacija i alati za inženjerske tokove rada: AutoLISP za AutoCAD produktivnost, C#/.NET plug-inovi i utility alati, i JavaScript (Node.js + web) za dashboarde, kalkulatore i obradu fajlova."
-          : "Automation and tooling for engineering workflows: AutoLISP for AutoCAD productivity, C#/.NET plugins and utilities, and JavaScript (Node.js + web) for dashboards, calculators and file-processing pipelines."
+      title: t("expertise.items.software.title"),
+      body: t("expertise.items.software.body")
     }
   ];
 
@@ -61,10 +55,17 @@ export default async function Page({
         title={t("hero.title")}
         subtitle={t("hero.subtitle")}
         stats={[
-          {value: 120, label: t("stats.projects"), suffix: "+"},
-          {value: 150000, label: t("stats.rebarArea"), suffix: "m²"},
-          {value: 10, label: t("stats.clients"), suffix: "+"}
+          { value: 120, label: t("stats.projects"), suffix: "+" },
+          { value: 150000, label: t("stats.rebarArea"), suffix: "m²" },
+          { value: 10, label: t("stats.clients"), suffix: "+" }
         ]}
+      />
+
+      <AboutUsSection
+        title={t("about.title")}
+        p1={t("about.p1")}
+        p2={t("about.p2")}
+        p3={t("about.p3")}
       />
 
       <ExpertiseSection

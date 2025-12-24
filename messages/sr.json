@@ -33,10 +33,16 @@
         "title": "Project management",
         "body": "Planiranje isporuka, praćenje zadataka i komunikacija kroz jasne tokove odobravanja. Fokus: rokovi, transparentnost i kontrola kvaliteta kroz ceo projekat."
       },
-      "code": {
-        "title": "Custom software solutions",
-        "body": "Automatizacija i alati po meri — AutoLISP za AutoCAD, C# dodaci i utilities, kao i JavaScript/TypeScript web alati. Fokus: brža produkcija, manje grešaka i konzistentan rezultat."
+      "software": {
+        "title": "Custom software rešenja",
+        "body": "Automatizacija i alati za inženjerske tokove rada: AutoLISP za AutoCAD produktivnost, C#/.NET plug-inovi i utility alati, i JavaScript (Node.js + web) za dashboarde, kalkulatore i obradu fajlova."
       }
     }
+  },
+  "about": {
+    "title": "About us",
+    "p1": "PRECON Design je projektni biro iz Niša (Srbija), fokusiran na statiku, detaljisanje armature i BIM podršku za inostrane partnere.",
+    "p2": "Geografski smo odlično pozicionirani za saradnju sa evropskim timovima — brza komunikacija, jasni standardi i uredna dokumentacija tokom celog ciklusa projekta.",
+    "p3": "Niš je univerzitetski centar sa snažnom inženjerskom bazom i kontinuiranim prilivom mladih talenata, što nam omogućava stabilan rast tima i pouzdanu isporuku i kada su rokovi kratki."
   }
 }

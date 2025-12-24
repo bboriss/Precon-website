@@ -33,10 +33,16 @@
         "title": "Projektmanagement",
         "body": "Lieferplanung, Aufgabenverfolgung und klare Kommunikationsprozesse. Fokus: Termine, Transparenz und Qualitätskontrolle über den gesamten Projektverlauf."
       },
-      "code": {
+      "software": {
         "title": "Individuelle Softwarelösungen",
-        "body": "Automatisierung und Tools für Ihren Workflow — AutoLISP für AutoCAD, C#-Add-ins und Utilities sowie JavaScript/TypeScript Web-Tools. Fokus: schnellere Produktion, weniger Fehler und konsistente Ergebnisse."
+        "body": "Automatisierung und Tools für Engineering-Workflows: AutoLISP für AutoCAD, C#/.NET-Plugins und Utilities sowie JavaScript (Node.js + Web) für Dashboards, Rechner und Dateiverarbeitung."
       }
     }
+  },
+  "about": {
+    "title": "Über uns",
+    "p1": "PRECON Design ist ein Ingenieurbüro aus Niš (Serbien) mit Fokus auf Tragwerksplanung, Bewehrungsdetails und BIM-Support für internationale Partner.",
+    "p2": "Geografisch sind wir ideal für die Zusammenarbeit mit Teams in Europa positioniert — schnelle Kommunikation, klare Standards und saubere Dokumentation über den gesamten Projektverlauf.",
+    "p3": "Niš ist ein Universitätsstandort mit starker Ingenieursbasis und konstantem Nachwuchs, was ein stabiles Teamwachstum und zuverlässige Lieferung auch bei kurzen Fristen ermöglicht."
   }
 }

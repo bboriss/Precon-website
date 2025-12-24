@@ -15,7 +15,7 @@ export type ExpertiseItem = {
 // ===== TUNING (promeni ovde) =====
 const IMAGE_MS = 2900;      // trajanje fade za sliku
 const TEXT_MS = 1200;       // trajanje za tekst (fade + slide)
-const TEXT_DELAY_MS = 300;  // mali delay da tekst “prati” sliku
+const TEXT_DELAY_MS = 0;  // mali delay da tekst “prati” sliku
 const OFFSET_PX = 26;       // koliko tekst “dolazi” sa strane
 // ================================
 
