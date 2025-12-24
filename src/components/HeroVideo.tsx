@@ -1,4 +1,6 @@
-import StatsCounters, {StatItem} from "@/components/StatsCounters";
+"use client";
+
+import StatsCounters, { StatItem } from "@/components/StatsCounters";
 
 export default function HeroVideo({
   src,
@@ -12,17 +14,16 @@ export default function HeroVideo({
   stats: StatItem[];
 }) {
   return (
-    <section className="w-full">
-      <div className="relative w-full overflow-hidden bg-black">
-        {/* HERO visina = 100% ekrana minus sticky header */}
+    <section className="w-full bg-black overflow-hidden">
+      <div className="relative w-full bg-black">
+        {/* ✅ +2px “bleed” da nema belog jaza */}
         <div
           className={[
             "relative w-full",
-            "h-[calc(100dvh-var(--header-h))]",
-            "min-h-[420px]" // safety da ne bude premalo na ekstremnim slučajevima
+            "h-[calc(100dvh-var(--header-h)+2px)]",
+            "min-h-[420px]"
           ].join(" ")}
         >
-          {/* VIDEO */}
           <video
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
@@ -34,15 +35,11 @@ export default function HeroVideo({
             <source src={src} type="video/mp4" />
           </video>
 
-          {/* DARK OVERLAY */}
           <div className="absolute inset-0 bg-black/50" />
 
-          {/* CONTENT */}
           <div className="absolute inset-0">
-            {/* wrapper mora biti relative + h-full da absolute elementi rade */}
             <div className="mx-auto h-full max-w-7xl px-6 lg:px-8">
               <div className="relative h-full">
-                {/* TEXT – u sredini sekcije, malo iznad centra */}
                 <div className="absolute left-0 top-[35%] -translate-y-1/2">
                   <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
                     {title}
@@ -52,7 +49,6 @@ export default function HeroVideo({
                   </p>
                 </div>
 
-                {/* COUNTER – UVEK PRI DNU (mobile + tablet + desktop) */}
                 <div className="absolute inset-x-0 bottom-6 md:bottom-8">
                   <div className="flex justify-center sm:justify-start lg:justify-end lg:translate-x-6">
                     <div
@@ -67,11 +63,11 @@ export default function HeroVideo({
                     </div>
                   </div>
                 </div>
-                {/* /counter */}
+
               </div>
             </div>
           </div>
-          {/* /content */}
+
         </div>
       </div>
     </section>
