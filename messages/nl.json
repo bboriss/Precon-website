@@ -44,5 +44,56 @@
     "p1": "PRECON Design is een ingenieursbureau in Niš (Servië), gericht op constructief ontwerp, wapeningsdetails en BIM-ondersteuning voor internationale partners.",
     "p2": "Geografisch zijn we uitstekend gepositioneerd voor samenwerking met Europese teams — snelle communicatie, duidelijke standaarden en nette documentatie gedurende de hele projectcyclus.",
     "p3": "Niš is een universiteitsstad met een sterke technische basis en een constante instroom van jong talent, waardoor we stabiel kunnen groeien en betrouwbaar kunnen leveren, ook bij korte deadlines."
+  },
+  "clients": {
+    "title": "Onze klanten"
+  },
+  "contactModal": {
+    "title": "Contact",
+    "help": "Meestal reageren we binnen 1–2 werkdagen.",
+    "close": "Sluiten",
+    "tabs": {
+      "work": "Laten we samenwerken",
+      "career": "Wil je deel uitmaken van PRECON?"
+    },
+    "send": "Versturen",
+    "note": "Door dit formulier te verzenden ga je ermee akkoord dat we contact met je opnemen via e-mail.",
+    "work": {
+      "fullName": "Voor- en achternaam",
+      "fullNamePh": "Je volledige naam",
+      "email": "E-mail",
+      "emailPh": "name@company.com",
+      "message": "Bericht",
+      "messagePh": "Vertel ons over je project, planning en verwachte scope…"
+    },
+    "career": {
+      "fullName": "Voor- en achternaam",
+      "fullNamePh": "Je volledige naam",
+      "email": "E-mail",
+      "emailPh": "name@email.com",
+      "letter": "Motivatiebrief",
+      "letterPh": "Korte intro, waar je goed in bent en waarom je wilt aansluiten…",
+      "cv": "CV",
+      "cvHint": "PDF of DOCX, tot 10MB.",
+      "chooseFile": "Bestand kiezen",
+      "removeFile": "Verwijderen",
+      "noFile": "Geen bestand gekozen"
+    },
+    "errors": {
+      "fullName": "Vul je voor- en achternaam in.",
+      "email": "Vul een geldig e-mailadres in.",
+      "message": "Het bericht moet minimaal 10 tekens bevatten.",
+      "letter": "De motivatiebrief moet minimaal 30 tekens bevatten.",
+      "cv": "Voeg je CV toe."
+    },
+    "details": {
+      "title": "Contactgegevens",
+      "phone": "Telefoon",
+      "email": "E-mail",
+      "office": "Kantoor",
+      "phoneValue": "+381 00 000 000",
+      "emailValue": "office@precon.rs",
+      "officeValue": "Niš, Servië"
+    }
   }
 }

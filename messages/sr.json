@@ -44,5 +44,56 @@
     "p1": "PRECON Design je projektni biro iz Niša (Srbija), fokusiran na statiku, detaljisanje armature i BIM podršku za inostrane partnere.",
     "p2": "Geografski smo odlično pozicionirani za saradnju sa evropskim timovima — brza komunikacija, jasni standardi i uredna dokumentacija tokom celog ciklusa projekta.",
     "p3": "Niš je univerzitetski centar sa snažnom inženjerskom bazom i kontinuiranim prilivom mladih talenata, što nam omogućava stabilan rast tima i pouzdanu isporuku i kada su rokovi kratki."
+  },
+  "clients": {
+    "title": "Naši klijenti"
+  },
+  "contactModal": {
+    "title": "Kontakt",
+    "help": "Obično odgovaramo u roku od 1–2 radna dana.",
+    "close": "Zatvori",
+    "tabs": {
+      "work": "Hajde da radimo zajedno",
+      "career": "Želiš da budeš deo PRECON-a?"
+    },
+    "send": "Pošalji",
+    "note": "Slanjem forme saglasni ste da vas možemo kontaktirati putem email-a.",
+    "work": {
+      "fullName": "Ime i prezime",
+      "fullNamePh": "Vaše ime i prezime",
+      "email": "Email",
+      "emailPh": "name@company.com",
+      "message": "Poruka",
+      "messagePh": "Opišite projekat, rokove i očekivani obim…"
+    },
+    "career": {
+      "fullName": "Ime i prezime",
+      "fullNamePh": "Vaše ime i prezime",
+      "email": "Email",
+      "emailPh": "name@email.com",
+      "letter": "Motivaciono pismo",
+      "letterPh": "Kratko predstavljanje, šta radite najbolje i zašto želite da se pridružite…",
+      "cv": "CV / Biografija",
+      "cvHint": "PDF ili DOCX, do 10MB.",
+      "chooseFile": "Izaberi fajl",
+      "removeFile": "Ukloni",
+      "noFile": "Nije izabran fajl"
+    },
+    "errors": {
+      "fullName": "Unesite ime i prezime.",
+      "email": "Unesite ispravan email.",
+      "message": "Poruka treba da ima najmanje 10 karaktera.",
+      "letter": "Motivaciono pismo treba da ima najmanje 30 karaktera.",
+      "cv": "Molimo dodajte vaš CV."
+    },
+    "details": {
+      "title": "Kontakt detalji",
+      "phone": "Telefon",
+      "email": "Email",
+      "office": "Kancelarija",
+      "phoneValue": "+381 00 000 000",
+      "emailValue": "office@precon.rs",
+      "officeValue": "Niš, Srbija"
+    }
   }
 }

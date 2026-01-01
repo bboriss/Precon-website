@@ -44,5 +44,56 @@
     "p1": "PRECON Design ist ein Ingenieurbüro aus Niš (Serbien) mit Fokus auf Tragwerksplanung, Bewehrungsdetails und BIM-Support für internationale Partner.",
     "p2": "Geografisch sind wir ideal für die Zusammenarbeit mit Teams in Europa positioniert — schnelle Kommunikation, klare Standards und saubere Dokumentation über den gesamten Projektverlauf.",
     "p3": "Niš ist ein Universitätsstandort mit starker Ingenieursbasis und konstantem Nachwuchs, was ein stabiles Teamwachstum und zuverlässige Lieferung auch bei kurzen Fristen ermöglicht."
+  },
+  "clients": {
+    "title": "Unsere Kunden"
+  },
+  "contactModal": {
+    "title": "Kontakt",
+    "help": "In der Regel antworten wir innerhalb von 1–2 Werktagen.",
+    "close": "Schließen",
+    "tabs": {
+      "work": "Lass uns zusammenarbeiten",
+      "career": "Möchtest du Teil von PRECON sein?"
+    },
+    "send": "Senden",
+    "note": "Mit dem Absenden stimmen Sie zu, dass wir Sie per E-Mail kontaktieren dürfen.",
+    "work": {
+      "fullName": "Vor- und Nachname",
+      "fullNamePh": "Ihr vollständiger Name",
+      "email": "E-Mail",
+      "emailPh": "name@company.com",
+      "message": "Nachricht",
+      "messagePh": "Erzählen Sie uns von Ihrem Projekt, Zeitplan und Umfang…"
+    },
+    "career": {
+      "fullName": "Vor- und Nachname",
+      "fullNamePh": "Ihr vollständiger Name",
+      "email": "E-Mail",
+      "emailPh": "name@email.com",
+      "letter": "Motivationsschreiben",
+      "letterPh": "Kurze Vorstellung, Ihre Stärken und warum Sie mitmachen möchten…",
+      "cv": "Lebenslauf",
+      "cvHint": "PDF oder DOCX, bis zu 10MB.",
+      "chooseFile": "Datei wählen",
+      "removeFile": "Entfernen",
+      "noFile": "Keine Datei ausgewählt"
+    },
+    "errors": {
+      "fullName": "Bitte Vor- und Nachnamen eingeben.",
+      "email": "Bitte eine gültige E-Mail eingeben.",
+      "message": "Die Nachricht muss mindestens 10 Zeichen lang sein.",
+      "letter": "Das Motivationsschreiben muss mindestens 30 Zeichen lang sein.",
+      "cv": "Bitte Lebenslauf anhängen."
+    },
+    "details": {
+      "title": "Kontaktdaten",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "office": "Büro",
+      "phoneValue": "+381 00 000 000",
+      "emailValue": "office@precon.rs",
+      "officeValue": "Niš, Serbien"
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 import { isLocale } from "@/i18n/locales";
 import SiteHeader from "@/components/SiteHeader";
@@ -19,12 +20,17 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
 
+  // ✅ Ovo je ključno: poruke za client komponente (useTranslations)
+  const messages = await getMessages();
+
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] overflow-x-hidden">
-      <SiteHeader locale={locale} />
-      <main className="flex-1">{children}</main>
-      <SiteFooter />
-      <BackToTop />
-    </div>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <div className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)]">
+        <SiteHeader locale={locale} />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+        <BackToTop />
+      </div>
+    </NextIntlClientProvider>
   );
 }

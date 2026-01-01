@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import HeroVideo from "@/components/HeroVideo";
 import ExpertiseSection, { ExpertiseItem } from "@/components/ExpertiseSection";
 import AboutUsSection from "@/components/AboutUsSection";
+import OurClientsSection from "@/components/OurClientsSection";
 
 export default async function Page({
   params
@@ -73,6 +74,8 @@ export default async function Page({
         lead={t("expertise.lead")}
         items={items}
       />
+
+      <OurClientsSection title={t("clients.title")} />
     </>
   );
 }
