@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import "flag-icons/css/flag-icons.min.css";
 
 import { isLocale } from "@/i18n/locales";
 import SiteHeader from "@/components/SiteHeader";
