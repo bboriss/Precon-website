@@ -40,7 +40,6 @@ function switchLocaleInPath(pathname: string, fromLocale: string, toLocale: stri
     return to + pathname.slice(from.length);
   }
 
-  // fallback: ako pathname nema locale prefiks, samo prefixuj
   if (pathname.startsWith("/")) return to + pathname;
   return to + "/" + pathname;
 }
@@ -85,7 +84,8 @@ export default function LocaleDropdown({
     };
   }, [open]);
 
-  const buttonLabel = compact ? shortForLocale(currentLocale) : (current?.label ?? shortForLocale(currentLocale));
+  // ✅ U headeru želiš samo SR/EN/DE/NL (bez zastave)
+  const buttonLabel = compact ? shortForLocale(currentLocale) : shortForLocale(currentLocale);
 
   return (
     <div className="relative">
@@ -95,16 +95,24 @@ export default function LocaleDropdown({
         onClick={() => setOpen((v) => !v)}
         className={cx(
           "inline-flex items-center gap-2",
-          "rounded-xl border border-white/15 bg-white/5",
+          // ✅ narandžast border
+          "rounded-xl border border-[var(--accent)] bg-white/5",
           "px-3 py-2 text-sm font-semibold leading-none text-white/90",
           "hover:bg-white/10 hover:text-white transition-colors"
         )}
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <span className={cx("fi", `fi-${flagForLocale(currentLocale)}`, "rounded-[2px]")} />
+        {/* ✅ NEMA zastave ovde */}
         <span>{buttonLabel}</span>
-        <span className="ml-1 text-white/60">▾</span>
+        <span
+  className={cx(
+    "ml-1 text-white/60 inline-block transition-transform duration-200",
+    open && "rotate-180"
+  )}
+>
+  ▾
+</span>
       </button>
 
       {open ? (
@@ -131,11 +139,14 @@ export default function LocaleDropdown({
                   className={cx(
                     "flex items-center gap-3 rounded-xl px-3 py-2",
                     "text-sm font-semibold",
-                    active ? "bg-white/5 text-white" : "text-white/90 hover:bg-white/5 hover:text-white",
+                    active
+                      ? "bg-white/5 text-white"
+                      : "text-white/90 hover:bg-white/5 hover:text-white",
                     "transition-colors"
                   )}
                   role="menuitem"
                 >
+                  {/* ✅ zastave SAMO u meniju */}
                   <span className={cx("fi", `fi-${flagForLocale(opt.locale)}`, "rounded-[2px]")} />
                   <span>{opt.label}</span>
                 </Link>

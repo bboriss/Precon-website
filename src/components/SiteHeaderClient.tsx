@@ -8,6 +8,8 @@ import { Container } from "@/components/Container";
 import LocaleDropdown from "@/components/LocaleDropdown";
 import MobileMenu from "@/components/MobileMenu";
 import ContactModal from "@/components/ContactModal";
+import ContactFab from "@/components/ContactFab";
+
 
 type NavItem = { href: string; label: string };
 type LocaleOpt = { locale: string; label: string };
@@ -56,7 +58,7 @@ export default function SiteHeaderClient({
         className={[
           "fixed top-0 left-0 right-0 z-50",
           "border-b border-white/10 bg-[var(--ink)] text-white",
-          "supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--ink),transparent_10%)] supports-[backdrop-filter]:backdrop-blur"
+          // "supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--ink),transparent_10%)] supports-[backdrop-filter]:backdrop-blur"
         ].join(" ")}
       >
         <Container>
@@ -141,6 +143,8 @@ export default function SiteHeaderClient({
       />
 
       <ContactModal open={contactOpen} onClose={closeContact} />
+      <ContactFab onClick={openContact} />
+
     </>
   );
 }

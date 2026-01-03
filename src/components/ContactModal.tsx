@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 type ContactModalProps = {
@@ -13,6 +12,121 @@ type TabKey = "work" | "career";
 
 function cx(...a: Array<string | false | null | undefined>) {
   return a.filter(Boolean).join(" ");
+}
+
+/** ✅ Tačna lokacija */
+const OFFICE_LAT = 43.324709;
+const OFFICE_LON = 21.913458;
+
+/** ✅ Malo više zumirano nego ranije */
+const OFFICE_ZOOM = 16;
+
+function MapEmbed({
+  className,
+  heightClass
+}: {
+  className?: string;
+  heightClass?: string;
+}) {
+  const elRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      const L = (await import("leaflet")).default as any;
+
+      if (cancelled) return;
+      if (!elRef.current) return;
+
+      // Ako se komponenta remountuje (tab switch, modal close/open), očisti staru mapu
+      if (mapRef.current) {
+        try {
+          mapRef.current.remove();
+        } catch { }
+        mapRef.current = null;
+      }
+
+      const map = L.map(elRef.current, {
+        zoomControl: true, // ✅ nema +- gore levo
+        attributionControl: false, // dodaćemo sopstveni mali overlay
+        scrollWheelZoom: true,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        tap: false
+      }).setView([OFFICE_LAT, OFFICE_LON], OFFICE_ZOOM);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19
+      }).addTo(map);
+
+      const tilePane = map.getPane("tilePane");
+      if (tilePane) {
+        tilePane.style.filter = "grayscale(0.15) saturate(1.05) contrast(1.05) brightness(1.03)";
+        tilePane.style.opacity = "0.98";
+      }
+
+      // ✅ marker (narandžast + halo + beli border)
+      const pinIcon = L.divIcon({
+        className: "", // bez leaflet default class styling-a
+        html: `
+    <div style="
+      position: relative;
+      width: 18px; height: 18px;
+      border-radius: 9999px;
+      background: rgb(249,115,22);
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 10px rgba(249,115,22,0.22);
+    "></div>
+  `,
+        iconSize: [18, 18],
+        iconAnchor: [9, 9]
+      });
+
+      L.marker([OFFICE_LAT, OFFICE_LON], { icon: pinIcon, interactive: false }).addTo(map);
+
+
+      // Drži mapu stabilnom u modalu
+      map.dragging.enable();
+
+      mapRef.current = map;
+    })();
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        try {
+          mapRef.current.remove();
+        } catch { }
+        mapRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      className={cx(
+        "relative w-full overflow-hidden rounded-xl",
+        className
+      )}
+      style={{
+        // ✅ “mnogo više siva”, bez jarkih boja
+        filter: "saturate(0.3) contrast(1.09) brightness(0.9)"
+      }}
+    >
+      <div ref={elRef} className={cx("w-full", heightClass ?? "h-full")} />
+
+      {/* suptilni dark overlay da se uklopi u UI */}
+      <div className="pointer-events-none absolute inset-0 bg-[color-mix(in_oklab,var(--ink),transparent_65%)] opacity-[0.22]" />
+
+      {/* OSM attribution (minimalno, da bude korektno) */}
+      <div className="pointer-events-none absolute bottom-2 right-2 rounded-lg bg-black/35 px-2 py-1 text-[10px] text-white/70">
+        © OpenStreetMap contributors
+      </div>
+    </div>
+  );
 }
 
 export default function ContactModal({ open, onClose }: ContactModalProps) {
@@ -174,7 +288,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           <div className="relative grid gap-0 lg:grid-cols-[7fr_1px_4fr]">
             {/* LEFT */}
             <div className="p-5 sm:p-6">
-              {/* TABS (nema overflow na mobilnom) */}
+              {/* TABS */}
               <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-w-full">
                 <button
                   type="button"
@@ -308,138 +422,75 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
               </form>
             </div>
 
-            {/* ✅ DESKTOP VERTICAL DIVIDER (1px, bez margina) */}
+            {/* DESKTOP VERTICAL DIVIDER */}
             <div className="hidden lg:block bg-white/10" aria-hidden="true" />
 
             {/* RIGHT */}
             <div className="p-5 sm:p-6">
               <h4 className="text-sm font-semibold text-white/80">{t("details.title")}</h4>
 
-              {/* MOBILE (stack) */}
+              {/* MOBILE */}
               <div className="mt-4 lg:hidden sm:hidden">
                 <div className="divide-y divide-white/12">
                   <div className="py-4">
-                    <DetailRow
-                      icon={<PhoneIcon />}
-                      label={t("details.phone")}
-                      value={t("details.phoneValue")}
-                    />
+                    <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
                   </div>
                   <div className="py-4">
-                    <DetailRow
-                      icon={<MailIcon />}
-                      label={t("details.email")}
-                      value={t("details.emailValue")}
-                    />
+                    <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
                   </div>
                   <div className="py-4">
-                    <DetailRow
-                      icon={<PinIcon />}
-                      label={t("details.office")}
-                      value={t("details.officeValue")}
-                    />
+                    <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
                   </div>
                 </div>
 
-                <div className="mt-4 relative w-full h-[280px]">
-                  <Image
-                    src="/europe.svg"
-                    alt="Europe"
-                    fill
-                    sizes="(max-width: 640px) 90vw, 520px"
-                    unoptimized
-                    style={{ objectFit: "contain" }}
-                  />
+                <div className="mt-4 h-[280px]">
+                  <MapEmbed heightClass="h-[280px]" />
                 </div>
               </div>
 
-              {/* TABLET (sm..lg-1): details levo, mapa desno + vertical divider */}
+              {/* TABLET */}
               <div className="hidden sm:block lg:hidden mt-4">
                 <div className="grid grid-cols-[1fr_1px_1fr] items-start">
-                  {/* details */}
                   <div className="pr-6">
                     <div className="divide-y divide-white/12">
                       <div className="py-4">
-                        <DetailRow
-                          icon={<PhoneIcon />}
-                          label={t("details.phone")}
-                          value={t("details.phoneValue")}
-                        />
+                        <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
                       </div>
                       <div className="py-4">
-                        <DetailRow
-                          icon={<MailIcon />}
-                          label={t("details.email")}
-                          value={t("details.emailValue")}
-                        />
+                        <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
                       </div>
                       <div className="py-4">
-                        <DetailRow
-                          icon={<PinIcon />}
-                          label={t("details.office")}
-                          value={t("details.officeValue")}
-                        />
+                        <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
                       </div>
                     </div>
                   </div>
 
-                  {/* divider */}
                   <div className="bg-white/12 self-stretch" aria-hidden="true" />
 
-                  {/* map */}
                   <div className="pl-6">
-                    <div className="relative w-full h-[280px] md:h-[320px]">
-                      <Image
-                        src="/europe.svg"
-                        alt="Europe"
-                        fill
-                        sizes="(max-width: 1024px) 45vw, 520px"
-                        unoptimized
-                        style={{ objectFit: "contain" }}
-                      />
-                    </div>
+                    <MapEmbed heightClass="h-[280px] md:h-[320px]" />
                   </div>
                 </div>
               </div>
 
-              {/* DESKTOP (lg+) */}
+              {/* DESKTOP */}
               <div className="hidden lg:block mt-4">
                 <div className="space-y-0 divide-y divide-white/12">
                   <div className="py-4">
-                    <DetailRow
-                      icon={<PhoneIcon />}
-                      label={t("details.phone")}
-                      value={t("details.phoneValue")}
-                    />
+                    <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
                   </div>
                   <div className="py-4">
-                    <DetailRow
-                      icon={<MailIcon />}
-                      label={t("details.email")}
-                      value={t("details.emailValue")}
-                    />
+                    <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
                   </div>
                   <div className="py-4">
-                    <DetailRow
-                      icon={<PinIcon />}
-                      label={t("details.office")}
-                      value={t("details.officeValue")}
-                    />
+                    <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
                   </div>
                 </div>
 
-                {/* suptilna linija iznad mape (manja margina) */}
                 <div className="mt-4 h-px bg-white/12 w-full" />
 
-                <div className="mt-4 relative w-full h-[300px]">
-                  <Image
-                    src="/europe.svg"
-                    alt="Europe"
-                    fill
-                    sizes="520px"
-                    unoptimized
-                    style={{ objectFit: "contain" }}
-                  />
+                <div className="mt-4">
+                  <MapEmbed heightClass="h-[300px]" />
                 </div>
               </div>
             </div>
@@ -595,8 +646,6 @@ function FileField({
   );
 }
 
-/* ----------------- Details UI ----------------- */
-
 function DetailRow({
   icon,
   label,
@@ -608,7 +657,6 @@ function DetailRow({
 }) {
   return (
     <div className="flex items-center gap-3">
-      {/* malo manje ikonice + centar */}
       <div className="flex h-8 w-8 items-center justify-center text-[var(--accent)]">
         {icon}
       </div>
