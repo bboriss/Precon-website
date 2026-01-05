@@ -5,6 +5,8 @@ import ExpertiseSection, { ExpertiseItem } from "@/components/ExpertiseSection";
 import AboutUsSection from "@/components/AboutUsSection";
 import OurClientsSection from "@/components/OurClientsSection";
 
+import { PREFAB_IMAGES, BETON_IMAGES, CELIK_IMAGES } from "@/assets/expertise";
+
 export default async function Page({
   params
 }: {
@@ -12,25 +14,27 @@ export default async function Page({
 }) {
   const { locale } = await params;
 
-  // t is a function: t("some.key")
   const t = await getTranslations({ locale });
 
   const items: ExpertiseItem[] = [
     {
       key: "precast",
-      image: "/precast.webp",
+      image: "/precast.webp", // ✅ ostaje
+      gallery: PREFAB_IMAGES, // ✅ assets galerija
       title: t("expertise.items.precast.title"),
       body: t("expertise.items.precast.body")
     },
     {
       key: "concrete",
-      image: "/concrete.webp",
+      image: "/concrete.webp", // ✅ ostaje
+      gallery: BETON_IMAGES,   // ✅ assets galerija
       title: t("expertise.items.concrete.title"),
       body: t("expertise.items.concrete.body")
     },
     {
       key: "steel",
-      image: "/steel.webp",
+      image: "/steel.webp", // ✅ ostaje
+      gallery: CELIK_IMAGES, // ✅ assets galerija
       title: t("expertise.items.steel.title"),
       body: t("expertise.items.steel.body")
     },
@@ -40,7 +44,6 @@ export default async function Page({
       title: t("expertise.items.management.title"),
       body: t("expertise.items.management.body")
     },
-    // ✅ Make software item consistent via i18n keys
     {
       key: "software",
       image: "/code.webp",
