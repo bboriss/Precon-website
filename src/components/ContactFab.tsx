@@ -1,15 +1,59 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function ContactFab({ onClick }: { onClick: () => void }) {
+export default function ContactFab({
+  onClick,
+  open = false,
+  showAfter = 120
+}: {
+  onClick: () => void;
+  open?: boolean;        // <-- NOVO: da znamo kad je modal otvoren
+  showAfter?: number;    // <-- NOVO: prag skrola
+}) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let raf = 0;
+
+    const update = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      setVisible(y > showAfter);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [showAfter]);
+
+  const hidden = open || !visible;
+
   return (
     <>
       <button
         type="button"
-        onClick={onClick}
+        onClick={(e) => {
+          // ✅ sprečava "sticky active/focus" na mobilnom
+          (e.currentTarget as HTMLButtonElement).blur();
+          onClick();
+        }}
         aria-label="Open contact"
-        className="contactFab fixed z-[70] left-4 bottom-4 cursor-pointer group"
+        className={[
+          "contactFab fixed z-[70] left-4 bottom-4 cursor-pointer group",
+          // ✅ show/hide animacija kao BackToTop
+          "transition-all duration-300 ease-out",
+          hidden
+            ? "opacity-0 translate-y-3 pointer-events-none"
+            : "opacity-100 translate-y-0"
+        ].join(" ")}
       >
         {/* Tooltip */}
         <span
@@ -24,7 +68,10 @@ export default function ContactFab({ onClick }: { onClick: () => void }) {
             "shadow-[0_10px_25px_rgba(249,115,22,0.25)]",
             "opacity-0 translate-y-2",
             "transition duration-200",
-            "group-hover:opacity-100 group-hover:translate-y-0",
+            // ✅ tooltip samo na uređajima koji stvarno imaju hover (ne mobile tap)
+            "[@media(hover:hover)]:group-hover:opacity-100",
+            "[@media(hover:hover)]:group-hover:translate-y-0",
+            // ✅ tastatura: focus-visible i dalje radi
             "group-focus-visible:opacity-100 group-focus-visible:translate-y-0"
           ].join(" ")}
           role="tooltip"

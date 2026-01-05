@@ -10,7 +10,6 @@ import MobileMenu from "@/components/MobileMenu";
 import ContactModal from "@/components/ContactModal";
 import ContactFab from "@/components/ContactFab";
 
-
 type NavItem = { href: string; label: string };
 type LocaleOpt = { locale: string; label: string };
 
@@ -143,8 +142,9 @@ export default function SiteHeaderClient({
       />
 
       <ContactModal open={contactOpen} onClose={closeContact} />
-      <ContactFab onClick={openContact} />
 
+      {/* ✅ FAB: pojavi se posle skrola + sakrij kad je modal open */}
+      <ContactFab onClick={openContact} open={contactOpen} showAfter={120} />
     </>
   );
 }
