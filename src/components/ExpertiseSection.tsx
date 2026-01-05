@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useMemo, useRef, useState} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 type ItemKey = "precast" | "concrete" | "steel" | "management" | "software";
@@ -15,7 +15,7 @@ export type ExpertiseItem = {
 // ===== TUNING (promeni ovde) =====
 const IMAGE_MS = 2900;      // trajanje fade za sliku
 const TEXT_MS = 1200;       // trajanje za tekst (fade + slide)
-const TEXT_DELAY_MS = 0;  // mali delay da tekst “prati” sliku
+const TEXT_DELAY_MS = 0;    // mali delay da tekst “prati” sliku
 const OFFSET_PX = 26;       // koliko tekst “dolazi” sa strane
 // ================================
 
@@ -30,7 +30,6 @@ function useInView(options?: IntersectionObserverInit) {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce) {
-      // ne radimo setState sync u effect-u (React warning)
       requestAnimationFrame(() => setInView(true));
       return;
     }
@@ -45,14 +44,14 @@ function useInView(options?: IntersectionObserverInit) {
           obs.disconnect(); // animate once
         }
       },
-      {threshold: 0.2, rootMargin: "0px 0px -10% 0px", ...(options || {})}
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px", ...(options || {}) }
     );
 
     obs.observe(el);
     return () => obs.disconnect();
   }, [options]);
 
-  return {ref, inView};
+  return { ref, inView };
 }
 
 export default function ExpertiseSection({
@@ -67,14 +66,15 @@ export default function ExpertiseSection({
   return (
     <section
       id="expertise"
-      className="relative overflow-hidden py-14 md:py-20 bg-[var(--section-bg)]"
+      className="relative overflow-hidden py-14 md:py-20 bg-[color-mix(in_oklab,var(--ink),white_8%)]"
+
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-black">
+        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white">
           {title}
         </h2>
 
-        <p className="mt-4 max-w-3xl text-base md:text-lg text-black/70">
+        <p className="mt-4 max-w-3xl text-base md:text-lg text-white/70">
           {lead}
         </p>
 
@@ -105,7 +105,7 @@ function ExpertiseRow({
   reverse: boolean;
   priority: boolean;
 }) {
-  const {ref, inView} = useInView();
+  const { ref, inView } = useInView();
 
   const imageStyle = useMemo<React.CSSProperties>(
     () => ({
@@ -142,7 +142,7 @@ function ExpertiseRow({
           ].join(" ")}
           style={imageStyle}
         >
-          <div className="relative overflow-hidden rounded-3xl shadow-sm border border-black/5">
+          <div className="relative overflow-hidden rounded-3xl shadow-sm border border-white/10 bg-white/5">
             <div className="relative h-[240px] sm:h-[280px] md:h-[320px]">
               <Image
                 src={item.image}
@@ -176,11 +176,11 @@ function ExpertiseRow({
               : `translate3d(${reverse ? -OFFSET_PX : OFFSET_PX}px, 2px, 0)`
           }}
         >
-          <h3 className="text-2xl md:text-3xl font-semibold text-black">
+          <h3 className="text-2xl md:text-3xl font-semibold text-white">
             {item.title}
           </h3>
 
-          <p className="mt-3 text-sm md:text-base text-black/70 leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-white/70 leading-relaxed">
             {item.body}
           </p>
         </div>
