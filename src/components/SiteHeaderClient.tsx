@@ -48,14 +48,29 @@ export default function SiteHeaderClient({
   const closeContact = () => setContactOpen(false);
 
   useEffect(() => {
-  const handler = () => openContact();
-  window.addEventListener("precon:open-contact", handler as EventListener);
-  return () => window.removeEventListener("precon:open-contact", handler as EventListener);
-}, []);
+    const handler = () => openContact();
+    window.addEventListener("precon:open-contact", handler as EventListener);
+    return () => window.removeEventListener("precon:open-contact", handler as EventListener);
+  }, []);
 
+  // Wrapper class (na Link/button)
+  const navItemWrap =
+    [
+      "group inline-flex items-center",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40",
+      "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]",
+      "rounded-md" // da ring izgleda lepse
+    ].join(" ");
 
-  const navItemClass =
-    "text-[15px] font-semibold leading-none text-white/90 hover:text-[var(--accent)] transition-colors";
+  // Text class (na span unutra) — ovde je i boja i scale
+  const navItemText =
+    [
+      "inline-flex items-center",
+      "text-[15px] font-semibold leading-none text-white/90",
+      "transition-[color,transform] duration-200 ease-out",
+      "group-hover:!text-[var(--accent)] group-hover:scale-[1.06]",
+      "group-active:scale-[1.02]"
+    ].join(" ");
 
   return (
     <>
@@ -63,7 +78,7 @@ export default function SiteHeaderClient({
         ref={headerRef}
         className={[
           "fixed top-0 left-0 right-0 z-50",
-          "border-b border-white/10 bg-[var(--ink)] text-white",
+          "border-b border-white/10 bg-[var(--ink)] text-white"
           // "supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--ink),transparent_10%)] supports-[backdrop-filter]:backdrop-blur"
         ].join(" ")}
       >
@@ -102,16 +117,16 @@ export default function SiteHeaderClient({
                         key={n.href}
                         type="button"
                         onClick={openContact}
-                        className={navItemClass}
+                        className={navItemWrap}
                       >
-                        {n.label}
+                        <span className={navItemText}>{n.label}</span>
                       </button>
                     );
                   }
 
                   return (
-                    <Link key={n.href} href={`${base}${n.href}`} className={navItemClass}>
-                      {n.label}
+                    <Link key={n.href} href={`${base}${n.href}`} className={navItemWrap}>
+                      <span className={navItemText}>{n.label}</span>
                     </Link>
                   );
                 })}
