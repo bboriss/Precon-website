@@ -1,62 +1,70 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 export default function ContactFab({
   onClick,
   open = false,
-  showAfter = 120
+  showAfter = 120,
 }: {
   onClick: () => void;
   open?: boolean;
   showAfter?: number;
 }) {
-  const [visible, setVisible] = useState(false);
-  const [footerInView, setFooterInView] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [footerInView, setFooterInView] = React.useState(false);
 
-  // 1) Pojavi se posle skrola
-  useEffect(() => {
+  // helper: siguran browser window (izbegava TS "window: never")
+  const getWin = () => {
+    if (typeof globalThis === "undefined") return null;
+    const w = (globalThis as any).window as Window | undefined;
+    return w ?? null;
+  };
+
+  // 1) Pojavljivanje posle skrola
+  React.useEffect(() => {
+    const w = getWin();
+    if (!w) return;
+
     let raf = 0;
 
     const update = () => {
-      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      const y = w.scrollY || 0;
       setVisible(y > showAfter);
     };
 
     const onScroll = () => {
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(update);
     };
 
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    w.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      w.removeEventListener("scroll", onScroll);
     };
   }, [showAfter]);
 
   // 2) Nestani kad footer udje u viewport
-  useEffect(() => {
+  React.useEffect(() => {
+    const w = getWin();
+    if (!w) return;
+
     const footerEl =
       (document.getElementById("site-footer") as HTMLElement | null) ||
       (document.querySelector("footer") as HTMLElement | null);
 
     if (!footerEl) return;
 
-    // IntersectionObserver = najstabilnije za ovaj use-case
-    if ("IntersectionObserver" in window) {
+    if ("IntersectionObserver" in w) {
       const io = new IntersectionObserver(
-        (entries) => {
-          const e = entries[0];
-          setFooterInView(!!e?.isIntersecting);
-        },
+        (entries) => setFooterInView(Boolean(entries[0]?.isIntersecting)),
         {
           root: null,
-          // malo ranije sakrij (pre nego "bas udaris" u footer),
-          // slobodno promeni na "0px" ako hoces tek kad se pojavi footer.
           rootMargin: "0px 0px -20% 0px",
-          threshold: 0.01
+          threshold: 0.01,
         }
       );
 
@@ -64,16 +72,16 @@ export default function ContactFab({
       return () => io.disconnect();
     }
 
-    // Fallback (ako bas nema IO)
+    // fallback
     const onScroll = () => {
       const r = footerEl.getBoundingClientRect();
-      const inView = r.top < window.innerHeight && r.bottom > 0;
+      const inView = r.top < w.innerHeight && r.bottom > 0;
       setFooterInView(inView);
     };
 
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    w.addEventListener("scroll", onScroll, { passive: true });
+    return () => w.removeEventListener("scroll", onScroll);
   }, []);
 
   const hidden = open || !visible || footerInView;
@@ -83,7 +91,7 @@ export default function ContactFab({
       <button
         type="button"
         onClick={(e) => {
-          // sprečava "sticky active/focus" na mobilnom
+          // sprečava sticky focus na mobilnom
           (e.currentTarget as HTMLButtonElement).blur();
           onClick();
         }}
@@ -93,7 +101,7 @@ export default function ContactFab({
           "transition-all duration-300 ease-out",
           hidden
             ? "opacity-0 translate-y-3 pointer-events-none"
-            : "opacity-100 translate-y-0"
+            : "opacity-100 translate-y-0",
         ].join(" ")}
       >
         {/* Tooltip */}
@@ -109,10 +117,10 @@ export default function ContactFab({
             "shadow-[0_10px_25px_rgba(249,115,22,0.25)]",
             "opacity-0 translate-y-2",
             "transition duration-200",
-            // tooltip samo na hover uredjajima (desktop), ne mobile tap
+            // tooltip samo na hover uredjajima (desktop)
             "[@media(hover:hover)]:group-hover:opacity-100",
             "[@media(hover:hover)]:group-hover:translate-y-0",
-            "group-focus-visible:opacity-100 group-focus-visible:translate-y-0"
+            "group-focus-visible:opacity-100 group-focus-visible:translate-y-0",
           ].join(" ")}
           role="tooltip"
         >
@@ -128,10 +136,9 @@ export default function ContactFab({
             "grid place-items-center",
             "transition",
             "hover:scale-[1.06] active:scale-[1.02]",
-            "contactFabPulse"
+            "contactFabPulse",
           ].join(" ")}
         >
-          {/* SVG kao maska -> boja je 100% bela */}
           <span className="contactFabMsgIcon" aria-hidden="true" />
         </span>
       </button>
@@ -159,7 +166,6 @@ export default function ContactFab({
             filter: none;
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
           }
-
           84% {
             transform: translateY(-2px) scale(1.08);
             filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
@@ -170,7 +176,6 @@ export default function ContactFab({
             filter: none;
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
           }
-
           90% {
             transform: translateY(-2px) scale(1.08);
             filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
@@ -181,7 +186,6 @@ export default function ContactFab({
             filter: none;
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
           }
-
           100% {
             transform: translateY(0) scale(1);
             filter: none;
