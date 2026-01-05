@@ -38,9 +38,6 @@ export default function SiteFooter() {
   const lineClass = "h-px w-full bg-white/10";
 
   // ✅ Jedan jedini class za sva 3 linka (Link + button)
-  const navItemClass =
-    "text-sm text-white/70 hover:text-white transition-colors text-left";
-
   const labelClass = "text-sm text-white/55";
   const valueClass = "text-sm text-white/80";
 
