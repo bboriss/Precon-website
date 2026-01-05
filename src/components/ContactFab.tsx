@@ -8,11 +8,13 @@ export default function ContactFab({
   showAfter = 120
 }: {
   onClick: () => void;
-  open?: boolean;        // <-- NOVO: da znamo kad je modal otvoren
-  showAfter?: number;    // <-- NOVO: prag skrola
+  open?: boolean;
+  showAfter?: number;
 }) {
   const [visible, setVisible] = useState(false);
+  const [footerInView, setFooterInView] = useState(false);
 
+  // 1) Pojavi se posle skrola
   useEffect(() => {
     let raf = 0;
 
@@ -34,21 +36,60 @@ export default function ContactFab({
     };
   }, [showAfter]);
 
-  const hidden = open || !visible;
+  // 2) Nestani kad footer udje u viewport
+  useEffect(() => {
+    const footerEl =
+      (document.getElementById("site-footer") as HTMLElement | null) ||
+      (document.querySelector("footer") as HTMLElement | null);
+
+    if (!footerEl) return;
+
+    // IntersectionObserver = najstabilnije za ovaj use-case
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          const e = entries[0];
+          setFooterInView(!!e?.isIntersecting);
+        },
+        {
+          root: null,
+          // malo ranije sakrij (pre nego "bas udaris" u footer),
+          // slobodno promeni na "0px" ako hoces tek kad se pojavi footer.
+          rootMargin: "0px 0px -20% 0px",
+          threshold: 0.01
+        }
+      );
+
+      io.observe(footerEl);
+      return () => io.disconnect();
+    }
+
+    // Fallback (ako bas nema IO)
+    const onScroll = () => {
+      const r = footerEl.getBoundingClientRect();
+      const inView = r.top < window.innerHeight && r.bottom > 0;
+      setFooterInView(inView);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const hidden = open || !visible || footerInView;
 
   return (
     <>
       <button
         type="button"
         onClick={(e) => {
-          // ✅ sprečava "sticky active/focus" na mobilnom
+          // sprečava "sticky active/focus" na mobilnom
           (e.currentTarget as HTMLButtonElement).blur();
           onClick();
         }}
         aria-label="Open contact"
         className={[
           "contactFab fixed z-[70] left-4 bottom-4 cursor-pointer group",
-          // ✅ show/hide animacija kao BackToTop
           "transition-all duration-300 ease-out",
           hidden
             ? "opacity-0 translate-y-3 pointer-events-none"
@@ -68,10 +109,9 @@ export default function ContactFab({
             "shadow-[0_10px_25px_rgba(249,115,22,0.25)]",
             "opacity-0 translate-y-2",
             "transition duration-200",
-            // ✅ tooltip samo na uređajima koji stvarno imaju hover (ne mobile tap)
+            // tooltip samo na hover uredjajima (desktop), ne mobile tap
             "[@media(hover:hover)]:group-hover:opacity-100",
             "[@media(hover:hover)]:group-hover:translate-y-0",
-            // ✅ tastatura: focus-visible i dalje radi
             "group-focus-visible:opacity-100 group-focus-visible:translate-y-0"
           ].join(" ")}
           role="tooltip"
@@ -102,7 +142,6 @@ export default function ContactFab({
           height: 22px;
           background: rgba(255, 255, 255, 0.92);
 
-          /* mask za SVG iz /public */
           -webkit-mask-image: url("/messageIcon.svg");
           mask-image: url("/messageIcon.svg");
           -webkit-mask-repeat: no-repeat;
@@ -121,7 +160,6 @@ export default function ContactFab({
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
           }
 
-          /* blink #1 */
           84% {
             transform: translateY(-2px) scale(1.08);
             filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
@@ -133,7 +171,6 @@ export default function ContactFab({
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
           }
 
-          /* blink #2 */
           90% {
             transform: translateY(-2px) scale(1.08);
             filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));

@@ -95,5 +95,18 @@
       "emailValue": "office@precon.rs",
       "officeValue": "Blagoja Parovica 1b, Niš, Serbia"
     }
+  },
+  "footer": {
+    "tagline": "Structural design, technical documentation and BIM models — clear, fast and coordinated.",
+    "navTitle": "Navigation",
+    "about": "About Us",
+    "services": "Services",
+    "contactTitle": "Contact",
+    "locationLabel": "Location",
+    "locationValue": "Niš, Serbia",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "contactCta": "Contact",
+    "rights": "All rights reserved."
   }
 }

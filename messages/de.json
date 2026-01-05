@@ -95,5 +95,18 @@
       "emailValue": "office@precon.rs",
       "officeValue": "Blagoja Parovica 1b, Niš, Serbien"
     }
+  },
+  "footer": {
+    "tagline": "Tragwerksplanung, technische Dokumentation und BIM-Modelle — klar, schnell und koordiniert.",
+    "navTitle": "Navigation",
+    "about": "Über uns",
+    "services": "Leistungen",
+    "contactTitle": "Kontakt",
+    "locationLabel": "Standort",
+    "locationValue": "Niš, Serbien",
+    "emailLabel": "E-Mail",
+    "phoneLabel": "Telefon",
+    "contactCta": "Kontakt",
+    "rights": "Alle Rechte vorbehalten."
   }
 }

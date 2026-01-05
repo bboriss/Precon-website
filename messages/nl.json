@@ -95,5 +95,18 @@
       "emailValue": "office@precon.rs",
       "officeValue": "Blagoja Parovica 1b, Niš, Servië"
     }
+  },
+  "footer": {
+    "tagline": "Constructieve berekeningen, technische documentatie en BIM-modellen — helder, snel en afgestemd.",
+    "navTitle": "Navigatie",
+    "about": "Over ons",
+    "services": "Diensten",
+    "contactTitle": "Contact",
+    "locationLabel": "Locatie",
+    "locationValue": "Niš, Servië",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Telefoon",
+    "contactCta": "Contact",
+    "rights": "Alle rechten voorbehouden."
   }
 }

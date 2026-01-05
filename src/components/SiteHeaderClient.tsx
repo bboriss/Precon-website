@@ -47,6 +47,13 @@ export default function SiteHeaderClient({
   const openContact = () => setContactOpen(true);
   const closeContact = () => setContactOpen(false);
 
+  useEffect(() => {
+  const handler = () => openContact();
+  window.addEventListener("precon:open-contact", handler as EventListener);
+  return () => window.removeEventListener("precon:open-contact", handler as EventListener);
+}, []);
+
+
   const navItemClass =
     "text-[15px] font-semibold leading-none text-white/90 hover:text-[var(--accent)] transition-colors";
 

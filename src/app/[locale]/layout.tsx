@@ -22,7 +22,6 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
 
-  // ✅ Ovo je ključno: poruke za client komponente (useTranslations)
   const messages = await getMessages();
 
   return (
