@@ -19,22 +19,22 @@ export default async function Page({
   const items: ExpertiseItem[] = [
     {
       key: "precast",
-      image: "/precast.webp", // ✅ ostaje
-      gallery: PREFAB_IMAGES, // ✅ assets galerija
+      image: "/precast.webp",
+      gallery: PREFAB_IMAGES,
       title: t("expertise.items.precast.title"),
       body: t("expertise.items.precast.body")
     },
     {
       key: "concrete",
-      image: "/concrete.webp", // ✅ ostaje
-      gallery: BETON_IMAGES,   // ✅ assets galerija
+      image: "/concrete.webp",
+      gallery: BETON_IMAGES,
       title: t("expertise.items.concrete.title"),
       body: t("expertise.items.concrete.body")
     },
     {
       key: "steel",
-      image: "/steel.webp", // ✅ ostaje
-      gallery: CELIK_IMAGES, // ✅ assets galerija
+      image: "/steel.webp",
+      gallery: CELIK_IMAGES,
       title: t("expertise.items.steel.title"),
       body: t("expertise.items.steel.body")
     },
@@ -76,6 +76,7 @@ export default async function Page({
         title={t("expertise.title")}
         lead={t("expertise.lead")}
         items={items}
+        locale={locale}
       />
 
       <OurClientsSection title={t("clients.title")} />
