@@ -14,10 +14,11 @@ export type ServiceShowcaseItem = {
   gallery: ImageSource[];
 };
 
-const IMAGE_MS = 1200;
+const IMAGE_MS = 1100;
 const TEXT_MS = 1000;
 const OFFSET_PX = 24;
-const AUTO_SLIDE_MS = 4500;
+const AUTO_SLIDE_MS = 4600;
+const SECTION_STAGGER_MS = 850;
 
 function clampIndex(i: number, n: number) {
   if (n <= 0) return 0;
@@ -73,8 +74,8 @@ function CarouselButton({
       aria-label={dir === "prev" ? "Previous slide" : "Next slide"}
       className={[
         "inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full",
-        "border border-white/40 bg-white/70 text-black/75 backdrop-blur-sm",
-        "transition hover:bg-white hover:text-black"
+        "border border-white/35 bg-white/72 text-black/75 backdrop-blur-sm",
+        "transition duration-300 hover:bg-white hover:text-black"
       ].join(" ")}
     >
       <span className="text-xl md:text-2xl leading-none">
@@ -86,14 +87,15 @@ function CarouselButton({
 
 function ServiceCarousel({
   title,
-  images
+  images,
+  autoplayStartDelayMs = 0
 }: {
   title: string;
   images: ImageSource[];
+  autoplayStartDelayMs?: number;
 }) {
   const [idx, setIdx] = useState(0);
   const hasMany = images.length > 1;
-  const current = images[idx] ?? images[0];
 
   useEffect(() => {
     const reduce =
@@ -103,16 +105,24 @@ function ServiceCarousel({
 
     if (!hasMany || reduce) return;
 
-    const timer = window.setInterval(() => {
+    let intervalId: number | undefined;
+    const firstTimeoutId = window.setTimeout(() => {
       setIdx((v) => clampIndex(v + 1, images.length));
-    }, AUTO_SLIDE_MS);
 
-    return () => window.clearInterval(timer);
-  }, [hasMany, images.length]);
+      intervalId = window.setInterval(() => {
+        setIdx((v) => clampIndex(v + 1, images.length));
+      }, AUTO_SLIDE_MS);
+    }, AUTO_SLIDE_MS + autoplayStartDelayMs);
 
-  if (!current) {
+    return () => {
+      window.clearTimeout(firstTimeoutId);
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, [hasMany, images.length, autoplayStartDelayMs]);
+
+  if (!images.length) {
     return (
-      <div className="grid h-[260px] sm:h-[320px] md:h-[420px] place-items-center rounded-[28px] bg-black/5 text-black/40">
+      <div className="grid h-[280px] sm:h-[360px] md:h-[420px] place-items-center rounded-[28px] bg-black/5 text-black/40">
         No images
       </div>
     );
@@ -121,15 +131,27 @@ function ServiceCarousel({
   return (
     <div className="w-full">
       <div className="relative overflow-hidden rounded-[28px] bg-black/5">
-        <div className="relative h-[260px] sm:h-[320px] md:h-[420px]">
-          <Image
-            key={typeof current === "string" ? current : current.src}
-            src={current}
-            alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, 60vw"
-            className="object-cover"
-          />
+        <div className="relative h-[280px] sm:h-[360px] md:h-[420px]">
+          <div
+            className="flex h-full transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
+            style={{ transform: `translate3d(-${idx * 100}%, 0, 0)` }}
+          >
+            {images.map((img, slideIdx) => (
+              <div
+                key={typeof img === "string" ? `${img}-${slideIdx}` : `${img.src}-${slideIdx}`}
+                className="relative h-full w-full shrink-0 grow-0 basis-full"
+              >
+                <Image
+                  src={img}
+                  alt={`${title} ${slideIdx + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  className="object-cover"
+                  priority={slideIdx === 0}
+                />
+              </div>
+            ))}
+          </div>
 
           {hasMany && (
             <>
@@ -152,16 +174,16 @@ function ServiceCarousel({
       </div>
 
       {hasMany && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+        <div className="mt-5 flex items-center justify-center gap-2.5">
           {images.map((img, dotIdx) => (
             <button
-              key={typeof img === "string" ? `${img}-${dotIdx}` : `${img.src}-${dotIdx}`}
+              key={typeof img === "string" ? `dot-${img}-${dotIdx}` : `dot-${img.src}-${dotIdx}`}
               type="button"
               onClick={() => setIdx(dotIdx)}
               aria-label={`Go to slide ${dotIdx + 1}`}
               className={[
-                "h-2.5 w-2.5 rounded-full transition",
-                dotIdx === idx ? "bg-black/75 scale-110" : "bg-black/20 hover:bg-black/40"
+                "h-2.5 w-2.5 rounded-full transition duration-300",
+                dotIdx === idx ? "scale-110 bg-black/75" : "bg-black/20 hover:bg-black/40"
               ].join(" ")}
             />
           ))}
@@ -200,13 +222,12 @@ function ServiceRow({
   );
 
   return (
-    <section id={item.key} className="scroll-mt-28 md:scroll-mt-36">
+    <section id={item.key} className="scroll-mt-24 md:scroll-mt-28">
       <div
         ref={ref}
         className="rounded-[32px] border border-black/8 bg-white p-5 md:p-8 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.22)]"
       >
         <div className="grid items-center gap-6 md:gap-10 md:grid-cols-12">
-          {/* IMAGE */}
           <div
             className={[
               "md:col-span-7",
@@ -217,11 +238,14 @@ function ServiceRow({
               className={inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
               style={imageStyle}
             >
-              <ServiceCarousel title={item.title} images={item.gallery} />
+              <ServiceCarousel
+                title={item.title}
+                images={item.gallery}
+                autoplayStartDelayMs={index * SECTION_STAGGER_MS}
+              />
             </div>
           </div>
 
-          {/* TEXT */}
           <div className={["md:col-span-5", reverse ? "md:order-1" : "md:order-2"].join(" ")}>
             <div
               className={inView ? "opacity-100" : "opacity-0"}
@@ -237,15 +261,15 @@ function ServiceRow({
                 <span className="h-px w-10 bg-black/15" />
               </div>
 
-              <h2 className="mt-4 text-2xl md:text-4xl font-semibold tracking-tight text-[var(--ink)]">
+              <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight text-[var(--ink)]">
                 {item.title}
               </h2>
 
-              <p className="mt-4 text-base md:text-lg leading-relaxed text-black/65">
+              <p className="mt-4 text-lg md:text-[1.2rem] leading-relaxed text-black/68">
                 {item.lead}
               </p>
 
-              <div className="mt-5 space-y-4 text-sm md:text-base leading-relaxed text-black/72">
+              <div className="mt-6 space-y-4 text-base md:text-[1.05rem] leading-relaxed text-black/72">
                 {item.paragraphs.map((paragraph, pIdx) => (
                   <p key={pIdx}>{paragraph}</p>
                 ))}
@@ -268,7 +292,7 @@ export default function ServicesShowcase({
   items: ServiceShowcaseItem[];
 }) {
   return (
-    <section className="bg-[var(--section-bg)] py-14 md:py-20">
+    <section className="bg-[var(--section-bg)] pt-8 pb-14 md:pt-10 md:pb-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="max-w-4xl">
           <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-[var(--ink)]">
@@ -280,7 +304,7 @@ export default function ServicesShowcase({
           </p>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
           {items.map((item) => (
             <a
               key={item.key}
@@ -292,7 +316,7 @@ export default function ServicesShowcase({
           ))}
         </div>
 
-        <div className="mt-12 space-y-10 md:space-y-14">
+        <div className="mt-12 space-y-12 md:mt-14 md:space-y-16">
           {items.map((item, index) => (
             <ServiceRow key={item.key} item={item} index={index} />
           ))}
