@@ -1,6 +1,7 @@
 {
   "nav": {
     "services": "Diensten",
+    "about": "Wie wij zijn",
     "references": "Referenties",
     "contact": "Contact"
   },
@@ -10,7 +11,7 @@
   },
   "stats": {
     "projects": "Succesvolle projecten",
-    "rebarArea": "Wapening (m²)",
+    "rebarArea": "Wapeningsdetailering (m²)",
     "clients": "Tevreden klanten"
   },
   "expertise": {
@@ -19,85 +20,134 @@
     "items": {
       "precast": {
         "title": "Prefab betonconstructies",
-        "body": "Ontwerp van prefab elementen (wanden, vloeren, liggers, kolommen) met BIM-coördinatie en detaillering van wapening, verbindingen en montage. Focus: maakbaarheid, toleranties en snelle montage."
+        "body": "Ontwerp van prefab elementen zoals wanden, vloeren, liggers en kolommen met BIM-coördinatie en detaillering van wapening, verbindingen en montage. Focus: produceerbaarheid, toleranties en snelle montage."
       },
       "concrete": {
-        "title": "Betonconstructies",
-        "body": "Ontwerp van gewapende betonconstructies met heldere berekeningen, rationele detaillering en betrouwbare documentatie. Optimalisatie van doorsneden en wapening met afstemming tussen disciplines."
+        "title": "Gewapende betonconstructies",
+        "body": "Constructief ontwerp in gewapend beton met heldere berekeningen, rationele detaillering en betrouwbare documentatie. Optimalisatie van doorsneden en wapening in afstemming met andere disciplines."
       },
       "steel": {
         "title": "Staalconstructies",
-        "body": "Uitwerking van staalconstructies en verbindingen, variantenstudies en coördinatie. Focus: nauwkeurige details, maakbaarheid en efficiënte fabricage."
+        "body": "Uitwerking van staalconstructies en verbindingen, oplossingsvarianten en interdisciplinaire coördinatie. Focus: nauwkeurige details, uitvoerbaarheid en efficiënte fabricage."
       },
       "management": {
         "title": "Projectmanagement",
-        "body": "Planning van deliverables, taakopvolging en duidelijke communicatie. Focus: deadlines, transparantie en kwaliteitscontrole doorheen het project."
+        "body": "Leveringsplanning, taakopvolging en duidelijke communicatieworkflows. Focus: deadlines, transparantie en kwaliteitsbewaking gedurende het hele project."
       },
       "software": {
         "title": "Maatwerk softwareoplossingen",
-        "body": "Automatisering en tooling voor engineering-workflows: AutoLISP voor AutoCAD-productiviteit, C#/.NET-plugins en utilities, en JavaScript (Node.js + web) voor dashboards, calculators en bestandsverwerking."
+        "body": "Automatisering en tools voor engineeringworkflows: AutoLISP voor hogere productiviteit in AutoCAD, C#/.NET-plugins en utilities, en JavaScript-oplossingen (Node.js + web) voor dashboards, calculators en bestandsverwerking."
       }
     }
   },
   "about": {
     "title": "Over ons",
-    "p1": "PRECON Design is een ingenieursbureau in Niš (Servië), gericht op constructief ontwerp, wapeningsdetails en BIM-ondersteuning voor internationale partners.",
-    "p2": "Geografisch zijn we uitstekend gepositioneerd voor samenwerking met Europese teams — snelle communicatie, duidelijke standaarden en nette documentatie gedurende de hele projectcyclus.",
-    "p3": "Niš is een universiteitsstad met een sterke technische basis en een constante instroom van jong talent, waardoor we stabiel kunnen groeien en betrouwbaar kunnen leveren, ook bij korte deadlines."
+    "p1": "PRECON Design is een ingenieursbureau gevestigd in Niš (Servië), gericht op constructief ontwerp, wapeningsdetailering en BIM-ondersteuning voor internationale partners.",
+    "p2": "Geografisch zijn wij goed gepositioneerd om samen te werken met Europese teams — met snelle communicatie, duidelijke standaarden en verzorgde documentatie gedurende de volledige projectcyclus.",
+    "p3": "Niš is een universiteitsstad met een sterke technische basis en een constante instroom van jong talent, wat zorgt voor stabiele teamgroei en betrouwbare levering, ook onder strakke planningen."
+  },
+  "servicesPage": {
+    "title": "Diensten",
+    "lead": "Wij bieden constructief ontwerp, detaillering en BIM-ondersteuning voor prefab beton-, beton- en staalconstructies — met focus op duidelijkheid, coördinatie en productierijpe documentatie.",
+    "items": {
+      "precast": {
+        "title": "Prefab betonconstructies",
+        "lead": "Ondersteuning gedurende het volledige ontwikkelproces van een prefab systeem — van concept en coördinatie tot modellering, detaillering en productierijpe documentatie.",
+        "p1": "Wij werken aan het ontwerp en de uitwerking van wanden, vloeren, liggers, kolommen en andere prefab elementen, met bijzondere aandacht voor produceerbaarheid, toleranties, transport en montagelogica.",
+        "p2": "Het doel is niet alleen om een constructieve oplossing te leveren, maar om heldere, gecoördineerde en praktische documentatie op te stellen die aansluit op echte productie- en projectprocessen."
+      },
+      "concrete": {
+        "title": "Betonconstructies",
+        "lead": "Uitwerking van gewapend-betonsystemen met focus op constructieve logica, wapeningsdetailering, multidisciplinaire coördinatie en betrouwbare technische documentatie.",
+        "p1": "Onze werkzaamheden omvatten constructieve analyse, technische uitwerking, wapeningsplanning en afstemming met architectuur en MEP-disciplines gedurende verschillende projectfasen.",
+        "p2": "Wij streven naar documentatie die technisch consistent, overzichtelijk en afgestemd is op de praktische eisen van de uitvoering op de bouwplaats."
+      },
+      "steel": {
+        "title": "Staalconstructies",
+        "lead": "Ontwikkeling van staalsystemen vanaf constructief concept en coördinatie tot verbindingsdetails, werkplaatstekeningen en ondersteuning tijdens de uitvoering.",
+        "p1": "Wij werken aan staalframes, secundaire onderdelen, verbindingslogica en technische documentatie met sterke focus op nauwkeurigheid, uitvoerbaarheid en fabricage-efficiëntie.",
+        "p2": "Het resultaat is een gecoördineerd en praktisch documentatiepakket dat zowel de ontwerpontwikkeling als de verdere productieprocessen ondersteunt."
+      }
+    }
+  },
+  "aboutPage": {
+    "heroTitle": "Wie wij zijn",
+    "heroLead": "Precon Design is een ingenieurspartner met focus op prefab betonconstructies, gewapend beton en staalconstructies, met een praktische BIM-gerichte aanpak voor coördinatie en productierijpe documentatie.",
+    "processTitle": "Hoe wij werken",
+    "processLead": "Onze werkwijze is gebaseerd op duidelijke technische communicatie, sterke coördinatie en documentatie die bruikbaar is voor zowel het ontwerpteam als de productie.",
+    "processItems": {
+      "item1": {
+        "title": "Concept en coördinatie",
+        "body": "In een vroege fase analyseren wij het systeem, de geometrie en de projectbeperkingen om een duidelijke en efficiënte ontwikkelingsrichting vast te leggen."
+      },
+      "item2": {
+        "title": "Modelleren en uitwerken",
+        "body": "Wij ontwikkelen de constructie via BIM en technische detaillering, met focus op samenhang tussen elementen, details en leveringsfasen."
+      },
+      "item3": {
+        "title": "Documentatie voor uitvoering",
+        "body": "Wij verzorgen tekeningen en technische documentatie die helder, praktisch en afgestemd zijn op de werkelijke productie- en uitvoeringsbehoeften."
+      }
+    },
+    "softwareTitle": "Software die wij gebruiken",
+    "softwareLead": "Wij vertrouwen op bewezen tools voor modellering, coördinatie, technische uitwerking en interne procesautomatisering.",
+    "ctaTitle": "Heeft u een project of aanvraag?",
+    "ctaBody": "Heeft u een partner nodig voor constructief ontwerp, BIM-coördinatie of productierijpe documentatie, neem dan contact met ons op.",
+    "ctaButton": "Neem contact op"
   },
   "clients": {
     "title": "Onze klanten"
   },
   "contactModal": {
     "title": "Contact",
-    "help": "Meestal reageren we binnen 1–2 werkdagen.",
+    "help": "Meestal reageren wij binnen 1–2 werkdagen.",
     "close": "Sluiten",
     "tabs": {
       "work": "Laten we samenwerken",
       "career": "Wil je deel uitmaken van PRECON?"
     },
-    "send": "Versturen",
-    "note": "Door dit formulier te verzenden ga je ermee akkoord dat we contact met je opnemen via e-mail.",
+    "send": "Verzenden",
+    "note": "Door dit formulier te verzenden ga je ermee akkoord dat wij per e-mail contact met je opnemen.",
     "work": {
-      "fullName": "Voor- en achternaam",
-      "fullNamePh": "Je volledige naam",
+      "fullName": "Volledige naam",
+      "fullNamePh": "Uw volledige naam",
       "email": "E-mail",
-      "emailPh": "name@company.com",
+      "emailPh": "naam@bedrijf.com",
       "message": "Bericht",
-      "messagePh": "Vertel ons over je project, planning en verwachte scope…"
+      "messagePh": "Vertel ons iets over uw project, planning en verwachte scope…"
     },
     "career": {
-      "fullName": "Voor- en achternaam",
-      "fullNamePh": "Je volledige naam",
+      "fullName": "Volledige naam",
+      "fullNamePh": "Uw volledige naam",
       "email": "E-mail",
-      "emailPh": "name@email.com",
+      "emailPh": "naam@email.com",
       "letter": "Motivatiebrief",
-      "letterPh": "Korte intro, waar je goed in bent en waarom je wilt aansluiten…",
-      "cv": "CV",
+      "letterPh": "Korte introductie, waar je in uitblinkt en waarom je bij ons wilt komen werken…",
+      "cv": "CV / Resume",
       "cvHint": "PDF of DOCX, tot 10MB.",
       "chooseFile": "Bestand kiezen",
       "removeFile": "Verwijderen",
-      "noFile": "Geen bestand gekozen"
+      "noFile": "Geen bestand geselecteerd"
     },
     "errors": {
-      "fullName": "Vul je voor- en achternaam in.",
-      "email": "Vul een geldig e-mailadres in.",
+      "fullName": "Voer uw voor- en achternaam in.",
+      "email": "Voer een geldig e-mailadres in.",
       "message": "Het bericht moet minimaal 10 tekens bevatten.",
       "letter": "De motivatiebrief moet minimaal 30 tekens bevatten.",
-      "cv": "Voeg je CV toe."
+      "cv": "Voeg uw CV toe."
     },
     "details": {
-      "title": "Contactgegevens",
-      "phone": "Telefoon",
-      "email": "E-mail",
-      "office": "Kantoor",
-      "phoneValue": "+381 00 000 000",
-      "emailValue": "office@precon.rs",
-      "officeValue": "Blagoja Parovica 1b, Niš, Servië"
-    }
+  "title": "Contactgegevens",
+  "phone": "Telefoon",
+  "email": "E-mail",
+  "office": "Kantoor",
+  "phoneValue": "+381 63 469 538",
+  "emailValue": "info@precondesign.rs",
+  "officeValue": "Blagoja Parovica 1b, Niš, Servië"
+}
   },
   "footer": {
-    "tagline": "Constructieve berekeningen, technische documentatie en BIM-modellen — helder, snel en afgestemd.",
+    "tagline": "Constructief ontwerp, technische documentatie en BIM-modellen — helder, snel en gecoördineerd.",
     "navTitle": "Navigatie",
     "about": "Over ons",
     "services": "Diensten",

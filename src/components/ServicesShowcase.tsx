@@ -73,12 +73,12 @@ function CarouselButton({
       onClick={onClick}
       aria-label={dir === "prev" ? "Previous slide" : "Next slide"}
       className={[
-        "inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full",
+        "inline-flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full",
         "border border-white/35 bg-white/72 text-black/75 backdrop-blur-sm",
         "transition duration-300 hover:bg-white hover:text-black"
       ].join(" ")}
     >
-      <span className="text-xl md:text-2xl leading-none">
+      <span className="text-lg md:text-xl leading-none">
         {dir === "prev" ? "←" : "→"}
       </span>
     </button>
@@ -256,20 +256,20 @@ function ServiceRow({
                   : `translate3d(${reverse ? -OFFSET_PX : OFFSET_PX}px, 4px, 0)`
               }}
             >
-              <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-black/35">
+              <div className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-black/35">
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <span className="h-px w-10 bg-black/15" />
               </div>
 
-              <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight text-[var(--ink)]">
+              <h2 className="mt-4 text-[1.85rem] md:text-[2.3rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.08]">
                 {item.title}
               </h2>
 
-              <p className="mt-4 text-lg md:text-[1.2rem] leading-relaxed text-black/68">
+              <p className="mt-4 text-[13.5px] md:text-[1rem] leading-relaxed text-black/68">
                 {item.lead}
               </p>
 
-              <div className="mt-6 space-y-4 text-base md:text-[1.05rem] leading-relaxed text-black/72">
+              <div className="mt-6 space-y-4 text-[13px] md:text-[0.95rem] leading-relaxed text-black/72">
                 {item.paragraphs.map((paragraph, pIdx) => (
                   <p key={pIdx}>{paragraph}</p>
                 ))}
@@ -295,11 +295,11 @@ export default function ServicesShowcase({
     <section className="bg-[var(--section-bg)] pt-8 pb-14 md:pt-10 md:pb-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-[var(--ink)]">
+          <h1 className="text-[2rem] md:text-[2.6rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.06]">
             {title}
           </h1>
 
-          <p className="mt-4 text-base md:text-lg leading-relaxed text-black/65">
+          <p className="mt-4 text-[13px] md:text-[0.95rem] leading-relaxed text-black/65">
             {lead}
           </p>
         </div>
@@ -309,7 +309,7 @@ export default function ServicesShowcase({
             <a
               key={item.key}
               href={`#${item.key}`}
-              className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-[var(--ink)] transition hover:border-black/20 hover:bg-black/5"
+              className="rounded-full border border-black/10 bg-white px-4 py-2 text-[12.5px] font-medium text-[var(--ink)] transition hover:border-black/20 hover:bg-black/5"
             >
               {item.title}
             </a>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { Container } from "@/components/Container";
@@ -26,23 +25,6 @@ export default function SiteHeaderClient({
   const [contactOpen, setContactOpen] = useState(false);
 
   const base = `/${locale}`;
-  const headerRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const setHeaderH = () => {
-      const h = headerRef.current?.getBoundingClientRect().height ?? 68;
-      const hh = Math.round(h);
-      document.documentElement.style.setProperty("--header-h", `${hh}px`);
-      document.body.style.paddingTop = `${hh}px`;
-    };
-
-    setHeaderH();
-    window.addEventListener("resize", setHeaderH);
-    return () => {
-      window.removeEventListener("resize", setHeaderH);
-      document.body.style.paddingTop = "";
-    };
-  }, []);
 
   const openContact = () => setContactOpen(true);
   const closeContact = () => setContactOpen(false);
@@ -53,39 +35,26 @@ export default function SiteHeaderClient({
     return () => window.removeEventListener("precon:open-contact", handler as EventListener);
   }, []);
 
-  // Wrapper class (na Link/button)
-  const navItemWrap =
-    [
-      "group inline-flex items-center",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40",
-      "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]",
-      "rounded-md" // da ring izgleda lepse
-    ].join(" ");
+  const navItemWrap = [
+    "group inline-flex items-center rounded-md",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40",
+    "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
+  ].join(" ");
 
-  // Text class (na span unutra) — ovde je i boja i scale
-  const navItemText =
-    [
-      "inline-flex items-center",
-      "text-[15px] font-semibold leading-none text-white/90",
-      "transition-[color,transform] duration-200 ease-out",
-      "group-hover:!text-[var(--accent)] group-hover:scale-[1.06]",
-      "group-active:scale-[1.02]"
-    ].join(" ");
+  const navItemText = [
+    "inline-flex items-center",
+    "text-[15px] font-semibold leading-none text-white/90",
+    "transition-[color,transform] duration-200 ease-out",
+    "group-hover:text-[var(--accent)] group-hover:scale-[1.04]",
+    "group-active:scale-[1.01]"
+  ].join(" ");
 
   return (
     <>
-      <header
-        ref={headerRef}
-        className={[
-          "fixed top-0 left-0 right-0 z-50",
-          "border-b border-white/10 bg-[var(--ink)] text-white"
-          // "supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--ink),transparent_10%)] supports-[backdrop-filter]:backdrop-blur"
-        ].join(" ")}
-      >
+      <header className="sticky top-0 left-0 right-0 z-50 border-b border-white/10 bg-[var(--ink)] text-white">
         <Container>
-          <div className="flex h-[68px] md:h-[72px] items-center justify-between">
-            {/* LEFT */}
-            <Link href={base} className="flex items-center gap-0">
+          <div className="flex h-[72px] items-center justify-between">
+            <a href={base} className="flex items-center gap-0">
               <div className="relative h-9 w-9 md:h-10 md:w-10 lg:h-11 lg:w-11">
                 <Image src="/Logo2.png" alt="PRECON" fill className="object-contain" priority />
               </div>
@@ -99,9 +68,8 @@ export default function SiteHeaderClient({
                   className="object-contain translate-y-[1px]"
                 />
               </div>
-            </Link>
+            </a>
 
-            {/* RIGHT DESKTOP */}
             <div className="hidden items-center gap-7 md:flex">
               <nav className="flex items-center gap-9">
                 {nav.map((n) => {
@@ -125,24 +93,26 @@ export default function SiteHeaderClient({
                   }
 
                   return (
-                    <Link key={n.href} href={`${base}${n.href}`} className={navItemWrap}>
+                    <a
+                      key={n.href}
+                      href={`${base}${n.href}`}
+                      className={navItemWrap}
+                    >
                       <span className={navItemText}>{n.label}</span>
-                    </Link>
+                    </a>
                   );
                 })}
               </nav>
 
-              {/* ✅ VRACENO na desktop + zastavice */}
               <LocaleDropdown currentLocale={locale} options={locales} compact />
             </div>
 
-            {/* RIGHT MOBILE (samo hamburger) */}
             <div className="flex items-center gap-3 md:hidden">
               <button
                 type="button"
                 aria-label="Open menu"
                 onClick={() => setMenuOpen(true)}
-                className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold leading-none text-white/90 hover:text-[var(--accent)] hover:bg-white/10 transition-colors"
+                className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold leading-none text-white/90 transition-colors hover:bg-white/10 hover:text-[var(--accent)]"
               >
                 <span className="text-lg leading-none">≡</span>
               </button>
@@ -164,8 +134,6 @@ export default function SiteHeaderClient({
       />
 
       <ContactModal open={contactOpen} onClose={closeContact} />
-
-      {/* ✅ FAB: pojavi se posle skrola + sakrij kad je modal open */}
       <ContactFab onClick={openContact} open={contactOpen} showAfter={120} />
     </>
   );

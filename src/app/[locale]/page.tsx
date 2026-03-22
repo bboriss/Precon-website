@@ -55,7 +55,7 @@ export default async function Page({
   return (
     <>
       <HeroVideo
-        src="/hero.mp4"
+        src="/hero1.mp4"
         title={t("hero.title")}
         subtitle={t("hero.subtitle")}
         stats={[

@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/Container";
 
 function IconLinkedIn(props: React.SVGProps<SVGSVGElement>) {
@@ -12,6 +11,7 @@ function IconLinkedIn(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
 function IconFacebook(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -19,6 +19,7 @@ function IconFacebook(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
 function IconInstagram(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -32,24 +33,45 @@ function emitOpenContact() {
   window.dispatchEvent(new CustomEvent("precon:open-contact"));
 }
 
+function goTo(href: string) {
+  if (typeof window === "undefined") return;
+  window.location.href = href;
+}
+
+function FooterNavButton({
+  label,
+  onClick
+}: {
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="appearance-none border-0 bg-transparent p-0 m-0 text-left text-sm font-medium text-white/80 transition-colors duration-300 hover:text-[var(--accent)] focus:outline-none"
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function SiteFooter() {
   const t = useTranslations("footer");
+  const locale = useLocale();
 
   const lineClass = "h-px w-full bg-white/10";
-
-  // ✅ Jedan jedini class za sva 3 linka (Link + button)
   const labelClass = "text-sm text-white/55";
   const valueClass = "text-sm text-white/80";
 
   const socialBtn =
-    "grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white transition-colors";
+    "grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/85 transition duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--ink)]";
 
   return (
     <footer id="site-footer" className="border-t border-white/10 bg-[var(--ink)] text-white">
       <Container>
         <div className="py-9 md:py-10">
           <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-            {/* LEFT */}
             <div>
               <div className="flex items-center gap-3">
                 <div className="relative h-10 w-10">
@@ -85,37 +107,27 @@ export default function SiteFooter() {
               </div>
             </div>
 
-            {/* RIGHT */}
             <div className="md:justify-self-end md:w-full md:max-w-[520px]">
               <div className="grid gap-8 sm:grid-cols-2 sm:gap-6">
-                {/* ✅ Navigation: strogo vertikalno + items-start */}
                 <div className="pt-[2px]">
-  <div className="flex flex-col items-start gap-2 text-sm text-white/70">
-    <Link
-      className="text-inherit hover:text-white transition-colors"
-      href="#about"
-    >
-      {t("about")}
-    </Link>
+                  <div className="flex flex-col items-start gap-2">
+                    <FooterNavButton
+                      label={t("about")}
+                      onClick={() => goTo(`/${locale}/about`)}
+                    />
 
-    <Link
-      className="text-inherit hover:text-white transition-colors"
-      href="#services"
-    >
-      {t("services")}
-    </Link>
+                    <FooterNavButton
+                      label={t("services")}
+                      onClick={() => goTo(`/${locale}/services`)}
+                    />
 
-    <button
-      type="button"
-      onClick={emitOpenContact}
-      className="text-inherit hover:text-white transition-colors appearance-none bg-transparent p-0 m-0 border-0 font-inherit leading-inherit text-left"
-    >
-      {t("contactCta")}
-    </button>
-  </div>
-</div>
+                    <FooterNavButton
+                      label={t("contactCta")}
+                      onClick={emitOpenContact}
+                    />
+                  </div>
+                </div>
 
-                {/* Contact info */}
                 <div className="grid gap-4">
                   <div>
                     <div className={labelClass}>{t("locationLabel")}</div>
@@ -125,20 +137,20 @@ export default function SiteFooter() {
                   <div>
                     <div className={labelClass}>{t("emailLabel")}</div>
                     <a
-                      className="text-sm text-white/80 hover:text-white transition-colors"
-                      href="mailto:info@precon.design"
+                      className="text-sm text-white/80 transition-colors duration-300 hover:text-[var(--accent)]"
+                      href="mailto:info@precondesign.rs"
                     >
-                      info@precon.design
+                      info@precondesign.rs
                     </a>
                   </div>
 
                   <div>
                     <div className={labelClass}>{t("phoneLabel")}</div>
                     <a
-                      className="text-sm text-white/80 hover:text-white transition-colors"
-                      href="tel:+381000000000"
+                      className="text-sm text-white/80 transition-colors duration-300 hover:text-[var(--accent)]"
+                      href="tel:+38163469538"
                     >
-                      +381 00 000 000
+                      +381 63 469 538
                     </a>
                   </div>
                 </div>
@@ -146,7 +158,6 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          {/* Bottom */}
           <div className="mt-6">
             <div className={lineClass} />
             <div className="mt-5 text-center text-xs text-white/55">

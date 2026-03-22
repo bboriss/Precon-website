@@ -1,6 +1,7 @@
 {
   "nav": {
     "services": "Usluge",
+    "about": "Ko smo mi",
     "references": "Reference",
     "contact": "Kontakt"
   },
@@ -9,41 +10,90 @@
     "subtitle": "Hajde da gradimo zajedno"
   },
   "stats": {
-    "projects": "Uspesni projekti",
-    "rebarArea": "Detalji armature (m²)",
+    "projects": "Uspešni projekti",
+    "rebarArea": "Detaljisanje armature (m²)",
     "clients": "Zadovoljni klijenti"
   },
   "expertise": {
-    "title": "Expertise",
-    "lead": "Statički proračuni, armirački detalji i BIM podrška — od koncepta do isporuke, fokusirano na jasnoću, brzinu i koordinaciju.",
+    "title": "Ekspertiza",
+    "lead": "Projektovanje konstrukcija, proračuni i BIM podrška — od koncepta do isporuke, sa fokusom na jasnoću, brzinu i koordinaciju.",
     "items": {
       "precast": {
-        "title": "Betonske prefabrikovane konstrukcije",
-        "body": "Projektovanje prefabrikovanih elemenata (zidovi, ploče, grede, stubovi) uz BIM koordinaciju i razradu armature, spojeva i montaže. Fokus: proizvodljivost, tolerancije i brza montaža."
+        "title": "Prefabrikovane betonske konstrukcije",
+        "body": "Projektovanje prefabrikovanih elemenata (zidovi, ploče, grede, stubovi) uz BIM koordinaciju i detaljisanje armature, spojeva i montaže. Fokus: proizvodivost, tolerancije i brza montaža."
       },
       "concrete": {
-        "title": "Betonske konstrukcije",
-        "body": "Projektovanje armiranobetonskih konstrukcija sa jasnim proračunom, racionalnim detaljima i pouzdanom dokumentacijom. Optimizacija preseka i armature uz koordinaciju sa arhitekturom i instalacijama."
+        "title": "Armiranobetonske konstrukcije",
+        "body": "Projektovanje AB konstrukcija sa jasnim proračunima, racionalnim detaljima i pouzdanom dokumentacijom. Optimizacija preseka i armature uz koordinaciju sa ostalim strukama."
       },
       "steel": {
         "title": "Čelične konstrukcije",
-        "body": "Razrada čeličnih nosača i spojeva, varijante rešenja i koordinacija sa drugim disciplinama. Fokus: precizni detalji, konstruktivna logika i efikasna izrada."
+        "body": "Razrada čeličnih sistema i spojeva, varijantna rešenja i interdisciplinarna koordinacija. Fokus: precizni detalji, izvodljivost i efikasna proizvodnja."
       },
       "management": {
-        "title": "Project management",
-        "body": "Planiranje isporuka, praćenje zadataka i komunikacija kroz jasne tokove odobravanja. Fokus: rokovi, transparentnost i kontrola kvaliteta kroz ceo projekat."
+        "title": "Upravljanje projektom",
+        "body": "Planiranje isporuke, praćenje zadataka i jasni tokovi komunikacije. Fokus: rokovi, transparentnost i kontrola kvaliteta tokom celog projekta."
       },
       "software": {
-        "title": "Custom software rešenja",
-        "body": "Automatizacija i alati za inženjerske tokove rada: AutoLISP za AutoCAD produktivnost, C#/.NET plug-inovi i utility alati, i JavaScript (Node.js + web) za dashboarde, kalkulatore i obradu fajlova."
+        "title": "Prilagođena softverska rešenja",
+        "body": "Automatizacija i alati za inženjerske procese: AutoLISP za veću produktivnost u AutoCAD-u, C#/.NET dodaci i alati, kao i JavaScript rešenja (Node.js + web) za dashboarde, kalkulatore i obradu fajlova."
       }
     }
   },
   "about": {
-    "title": "About us",
-    "p1": "PRECON Design je projektni biro iz Niša (Srbija), fokusiran na statiku, detaljisanje armature i BIM podršku za inostrane partnere.",
-    "p2": "Geografski smo odlično pozicionirani za saradnju sa evropskim timovima — brza komunikacija, jasni standardi i uredna dokumentacija tokom celog ciklusa projekta.",
-    "p3": "Niš je univerzitetski centar sa snažnom inženjerskom bazom i kontinuiranim prilivom mladih talenata, što nam omogućava stabilan rast tima i pouzdanu isporuku i kada su rokovi kratki."
+    "title": "O nama",
+    "p1": "PRECON Design je inženjerski biro sa sedištem u Nišu, fokusiran na projektovanje konstrukcija, detaljisanje armature i BIM podršku za međunarodne partnere.",
+    "p2": "Geografski smo odlično pozicionirani za saradnju sa evropskim timovima — brza komunikacija, jasni standardi i uredna dokumentacija tokom celog životnog ciklusa projekta.",
+    "p3": "Niš je univerzitetski grad sa jakom inženjerskom osnovom i stalnim prilivom mladih talenata, što omogućava stabilan rast tima i pouzdanu isporuku čak i u kratkim rokovima."
+  },
+  "servicesPage": {
+    "title": "Usluge",
+    "lead": "Pružamo usluge projektovanja konstrukcija, detaljisanja i BIM podrške za prefabrikovane betonske, betonske i čelične konstrukcije — sa fokusom na jasnoću, koordinaciju i dokumentaciju spremnu za proizvodnju.",
+    "items": {
+      "precast": {
+        "title": "Prefabrikovane betonske konstrukcije",
+        "lead": "Podrška kroz ceo proces razvoja prefabrikovanog sistema — od koncepta i koordinacije do modelovanja, detaljisanja i dokumentacije spremne za proizvodnju.",
+        "p1": "Radimo na projektovanju i razradi zidova, ploča, greda, stubova i drugih prefabrikovanih elemenata, sa posebnim fokusom na proizvodivost, tolerancije, transport i logiku montaže.",
+        "p2": "Cilj nije samo da se isporuči statičko rešenje, već da se pripremi jasna, koordinisana i praktična dokumentacija prilagođena realnoj proizvodnji i toku projekta."
+      },
+      "concrete": {
+        "title": "Betonske konstrukcije",
+        "lead": "Razrada armiranobetonskih sistema sa fokusom na statičku logiku, detaljisanje armature, multidisciplinarnu koordinaciju i pouzdanu tehničku dokumentaciju.",
+        "p1": "Naš rad obuhvata statičke analize, tehničku razradu, planiranje armature i koordinaciju sa arhitekturom i MEP strukama kroz različite faze projekta.",
+        "p2": "Cilj nam je da pripremimo dokumentaciju koja je tehnički dosledna, pregledna i usklađena sa praktičnim zahtevima izvođenja na gradilištu."
+      },
+      "steel": {
+        "title": "Čelične konstrukcije",
+        "lead": "Razvoj čeličnih sistema od koncepta i koordinacije do detalja spojeva, radioničke dokumentacije i podrške tokom realizacije.",
+        "p1": "Radimo na čeličnim ramovima, sekundarnim elementima, logici spojeva i tehničkoj dokumentaciji sa snažnim fokusom na preciznost, izvodljivost i efikasnost proizvodnje.",
+        "p2": "Rezultat je koordinisan i praktičan paket dokumentacije koji podržava i razvoj projekta i dalje proizvodne procese."
+      }
+    }
+  },
+  "aboutPage": {
+    "heroTitle": "Ko smo mi",
+    "heroLead": "Precon Design je inženjerski partner fokusiran na prefabrikovane betonske, armiranobetonske i čelične konstrukcije, sa praktičnim BIM pristupom koordinaciji i dokumentaciji spremnoj za proizvodnju.",
+    "processTitle": "Kako radimo",
+    "processLead": "Naš način rada zasniva se na jasnoj tehničkoj komunikaciji, dobroj koordinaciji i dokumentaciji koja je upotrebljiva i za projektni tim i za proizvodnju.",
+    "processItems": {
+      "item1": {
+        "title": "Koncept i koordinacija",
+        "body": "U ranoj fazi analiziramo sistem, geometriju i ograničenja projekta kako bismo postavili jasan i efikasan pravac razvoja."
+      },
+      "item2": {
+        "title": "Modelovanje i razrada",
+        "body": "Konstrukciju razvijamo kroz BIM i tehničku razradu, sa fokusom na usklađenost elemenata, detalja i faza isporuke."
+      },
+      "item3": {
+        "title": "Dokumentacija za realizaciju",
+        "body": "Pripremamo crteže i tehničku dokumentaciju koji su jasni, praktični i usklađeni sa stvarnim potrebama proizvodnje i izvođenja."
+      }
+    },
+    "softwareTitle": "Softveri koje koristimo",
+    "softwareLead": "U radu koristimo proverene alate za modelovanje, koordinaciju, tehničku razradu i internu automatizaciju procesa.",
+    "ctaTitle": "Imate projekat ili upit?",
+    "ctaBody": "Ako vam je potreban partner za projektovanje konstrukcija, BIM koordinaciju ili dokumentaciju spremnu za proizvodnju, javite nam se.",
+    "ctaButton": "Kontaktirajte nas"
   },
   "clients": {
     "title": "Naši klijenti"
@@ -53,27 +103,27 @@
     "help": "Obično odgovaramo u roku od 1–2 radna dana.",
     "close": "Zatvori",
     "tabs": {
-      "work": "Hajde da radimo zajedno",
-      "career": "Želiš da budeš deo PRECON-a?"
+      "work": "Hajde da sarađujemo",
+      "career": "Želite da budete deo PRECON-a?"
     },
     "send": "Pošalji",
-    "note": "Slanjem forme saglasni ste da vas možemo kontaktirati putem email-a.",
+    "note": "Slanjem ovog formulara saglasni ste da vas možemo kontaktirati putem email-a.",
     "work": {
       "fullName": "Ime i prezime",
       "fullNamePh": "Vaše ime i prezime",
       "email": "Email",
-      "emailPh": "name@company.com",
+      "emailPh": "ime@firma.com",
       "message": "Poruka",
-      "messagePh": "Opišite projekat, rokove i očekivani obim…"
+      "messagePh": "Recite nam nešto o svom projektu, roku i očekivanom obimu…"
     },
     "career": {
       "fullName": "Ime i prezime",
       "fullNamePh": "Vaše ime i prezime",
       "email": "Email",
-      "emailPh": "name@email.com",
+      "emailPh": "ime@email.com",
       "letter": "Motivaciono pismo",
-      "letterPh": "Kratko predstavljanje, šta radite najbolje i zašto želite da se pridružite…",
-      "cv": "CV / Biografija",
+      "letterPh": "Kratko predstavljanje, u čemu ste najbolji i zašto želite da nam se pridružite…",
+      "cv": "CV / Radna biografija",
       "cvHint": "PDF ili DOCX, do 10MB.",
       "chooseFile": "Izaberi fajl",
       "removeFile": "Ukloni",
@@ -84,29 +134,29 @@
       "email": "Unesite ispravan email.",
       "message": "Poruka treba da ima najmanje 10 karaktera.",
       "letter": "Motivaciono pismo treba da ima najmanje 30 karaktera.",
-      "cv": "Molimo dodajte vaš CV."
+      "cv": "Molimo priložite svoj CV."
     },
     "details": {
-      "title": "Kontakt detalji",
-      "phone": "Telefon",
-      "email": "Email",
-      "office": "Kancelarija",
-      "phoneValue": "+381 00 000 000",
-      "emailValue": "office@precon.rs",
-      "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
-    }
+  "title": "Kontakt podaci",
+  "phone": "Telefon",
+  "email": "Email",
+  "office": "Kancelarija",
+  "phoneValue": "+381 63 469 538",
+  "emailValue": "info@precondesign.rs",
+  "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
+}
   },
   "footer": {
-    "tagline": "Staticki proracun, izrada tehnicke dokumentacije, BIM modela - Cisto, brzo i koordinisano.",
-    "navTitle": "Navigation",
-    "about": "About Us",
-    "services": "Services",
-    "contactTitle": "Contact",
-    "locationLabel": "Location",
-    "locationValue": "Niš, Serbia",
+    "tagline": "Projektovanje konstrukcija, tehnička dokumentacija i BIM modeli — jasno, brzo i koordinisano.",
+    "navTitle": "Navigacija",
+    "about": "O nama",
+    "services": "Usluge",
+    "contactTitle": "Kontakt",
+    "locationLabel": "Lokacija",
+    "locationValue": "Niš, Srbija",
     "emailLabel": "Email",
-    "phoneLabel": "Phone",
-    "contactCta": "Contact",
-    "rights": "All rights reserved."
+    "phoneLabel": "Telefon",
+    "contactCta": "Kontakt",
+    "rights": "Sva prava zadržana."
   }
 }
