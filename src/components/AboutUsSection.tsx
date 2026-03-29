@@ -3,12 +3,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
-const MAP_MS = 1800;
+const MAP_MS = 2050;
 const TEXT_MS = 1500;
-const TEXT_DELAY_MS = 60;
-const OFFSET_PX = 18;
+const TEXT_DELAY_MS = 90;
+const MAP_DELAY_MS = 220;
+const OFFSET_PX = 24;
+const INITIAL_REVEAL_DELAY_MS = 120;
 
-function useInView(options?: IntersectionObserverInit) {
+function useInView(
+  options?: IntersectionObserverInit & { delayMs?: number }
+) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [inView, setInView] = useState(false);
 
@@ -26,18 +30,31 @@ function useInView(options?: IntersectionObserverInit) {
     const el = ref.current;
     if (!el) return;
 
+    const delayMs = options?.delayMs ?? 0;
+    let timer: number | null = null;
+
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
+          timer = window.setTimeout(() => {
+            setInView(true);
+            obs.disconnect();
+          }, delayMs);
         }
       },
-      { threshold: 0.18, rootMargin: "0px 0px -10% 0px", ...(options || {}) }
+      {
+        threshold: 0.2,
+        rootMargin: "0px 0px -10% 0px",
+        ...(options || {})
+      }
     );
 
     obs.observe(el);
-    return () => obs.disconnect();
+
+    return () => {
+      obs.disconnect();
+      if (timer) window.clearTimeout(timer);
+    };
   }, [options]);
 
   return { ref, inView };
@@ -54,14 +71,17 @@ export default function AboutUsSection({
   p2: string;
   p3: string;
 }) {
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView({
+    delayMs: INITIAL_REVEAL_DELAY_MS
+  });
 
   const textStyle = useMemo<React.CSSProperties>(
     () => ({
       transitionProperty: "opacity, transform",
       transitionDuration: `${TEXT_MS}ms`,
       transitionDelay: `${TEXT_DELAY_MS}ms`,
-      transitionTimingFunction: "cubic-bezier(.16,1,.3,1)"
+      transitionTimingFunction: "cubic-bezier(.16,1,.3,1)",
+      willChange: "opacity, transform"
     }),
     []
   );
@@ -70,7 +90,9 @@ export default function AboutUsSection({
     () => ({
       transitionProperty: "opacity, transform",
       transitionDuration: `${MAP_MS}ms`,
-      transitionTimingFunction: "cubic-bezier(.16,1,.3,1)"
+      transitionDelay: `${MAP_DELAY_MS}ms`,
+      transitionTimingFunction: "cubic-bezier(.16,1,.3,1)",
+      willChange: "opacity, transform"
     }),
     []
   );
@@ -89,7 +111,7 @@ export default function AboutUsSection({
                 ...textStyle,
                 transform: inView
                   ? "translate3d(0,0,0)"
-                  : `translate3d(${OFFSET_PX}px, 2px, 0)`
+                  : `translate3d(${OFFSET_PX}px, 4px, 0)`
               }}
             >
               <h2 className="text-[1.9rem] md:text-[2.35rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.08]">
@@ -111,7 +133,7 @@ export default function AboutUsSection({
                 ...mapStyle,
                 transform: inView
                   ? "translate3d(0,0,0)"
-                  : "translate3d(0,10px,0)"
+                  : "translate3d(26px,10px,0)"
               }}
             >
               <EuropeZoomMap />

@@ -2,6 +2,8 @@
 
 import React from "react";
 
+type FabTheme = "light" | "dark";
+
 export default function ContactFab({
   onClick,
   open = false,
@@ -13,15 +15,15 @@ export default function ContactFab({
 }) {
   const [visible, setVisible] = React.useState(false);
   const [footerInView, setFooterInView] = React.useState(false);
+  const [surfaceTheme, setSurfaceTheme] = React.useState<FabTheme>("light");
+  const fabRef = React.useRef<HTMLButtonElement | null>(null);
 
-  // helper: siguran browser window (izbegava TS "window: never")
   const getWin = () => {
     if (typeof globalThis === "undefined") return null;
     const w = (globalThis as any).window as Window | undefined;
     return w ?? null;
   };
 
-  // 1) Pojavljivanje posle skrola
   React.useEffect(() => {
     const w = getWin();
     if (!w) return;
@@ -47,7 +49,6 @@ export default function ContactFab({
     };
   }, [showAfter]);
 
-  // 2) Nestani kad footer udje u viewport
   React.useEffect(() => {
     const w = getWin();
     if (!w) return;
@@ -72,7 +73,6 @@ export default function ContactFab({
       return () => io.disconnect();
     }
 
-    // fallback
     const onScroll = () => {
       const r = footerEl.getBoundingClientRect();
       const inView = r.top < w.innerHeight && r.bottom > 0;
@@ -84,14 +84,84 @@ export default function ContactFab({
     return () => w.removeEventListener("scroll", onScroll);
   }, []);
 
+  React.useEffect(() => {
+    const w = getWin();
+    if (!w) return;
+
+    let raf = 0;
+
+    const detectThemeBelowFab = () => {
+      const fab = fabRef.current;
+      if (!fab) return;
+
+      const r = fab.getBoundingClientRect();
+      const x = Math.max(0, Math.min(w.innerWidth - 1, r.left + r.width / 2));
+      const y = Math.max(0, Math.min(w.innerHeight - 1, r.top + r.height / 2));
+
+      const stack = document.elementsFromPoint(x, y);
+
+      let target: HTMLElement | null = null;
+
+      for (const el of stack) {
+        if (!(el instanceof HTMLElement)) continue;
+        if (fab.contains(el)) continue;
+        target = el;
+        break;
+      }
+
+      if (!target) return;
+
+      const themedParent = target.closest("[data-fab-theme]") as HTMLElement | null;
+      const explicitTheme = themedParent?.getAttribute("data-fab-theme");
+
+      if (explicitTheme === "dark" || explicitTheme === "light") {
+        setSurfaceTheme(explicitTheme);
+        return;
+      }
+
+      // fallback ako nisi dodao data-fab-theme
+      let node: HTMLElement | null = target;
+      while (node) {
+        const bg = w.getComputedStyle(node).backgroundColor;
+        const parsed = parseRgb(bg);
+
+        if (parsed && parsed.a > 0.05) {
+          const tone = getToneFromRgb(parsed.r, parsed.g, parsed.b);
+          setSurfaceTheme(tone);
+          return;
+        }
+
+        node = node.parentElement;
+      }
+
+      setSurfaceTheme("light");
+    };
+
+    const runDetect = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(detectThemeBelowFab);
+    };
+
+    runDetect();
+    w.addEventListener("scroll", runDetect, { passive: true });
+    w.addEventListener("resize", runDetect);
+
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      w.removeEventListener("scroll", runDetect);
+      w.removeEventListener("resize", runDetect);
+    };
+  }, []);
+
   const hidden = open || !visible || footerInView;
+  const onDarkSection = surfaceTheme === "dark";
 
   return (
     <>
       <button
+        ref={fabRef}
         type="button"
         onClick={(e) => {
-          // sprečava sticky focus na mobilnom
           (e.currentTarget as HTMLButtonElement).blur();
           onClick();
         }}
@@ -102,22 +172,21 @@ export default function ContactFab({
           hidden
             ? "opacity-0 translate-y-3 pointer-events-none"
             : "opacity-100 translate-y-0",
+          onDarkSection ? "contactFabOnDarkSection" : "contactFabOnLightSection",
         ].join(" ")}
       >
-        {/* Tooltip */}
         <span
           className={[
             "pointer-events-none absolute",
-            "left-[62%] -translate-x-0",
-            "bottom-[62px]",
+            "left-[60%] -translate-x-0",
+            "bottom-[72px]",
             "px-4 py-2 rounded-xl",
-            "min-w-[150px]",
+            "min-w-[158px]",
             "bg-[var(--accent)] text-black",
             "text-xs font-semibold tracking-tight leading-snug text-center",
-            "shadow-[0_10px_25px_rgba(249,115,22,0.25)]",
+            "shadow-[0_10px_28px_rgba(249,115,22,0.28)]",
             "opacity-0 translate-y-2",
             "transition duration-200",
-            // tooltip samo na hover uredjajima (desktop)
             "[@media(hover:hover)]:group-hover:opacity-100",
             "[@media(hover:hover)]:group-hover:translate-y-0",
             "group-focus-visible:opacity-100 group-focus-visible:translate-y-0",
@@ -128,14 +197,14 @@ export default function ContactFab({
           <span className="block">in touch!</span>
         </span>
 
+        <span className="contactFabRing" aria-hidden="true" />
+
         <span
           className={[
-            "h-12 w-12 rounded-full",
-            "bg-[var(--ink)] border border-white/10",
-            "shadow-lg",
-            "grid place-items-center",
-            "transition",
-            "hover:scale-[1.06] active:scale-[1.02]",
+            "relative h-14 w-14 rounded-full",
+            "border grid place-items-center",
+            "transition-all duration-300",
+            "hover:scale-[1.08] active:scale-[1.03]",
             "contactFabPulse",
           ].join(" ")}
         >
@@ -144,10 +213,56 @@ export default function ContactFab({
       </button>
 
       <style jsx>{`
+        .contactFab {
+          --fab-bg: var(--ink);
+          --fab-border: rgba(255, 255, 255, 0.1);
+          --fab-icon: rgba(255, 255, 255, 0.94);
+          --fab-ring: rgba(249, 115, 22, 0.12);
+          --fab-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Kada je sekcija iza dugmeta svetla -> dugme tamno */
+        .contactFabOnLightSection {
+          --fab-bg: var(--ink);
+          --fab-border: rgba(255, 255, 255, 0.1);
+          --fab-icon: rgba(255, 255, 255, 0.94);
+          --fab-ring: rgba(249, 115, 22, 0.12);
+          --fab-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Kada je sekcija iza dugmeta tamna -> dugme svetlije */
+        .contactFabOnDarkSection {
+          --fab-bg: var(--section-bg);
+          --fab-border: rgba(255, 255, 255, 0.14);
+          --fab-icon: rgba(24, 31, 46, 0.96);
+          --fab-ring: rgba(249, 115, 22, 0.16);
+          --fab-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .contactFab > span:last-child {
+          background: var(--fab-bg);
+          border-color: var(--fab-border);
+          box-shadow: var(--fab-shadow);
+        }
+
+        .contactFabRing {
+          position: absolute;
+          inset: 50% auto auto 50%;
+          width: 58px;
+          height: 58px;
+          transform: translate(-50%, -50%);
+          border-radius: 999px;
+          background: var(--fab-ring);
+          filter: blur(12px);
+          pointer-events: none;
+          transition: background 0.3s ease;
+        }
+
         .contactFabMsgIcon {
-          width: 22px;
-          height: 22px;
-          background: rgba(255, 255, 255, 0.92);
+          width: 24px;
+          height: 24px;
+          background: var(--fab-icon);
+          transition: background 0.3s ease;
 
           -webkit-mask-image: url("/messageIcon.svg");
           mask-image: url("/messageIcon.svg");
@@ -161,42 +276,62 @@ export default function ContactFab({
 
         @keyframes contactFabPulse {
           0%,
-          80% {
-            transform: translateY(0) scale(1);
-            filter: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-          }
-          84% {
-            transform: translateY(-2px) scale(1.08);
-            filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
-            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.22);
-          }
-          87% {
-            transform: translateY(0) scale(1);
-            filter: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-          }
-          90% {
-            transform: translateY(-2px) scale(1.08);
-            filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
-            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.22);
-          }
-          93% {
-            transform: translateY(0) scale(1);
-            filter: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-          }
           100% {
             transform: translateY(0) scale(1);
+            box-shadow: var(--fab-shadow);
             filter: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+          }
+
+          8% {
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 16px 34px rgba(249, 115, 22, 0.18);
+            filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.26));
+          }
+
+          14% {
+            transform: translateY(0) scale(1);
+            box-shadow: var(--fab-shadow);
+            filter: none;
+          }
+
+          22% {
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 15px 30px rgba(249, 115, 22, 0.14);
+            filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.2));
+          }
+
+          28% {
+            transform: translateY(0) scale(1);
+            box-shadow: var(--fab-shadow);
+            filter: none;
           }
         }
 
         .contactFabPulse {
-          animation: contactFabPulse 6.5s ease-in-out infinite;
+          animation: contactFabPulse 4.4s ease-in-out infinite;
+          will-change: transform, box-shadow, filter;
         }
       `}</style>
     </>
   );
+}
+
+function parseRgb(input: string) {
+  const m = input.match(
+    /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/i
+  );
+
+  if (!m) return null;
+
+  return {
+    r: Number(m[1]),
+    g: Number(m[2]),
+    b: Number(m[3]),
+    a: m[4] == null ? 1 : Number(m[4]),
+  };
+}
+
+function getToneFromRgb(r: number, g: number, b: number): "light" | "dark" {
+  const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  return luminance < 0.52 ? "dark" : "light";
 }

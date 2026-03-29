@@ -2,79 +2,9 @@ import { getTranslations } from "next-intl/server";
 
 import AboutUsSection from "@/components/AboutUsSection";
 import AboutFlowSection from "@/components/AboutFlowSection";
-import SoftwareLogoStrip from "@/components/SoftwareLogoStrip";
-import type { SoftwareItem } from "@/components/SoftwareLogoStrip";
+import AboutPageHero from "@/components/AboutPageHero";
+import SoftwareLogoStrip, { type SoftwareItem } from "@/components/SoftwareLogoStrip";
 import ContactCtaButton from "@/components/ContactCtaButton";
-
-function getExtraFlowItems(locale: string) {
-  const lang = locale.toLowerCase().split("-")[0];
-
-  if (lang === "sr") {
-    return [
-      {
-        title: "BIM koordinacija",
-        body: "Usklađujemo konstrukciju sa arhitekturom, instalacijama i fazama projekta kako bi razrada bila stabilna i pregledna."
-      },
-      {
-        title: "Automatizacija i alati",
-        body: "Koristimo interne alate i standardizovane workflow-e za brži rad, manje ručnih grešaka i lakšu kontrolu dokumentacije."
-      },
-      {
-        title: "Efikasna isporuka",
-        body: "Fokus je na jasnim, upotrebljivim i proizvodno orijentisanim deliverable-ima koji ubrzavaju sledeće korake projekta."
-      }
-    ];
-  }
-
-  if (lang === "de") {
-    return [
-      {
-        title: "BIM-Koordination",
-        body: "Wir stimmen Tragwerk, Architektur, TGA und Projektphasen so ab, dass die Ausarbeitung stabil und klar bleibt."
-      },
-      {
-        title: "Automatisierung und Tools",
-        body: "Wir nutzen interne Werkzeuge und standardisierte Workflows für schnelleres Arbeiten, weniger manuelle Fehler und bessere Dokumentenkontrolle."
-      },
-      {
-        title: "Effiziente Lieferung",
-        body: "Der Fokus liegt auf klaren, nutzbaren und produktionsorientierten Ergebnissen, die die nächsten Projektphasen beschleunigen."
-      }
-    ];
-  }
-
-  if (lang === "nl") {
-    return [
-      {
-        title: "BIM-coördinatie",
-        body: "Wij stemmen constructie, architectuur, installaties en projectfasen op elkaar af zodat de uitwerking stabiel en overzichtelijk blijft."
-      },
-      {
-        title: "Automatisering en tools",
-        body: "Wij gebruiken interne tools en gestandaardiseerde workflows voor sneller werk, minder handmatige fouten en betere documentcontrole."
-      },
-      {
-        title: "Efficiënte oplevering",
-        body: "De focus ligt op duidelijke, bruikbare en productiegerichte deliverables die de volgende projectstappen versnellen."
-      }
-    ];
-  }
-
-  return [
-    {
-      title: "BIM coordination",
-      body: "We align the structure with architecture, MEP disciplines and project phases so the development stays stable and easy to coordinate."
-    },
-    {
-      title: "Automation and tools",
-      body: "We use internal tools and standardized workflows for faster delivery, fewer manual errors and better control over documentation."
-    },
-    {
-      title: "Efficient delivery",
-      body: "The focus is on clear, usable and production-oriented deliverables that support the next steps of the project."
-    }
-  ];
-}
 
 export default async function AboutPage({
   params
@@ -97,33 +27,38 @@ export default async function AboutPage({
       title: t("aboutPage.processItems.item3.title"),
       body: t("aboutPage.processItems.item3.body")
     },
-    ...getExtraFlowItems(locale)
+    {
+      title: t("aboutPage.processItems.item4.title"),
+      body: t("aboutPage.processItems.item4.body")
+    },
+    {
+      title: t("aboutPage.processItems.item5.title"),
+      body: t("aboutPage.processItems.item5.body")
+    },
+    {
+      title: t("aboutPage.processItems.item6.title"),
+      body: t("aboutPage.processItems.item6.body")
+    }
   ];
 
   const softwareItems: SoftwareItem[] = [
-    { name: "Autocad", src: "/softwares/Autocad.png" },
+    { name: "Autocad", src: "/softwares/Autocad.png", logoClassName: "scale-[0.9]" },
     { name: "BIMcollab", src: "/softwares/BIMcollab.png" },
-    { name: "Matrix Software", src: "/softwares/Matrix%20Software.jpg" },
-    { name: "Radimpex", src: "/softwares/Radimpex.png" },
-    { name: "Revit", src: "/softwares/Revit.jpg" },
-    { name: "SketchUp", src: "/softwares/SketchUp.png" }
+    { name: "Dlubal", src: "/softwares/Dlubal.png", logoClassName: "scale-[1.00]" },
+    { name: "FINEC", src: "/softwares/FINEC.png", logoClassName: "scale-[1.58]" },
+    { name: "Matrix", src: "/softwares/Matrix.png", logoClassName: "scale-[1.12]" },
+    { name: "Radimpex Software", src: "/softwares/RadimpexSoftware.png", logoClassName: "scale-[1.85]" },
+    { name: "Revit", src: "/softwares/Revit.png", logoClassName: "scale-[1.1]" },
+    { name: "Rootsoft", src: "/softwares/rootsoft.nl.png", logoClassName: "scale-[1.00]" },
+    { name: "SketchUp", src: "/softwares/Sketchup.png" }
   ];
 
   return (
     <div className="bg-[var(--section-bg)]">
-      <section className="bg-[var(--section-bg)] pt-8 pb-3 md:pt-9 md:pb-5">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <h1 className="text-[2rem] md:text-[2.6rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.06]">
-              {t("aboutPage.heroTitle")}
-            </h1>
-
-            <p className="mt-4 max-w-3xl text-[13px] md:text-[0.95rem] leading-relaxed text-black/65">
-              {t("aboutPage.heroLead")}
-            </p>
-          </div>
-        </div>
-      </section>
+      <AboutPageHero
+        title={t("aboutPage.heroTitle")}
+        lead={t("aboutPage.heroLead")}
+      />
 
       <AboutUsSection
         title={t("about.title")}
@@ -147,11 +82,11 @@ export default async function AboutPage({
       <section className="bg-[var(--section-bg)] pt-8 pb-14 md:pt-9 md:pb-18">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h2 className="text-[1.7rem] md:text-[2.1rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.08]">
+            <h2 className="text-[1.7rem] leading-[1.08] font-semibold tracking-tight text-[var(--ink)] md:text-[2.1rem]">
               {t("aboutPage.ctaTitle")}
             </h2>
 
-            <p className="mt-4 text-[13px] md:text-[0.95rem] leading-relaxed text-black/65">
+            <p className="mt-4 text-[13px] leading-relaxed text-black/65 md:text-[0.95rem]">
               {t("aboutPage.ctaBody")}
             </p>
 

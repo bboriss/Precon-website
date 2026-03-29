@@ -71,30 +71,42 @@
     }
   },
   "aboutPage": {
-    "heroTitle": "Ko smo mi",
-    "heroLead": "Precon Design je inženjerski partner fokusiran na prefabrikovane betonske, armiranobetonske i čelične konstrukcije, sa praktičnim BIM pristupom koordinaciji i dokumentaciji spremnoj za proizvodnju.",
-    "processTitle": "Kako radimo",
-    "processLead": "Naš način rada zasniva se na jasnoj tehničkoj komunikaciji, dobroj koordinaciji i dokumentaciji koja je upotrebljiva i za projektni tim i za proizvodnju.",
-    "processItems": {
-      "item1": {
-        "title": "Koncept i koordinacija",
-        "body": "U ranoj fazi analiziramo sistem, geometriju i ograničenja projekta kako bismo postavili jasan i efikasan pravac razvoja."
-      },
-      "item2": {
-        "title": "Modelovanje i razrada",
-        "body": "Konstrukciju razvijamo kroz BIM i tehničku razradu, sa fokusom na usklađenost elemenata, detalja i faza isporuke."
-      },
-      "item3": {
-        "title": "Dokumentacija za realizaciju",
-        "body": "Pripremamo crteže i tehničku dokumentaciju koji su jasni, praktični i usklađeni sa stvarnim potrebama proizvodnje i izvođenja."
-      }
+  "heroTitle": "Ko smo mi",
+  "heroLead": "Precon Design je inženjerski partner fokusiran na prefabrikovane betonske, armiranobetonske i čelične konstrukcije, sa praktičnim BIM pristupom koordinaciji i dokumentaciji spremnoj za proizvodnju.",
+  "processTitle": "Kako radimo",
+  "processLead": "Naš način rada zasniva se na jasnoj tehničkoj komunikaciji, dobroj koordinaciji i dokumentaciji koja je upotrebljiva i za projektni tim i za proizvodnju.",
+  "processItems": {
+    "item1": {
+      "title": "Koncept i koordinacija",
+      "body": "U ranoj fazi analiziramo sistem, geometriju i ograničenja projekta kako bismo postavili jasan i efikasan pravac razvoja."
     },
-    "softwareTitle": "Softveri koje koristimo",
-    "softwareLead": "U radu koristimo proverene alate za modelovanje, koordinaciju, tehničku razradu i internu automatizaciju procesa.",
-    "ctaTitle": "Imate projekat ili upit?",
-    "ctaBody": "Ako vam je potreban partner za projektovanje konstrukcija, BIM koordinaciju ili dokumentaciju spremnu za proizvodnju, javite nam se.",
-    "ctaButton": "Kontaktirajte nas"
+    "item2": {
+      "title": "Modelovanje i razrada",
+      "body": "Konstrukciju razvijamo kroz BIM i tehničku razradu, sa fokusom na usklađenost elemenata, detalja i faza isporuke."
+    },
+    "item3": {
+      "title": "Dokumentacija za realizaciju",
+      "body": "Pripremamo crteže i tehničku dokumentaciju koji su jasni, praktični i usklađeni sa stvarnim potrebama proizvodnje i izvođenja."
+    },
+    "item4": {
+      "title": "BIM koordinacija",
+      "body": "Usklađujemo konstrukciju sa arhitekturom, instalacijama i fazama projekta kako bi razrada bila stabilna i pregledna."
+    },
+    "item5": {
+      "title": "Automatizacija i alati",
+      "body": "Koristimo interne alate i standardizovane workflow-e za brži rad, manje ručnih grešaka i lakšu kontrolu dokumentacije."
+    },
+    "item6": {
+      "title": "Efikasna isporuka",
+      "body": "Fokus je na jasnim, upotrebljivim i proizvodno orijentisanim deliverable-ima koji ubrzavaju sledeće korake projekta."
+    }
   },
+  "softwareTitle": "Softveri koje koristimo",
+  "softwareLead": "U radu koristimo proverene alate za modelovanje, koordinaciju, tehničku razradu i internu automatizaciju procesa.",
+  "ctaTitle": "Imate projekat ili upit?",
+  "ctaBody": "Ako vam je potreban partner za projektovanje konstrukcija, BIM koordinaciju ili dokumentaciju spremnu za proizvodnju, javite nam se.",
+  "ctaButton": "Kontaktirajte nas"
+},
   "clients": {
     "title": "Naši klijenti"
   },
@@ -137,14 +149,14 @@
       "cv": "Molimo priložite svoj CV."
     },
     "details": {
-  "title": "Kontakt podaci",
-  "phone": "Telefon",
-  "email": "Email",
-  "office": "Kancelarija",
-  "phoneValue": "+381 63 469 538",
-  "emailValue": "info@precondesign.rs",
-  "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
-}
+      "title": "Kontakt podaci",
+      "phone": "Telefon",
+      "email": "Email",
+      "office": "Kancelarija",
+      "phoneValue": "+381 63 469 538",
+      "emailValue": "info@precondesign.rs",
+      "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
+    }
   },
   "footer": {
     "tagline": "Projektovanje konstrukcija, tehnička dokumentacija i BIM modeli — jasno, brzo i koordinisano.",

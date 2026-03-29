@@ -71,30 +71,42 @@
     }
   },
   "aboutPage": {
-    "heroTitle": "Who we are",
-    "heroLead": "Precon Design is an engineering partner focused on precast concrete, reinforced concrete and steel structures, with a practical BIM-oriented approach to coordination and production-ready documentation.",
-    "processTitle": "How we work",
-    "processLead": "Our workflow is built around clear technical communication, strong coordination and documentation that is useful both for the design team and for production.",
-    "processItems": {
-      "item1": {
-        "title": "Concept and coordination",
-        "body": "At an early stage, we analyze the system, geometry and project constraints in order to establish a clear and efficient development path."
-      },
-      "item2": {
-        "title": "Modeling and development",
-        "body": "We develop the structure through BIM and technical detailing, with a focus on consistency across elements, details and delivery phases."
-      },
-      "item3": {
-        "title": "Documentation for execution",
-        "body": "We prepare drawings and technical documentation that are clear, practical and aligned with real production and construction needs."
-      }
+  "heroTitle": "Who we are",
+  "heroLead": "Precon Design is an engineering partner focused on precast concrete, reinforced concrete and steel structures, with a practical BIM-oriented approach to coordination and production-ready documentation.",
+  "processTitle": "How we work",
+  "processLead": "Our workflow is built around clear technical communication, strong coordination and documentation that is useful both for the design team and for production.",
+  "processItems": {
+    "item1": {
+      "title": "Concept and coordination",
+      "body": "At an early stage, we analyze the system, geometry and project constraints in order to establish a clear and efficient development path."
     },
-    "softwareTitle": "Software we use",
-    "softwareLead": "We rely on proven tools for modeling, coordination, technical development and internal process automation.",
-    "ctaTitle": "Do you have a project or inquiry?",
-    "ctaBody": "If you need a partner for structural engineering, BIM coordination or production-ready documentation, get in touch with us.",
-    "ctaButton": "Contact us"
+    "item2": {
+      "title": "Modeling and development",
+      "body": "We develop the structure through BIM and technical detailing, with a focus on consistency across elements, details and delivery phases."
+    },
+    "item3": {
+      "title": "Documentation for execution",
+      "body": "We prepare drawings and technical documentation that are clear, practical and aligned with real production and construction needs."
+    },
+    "item4": {
+      "title": "BIM coordination",
+      "body": "We align the structure with architecture, MEP disciplines and project phases so the development stays stable and easy to coordinate."
+    },
+    "item5": {
+      "title": "Automation and tools",
+      "body": "We use internal tools and standardized workflows for faster delivery, fewer manual errors and better control over documentation."
+    },
+    "item6": {
+      "title": "Efficient delivery",
+      "body": "The focus is on clear, usable and production-oriented deliverables that support the next steps of the project."
+    }
   },
+  "softwareTitle": "Software we use",
+  "softwareLead": "We rely on proven tools for modeling, coordination, technical development and internal process automation.",
+  "ctaTitle": "Do you have a project or inquiry?",
+  "ctaBody": "If you need a partner for structural engineering, BIM coordination or production-ready documentation, get in touch with us.",
+  "ctaButton": "Contact us"
+},
   "clients": {
     "title": "Our clients"
   },
@@ -137,14 +149,14 @@
       "cv": "Please attach your CV."
     },
     "details": {
-  "title": "Contact details",
-  "phone": "Phone",
-  "email": "Email",
-  "office": "Office",
-  "phoneValue": "+381 63 469 538",
-  "emailValue": "info@precondesign.rs",
-  "officeValue": "Blagoja Parovica 1b, Niš, Serbia"
-}
+      "title": "Contact details",
+      "phone": "Phone",
+      "email": "Email",
+      "office": "Office",
+      "phoneValue": "+381 63 469 538",
+      "emailValue": "info@precondesign.rs",
+      "officeValue": "Blagoja Parovica 1b, Niš, Serbia"
+    }
   },
   "footer": {
     "tagline": "Structural design, technical documentation and BIM models — clear, fast and coordinated.",
