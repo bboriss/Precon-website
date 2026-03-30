@@ -14,10 +14,12 @@ function cx(...a: Array<string | false | null | undefined>) {
   return a.filter(Boolean).join(" ");
 }
 
+/** ✅ Tačna lokacija */
 const OFFICE_LAT = 43.324709;
 const OFFICE_LON = 21.913458;
+
+/** ✅ Malo više zumirano nego ranije */
 const OFFICE_ZOOM = 16;
-const MAX_CV_MB = 10;
 
 function MapEmbed({
   className,
@@ -38,6 +40,7 @@ function MapEmbed({
       if (cancelled) return;
       if (!elRef.current) return;
 
+      // Ako se komponenta remountuje (tab switch, modal close/open), očisti staru mapu
       if (mapRef.current) {
         try {
           mapRef.current.remove();
@@ -46,8 +49,8 @@ function MapEmbed({
       }
 
       const map = L.map(elRef.current, {
-        zoomControl: true,
-        attributionControl: false,
+        zoomControl: true, // ✅ nema +- gore levo
+        attributionControl: false, // dodaćemo sopstveni mali overlay
         scrollWheelZoom: true,
         doubleClickZoom: false,
         boxZoom: false,
@@ -66,18 +69,19 @@ function MapEmbed({
         tilePane.style.opacity = "0.98";
       }
 
+      // ✅ marker (narandžast + halo + beli border)
       const pinIcon = L.divIcon({
-        className: "",
+        className: "", // bez leaflet default class styling-a
         html: `
-          <div style="
-            position: relative;
-            width: 18px; height: 18px;
-            border-radius: 9999px;
-            background: rgb(249,115,22);
-            border: 2px solid rgba(255,255,255,0.9);
-            box-shadow: 0 0 0 10px rgba(249,115,22,0.22);
-          "></div>
-        `,
+    <div style="
+      position: relative;
+      width: 18px; height: 18px;
+      border-radius: 9999px;
+      background: rgb(249,115,22);
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 10px rgba(249,115,22,0.22);
+    "></div>
+  `,
         iconSize: [18, 18],
         iconAnchor: [9, 9],
       });
@@ -89,6 +93,7 @@ function MapEmbed({
 
       // Drži mapu stabilnom u modalu
       map.dragging.enable();
+
       mapRef.current = map;
     })();
 
@@ -112,7 +117,11 @@ function MapEmbed({
       }}
     >
       <div ref={elRef} className={cx("w-full", heightClass ?? "h-full")} />
+
+      {/* suptilni dark overlay da se uklopi u UI */}
       <div className="pointer-events-none absolute inset-0 bg-[color-mix(in_oklab,var(--ink),transparent_65%)] opacity-[0.22]" />
+
+      {/* OSM attribution (minimalno, da bude korektno) */}
       <div className="pointer-events-none absolute bottom-2 right-2 rounded-lg bg-black/35 px-2 py-1 text-[10px] text-white/70">
         © OpenStreetMap contributors
       </div>
@@ -126,10 +135,12 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
   const [tab, setTab] = useState<TabKey>("work");
 
+  // form state (work)
   const [wName, setWName] = useState("");
   const [wEmail, setWEmail] = useState("");
   const [wMsg, setWMsg] = useState("");
 
+  // form state (career)
   const [cName, setCName] = useState("");
   const [cEmail, setCEmail] = useState("");
   const [cLetter, setCLetter] = useState("");
@@ -139,13 +150,13 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
+  // close on ESC + lock scroll
   useEffect(() => {
     if (!open) return;
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !isSubmitting) onClose();
+      if (e.key === "Escape") onClose();
     };
-
     window.addEventListener("keydown", onKey);
 
     const prev = document.body.style.overflow;
@@ -157,16 +168,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose, isSubmitting]);
-
-  useEffect(() => {
-    if (!open) {
-      setErrors({});
-      setSubmitMessage("");
-      setSubmitOk(null);
-      setIsSubmitting(false);
-    }
-  }, [open]);
+  }, [open, onClose]);
 
   const helpLine = useMemo(() => t("help"), [t]);
 
@@ -177,19 +179,6 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
   const validateFullName = (v: string) => {
     const parts = v.trim().split(/\s+/).filter(Boolean);
     return parts.length >= 2 && parts.join(" ").length >= 4;
-  };
-
-  const resetWork = () => {
-    setWName("");
-    setWEmail("");
-    setWMsg("");
-  };
-
-  const resetCareer = () => {
-    setCName("");
-    setCEmail("");
-    setCLetter("");
-    setCCv(null);
   };
 
   const validateWork = () => {
@@ -291,90 +280,8 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     });
   };
 
-  const switchTab = (k: TabKey) => {
-    if (isSubmitting) return;
-    setErrors({});
-    setSubmitMessage("");
-    setSubmitOk(null);
-    setTab(k);
-  };
-
-  const onSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault();
-
-    setSubmitMessage("");
-    setSubmitOk(null);
-
-    const ok = tab === "work" ? validateWork() : validateCareer();
-    if (!ok) return;
-
-    try {
-      setIsSubmitting(true);
-
-      if (tab === "work") {
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            kind: "work",
-            name: wName.trim(),
-            email: wEmail.trim(),
-            message: wMsg.trim(),
-          }),
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (!res.ok || !data?.ok) {
-          setSubmitOk(false);
-          setSubmitMessage(data?.message || "Slanje poruke nije uspelo.");
-          return;
-        }
-
-        setSubmitOk(true);
-        setSubmitMessage("Poruka je uspešno poslata.");
-        setErrors({});
-        resetWork();
-        return;
-      }
-
-      const fd = new FormData();
-      fd.append("kind", "join");
-      fd.append("name", cName.trim());
-      fd.append("email", cEmail.trim());
-      fd.append("letter", cLetter.trim());
-      if (cCv) fd.append("cv", cCv);
-
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        body: fd,
-      });
-
-      const data = await res.json().catch(() => null);
-
-      if (!res.ok || !data?.ok) {
-        setSubmitOk(false);
-        setSubmitMessage(data?.message || "Slanje prijave nije uspelo.");
-        return;
-      }
-
-      setSubmitOk(true);
-      setSubmitMessage("Prijava je uspešno poslata.");
-      setErrors({});
-      resetCareer();
-    } catch (err) {
-      console.error(err);
-      setSubmitOk(false);
-      setSubmitMessage("Greška mreže. Pokušaj ponovo.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+  // ✅ Klik van panela zatvara modal (robustno)
   const onOverlayMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isSubmitting) return;
     const target = e.target as Node;
     if (panelRef.current && !panelRef.current.contains(target)) onClose();
   };
@@ -385,6 +292,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       onMouseDown={onOverlayMouseDown}
       role="presentation"
     >
+      {/* BACKDROP */}
       <div
         className={cx(
           "fixed inset-0",
@@ -393,7 +301,9 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
         )}
       />
 
+      {/* WRAP */}
       <div className="relative min-h-full px-4 py-6 sm:px-6 flex items-start sm:items-center justify-center">
+        {/* PANEL */}
         <div
           ref={panelRef}
           tabIndex={-1}
@@ -405,6 +315,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           )}
           onMouseDown={(e) => e.stopPropagation()}
         >
+          {/* glow */}
           <div
             className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
@@ -413,6 +324,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
             }}
           />
 
+          {/* HEADER */}
           <div className="relative flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-white/10">
             <div>
               <h3 className="text-lg sm:text-xl font-semibold tracking-tight">
@@ -421,26 +333,28 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
               <p className="mt-1 text-sm text-white/70">{helpLine}</p>
             </div>
 
+            {/* X */}
             <button
               type="button"
               onClick={onClose}
-              disabled={isSubmitting}
               aria-label={t("close")}
-              className="text-white/70 hover:text-[var(--accent)] transition-colors text-[34px] leading-none px-2 disabled:opacity-40"
+              className="text-white/70 hover:text-[var(--accent)] transition-colors text-[34px] leading-none px-2"
             >
               ×
             </button>
           </div>
 
+          {/* BODY */}
           <div className="relative grid gap-0 lg:grid-cols-[7fr_1px_4fr]">
+            {/* LEFT */}
             <div className="p-5 sm:p-6">
+              {/* TABS */}
               <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-w-full">
                 <button
                   type="button"
                   onClick={() => switchTab("work")}
-                  disabled={isSubmitting}
                   className={cx(
-                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer disabled:opacity-60",
+                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
                     "text-left whitespace-normal break-words",
                     tab === "work"
                       ? "text-[var(--accent)]"
@@ -455,9 +369,8 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                 <button
                   type="button"
                   onClick={() => switchTab("career")}
-                  disabled={isSubmitting}
                   className={cx(
-                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer disabled:opacity-60",
+                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
                     "text-left whitespace-normal break-words",
                     tab === "career"
                       ? "text-[var(--accent)]"
@@ -542,15 +455,6 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                       label={t("career.cv")}
                       file={cCv}
                       onPick={(f) => {
-                        if (f && f.size > MAX_CV_MB * 1024 * 1024) {
-                          setCCv(null);
-                          setErrors((prev) => ({
-                            ...prev,
-                            cCv: `CV fajl može biti maksimalno ${MAX_CV_MB} MB.`,
-                          }));
-                          return;
-                        }
-
                         setCCv(f);
                         if (f) clearError("cCv");
                       }}
@@ -572,7 +476,6 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
                     className={cx(
                       "rounded-xl bg-[var(--accent)] text-black",
                       "px-7 py-3 text-sm font-semibold",
@@ -584,32 +487,24 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                       transformOrigin: "left center",
                     }}
                   >
-                    {isSubmitting ? "Šaljem..." : t("send")}
+                    {t("send")}
                   </button>
-
-                  {submitMessage ? (
-                    <p
-                      className={cx(
-                        "mt-4 text-sm font-medium",
-                        submitOk ? "text-emerald-400" : "text-[var(--accent)]",
-                      )}
-                    >
-                      {submitMessage}
-                    </p>
-                  ) : null}
 
                   <p className="mt-4 text-xs text-white/50">{t("note")}</p>
                 </div>
               </form>
             </div>
 
+            {/* DESKTOP VERTICAL DIVIDER */}
             <div className="hidden lg:block bg-white/10" aria-hidden="true" />
 
+            {/* RIGHT */}
             <div className="p-5 sm:p-6">
               <h4 className="text-sm font-semibold text-white/80">
                 {t("details.title")}
               </h4>
 
+              {/* MOBILE */}
               <div className="mt-4 lg:hidden sm:hidden">
                 <div className="divide-y divide-white/12">
                   <div className="py-4">
@@ -640,6 +535,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                 </div>
               </div>
 
+              {/* TABLET */}
               <div className="hidden sm:block lg:hidden mt-4">
                 <div className="grid grid-cols-[1fr_1px_1fr] items-start">
                   <div className="pr-6">
@@ -679,6 +575,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                 </div>
               </div>
 
+              {/* DESKTOP */}
               <div className="hidden lg:block mt-4">
                 <div className="space-y-0 divide-y divide-white/12">
                   <div className="py-4">
@@ -712,11 +609,14 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
               </div>
             </div>
           </div>
+          {/* /body */}
         </div>
       </div>
     </div>
   );
 }
+
+/* ----------------- UI atoms ----------------- */
 
 function Field({
   label,
