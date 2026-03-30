@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import React, { use, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 
 type ContactModalProps = {
   open: boolean;
@@ -23,7 +23,7 @@ const OFFICE_ZOOM = 16;
 
 function MapEmbed({
   className,
-  heightClass
+  heightClass,
 }: {
   className?: string;
   heightClass?: string;
@@ -44,7 +44,7 @@ function MapEmbed({
       if (mapRef.current) {
         try {
           mapRef.current.remove();
-        } catch { }
+        } catch {}
         mapRef.current = null;
       }
 
@@ -55,16 +55,17 @@ function MapEmbed({
         doubleClickZoom: false,
         boxZoom: false,
         keyboard: false,
-        tap: false
+        tap: false,
       }).setView([OFFICE_LAT, OFFICE_LON], OFFICE_ZOOM);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19
+        maxZoom: 19,
       }).addTo(map);
 
       const tilePane = map.getPane("tilePane");
       if (tilePane) {
-        tilePane.style.filter = "grayscale(0.15) saturate(1.05) contrast(1.05) brightness(1.03)";
+        tilePane.style.filter =
+          "grayscale(0.15) saturate(1.05) contrast(1.05) brightness(1.03)";
         tilePane.style.opacity = "0.98";
       }
 
@@ -82,11 +83,13 @@ function MapEmbed({
     "></div>
   `,
         iconSize: [18, 18],
-        iconAnchor: [9, 9]
+        iconAnchor: [9, 9],
       });
 
-      L.marker([OFFICE_LAT, OFFICE_LON], { icon: pinIcon, interactive: false }).addTo(map);
-
+      L.marker([OFFICE_LAT, OFFICE_LON], {
+        icon: pinIcon,
+        interactive: false,
+      }).addTo(map);
 
       // Drži mapu stabilnom u modalu
       map.dragging.enable();
@@ -99,7 +102,7 @@ function MapEmbed({
       if (mapRef.current) {
         try {
           mapRef.current.remove();
-        } catch { }
+        } catch {}
         mapRef.current = null;
       }
     };
@@ -107,13 +110,10 @@ function MapEmbed({
 
   return (
     <div
-      className={cx(
-        "relative w-full overflow-hidden rounded-xl",
-        className
-      )}
+      className={cx("relative w-full overflow-hidden rounded-xl", className)}
       style={{
         // ✅ “mnogo više siva”, bez jarkih boja
-        filter: "saturate(0.3) contrast(1.09) brightness(0.9)"
+        filter: "saturate(0.3) contrast(1.09) brightness(0.9)",
       }}
     >
       <div ref={elRef} className={cx("w-full", heightClass ?? "h-full")} />
@@ -130,6 +130,7 @@ function MapEmbed({
 }
 
 export default function ContactModal({ open, onClose }: ContactModalProps) {
+  const locale = useLocale();
   const t = useTranslations("contactModal");
 
   const [tab, setTab] = useState<TabKey>("work");
@@ -146,6 +147,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
   const [cCv, setCCv] = useState<File | null>(null);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   // close on ESC + lock scroll
@@ -185,24 +187,82 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     if (!wEmail.trim() || !isValidEmail(wEmail)) e.wEmail = t("errors.email");
     if (!wMsg.trim() || wMsg.trim().length < 10) e.wMsg = t("errors.message");
     setErrors(e);
-    return Object.keys(e).length === 0;
+
+    const data = {
+      name: wName.trim(),
+      email: wEmail.trim(),
+      message: wMsg.trim(),
+      cv: null,
+      type: "work",
+    };
+    return {
+      valid: Object.keys(e).length === 0,
+      data,
+    };
   };
 
   const validateCareer = () => {
     const e: Record<string, string> = {};
     if (!validateFullName(cName)) e.cName = t("errors.fullName");
     if (!cEmail.trim() || !isValidEmail(cEmail)) e.cEmail = t("errors.email");
-    if (!cLetter.trim() || cLetter.trim().length < 30) e.cLetter = t("errors.letter");
+    if (!cLetter.trim() || cLetter.trim().length < 30)
+      e.cLetter = t("errors.letter");
     if (!cCv) e.cCv = t("errors.cv");
+
+    console.log({ cCv });
     setErrors(e);
-    return Object.keys(e).length === 0;
+
+    const data = {
+      name: cName.trim(),
+      email: cEmail.trim(),
+      message: cLetter.trim(),
+      cv: cCv,
+      type: "career",
+    };
+    return {
+      valid: Object.keys(e).length === 0,
+      data,
+    };
   };
 
-  const onSubmit = (ev: React.FormEvent) => {
+  const onSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
-    const ok = tab === "work" ? validateWork() : validateCareer();
-    if (!ok) return;
-    onClose();
+
+    const validationResult = tab === "work" ? validateWork() : validateCareer();
+
+    if (!validationResult.valid) return;
+
+    const payload = { ...validationResult.data };
+
+    // Convert File to Base64 if it exists
+    if (tab === "career" && validationResult.data.cv instanceof File) {
+      const file = validationResult.data.cv;
+      const base64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+      payload.cv = base64;
+    }
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept-language": locale || "en",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to send message");
+      }
+      onClose();
+    } catch (error) {
+      setFetchError(error instanceof Error ? error.message : String(error));
+    }
   };
 
   const switchTab = (k: TabKey) => {
@@ -237,7 +297,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
         className={cx(
           "fixed inset-0",
           "bg-[color-mix(in_oklab,var(--ink),black_30%)]/70",
-          "supports-[backdrop-filter]:backdrop-blur-md"
+          "supports-[backdrop-filter]:backdrop-blur-md",
         )}
       />
 
@@ -251,7 +311,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
             "relative w-full max-w-5xl outline-none",
             "rounded-2xl border border-white/10",
             "bg-[color-mix(in_oklab,var(--ink),black_12%)] text-white",
-            "shadow-2xl"
+            "shadow-2xl",
           )}
           onMouseDown={(e) => e.stopPropagation()}
         >
@@ -260,7 +320,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
             className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
               background:
-                "radial-gradient(1200px 420px at 20% -10%, rgba(249,115,22,0.12), transparent 55%)"
+                "radial-gradient(1200px 420px at 20% -10%, rgba(249,115,22,0.12), transparent 55%)",
             }}
           />
 
@@ -296,7 +356,9 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                   className={cx(
                     "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
                     "text-left whitespace-normal break-words",
-                    tab === "work" ? "text-[var(--accent)]" : "text-white/85 hover:text-white"
+                    tab === "work"
+                      ? "text-[var(--accent)]"
+                      : "text-white/85 hover:text-white",
                   )}
                 >
                   {t("tabs.work")}
@@ -310,7 +372,9 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                   className={cx(
                     "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
                     "text-left whitespace-normal break-words",
-                    tab === "career" ? "text-[var(--accent)]" : "text-white/85 hover:text-white"
+                    tab === "career"
+                      ? "text-[var(--accent)]"
+                      : "text-white/85 hover:text-white",
                   )}
                 >
                   {t("tabs.career")}
@@ -403,6 +467,12 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                   </>
                 )}
 
+                {fetchError && (
+                  <p className="text-sm font-semibold text-[var(--accent)]">
+                    {fetchError}
+                  </p>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
@@ -410,9 +480,12 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                       "rounded-xl bg-[var(--accent)] text-black",
                       "px-7 py-3 text-sm font-semibold",
                       "shadow-[0_10px_30px_rgba(249,115,22,0.25)]",
-                      "transition hover:scale-[1.06] hover:brightness-[1.02] active:scale-[1.02]"
+                      "transition hover:scale-[1.06] hover:brightness-[1.02] active:scale-[1.02]",
                     )}
-                    style={{ cursor: "pointer", transformOrigin: "left center" }}
+                    style={{
+                      cursor: "pointer",
+                      transformOrigin: "left center",
+                    }}
                   >
                     {t("send")}
                   </button>
@@ -427,19 +500,33 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
             {/* RIGHT */}
             <div className="p-5 sm:p-6">
-              <h4 className="text-sm font-semibold text-white/80">{t("details.title")}</h4>
+              <h4 className="text-sm font-semibold text-white/80">
+                {t("details.title")}
+              </h4>
 
               {/* MOBILE */}
               <div className="mt-4 lg:hidden sm:hidden">
                 <div className="divide-y divide-white/12">
                   <div className="py-4">
-                    <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
+                    <DetailRow
+                      icon={<PhoneIcon />}
+                      label={t("details.phone")}
+                      value={t("details.phoneValue")}
+                    />
                   </div>
                   <div className="py-4">
-                    <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
+                    <DetailRow
+                      icon={<MailIcon />}
+                      label={t("details.email")}
+                      value={t("details.emailValue")}
+                    />
                   </div>
                   <div className="py-4">
-                    <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
+                    <DetailRow
+                      icon={<PinIcon />}
+                      label={t("details.office")}
+                      value={t("details.officeValue")}
+                    />
                   </div>
                 </div>
 
@@ -454,18 +541,33 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
                   <div className="pr-6">
                     <div className="divide-y divide-white/12">
                       <div className="py-4">
-                        <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
+                        <DetailRow
+                          icon={<PhoneIcon />}
+                          label={t("details.phone")}
+                          value={t("details.phoneValue")}
+                        />
                       </div>
                       <div className="py-4">
-                        <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
+                        <DetailRow
+                          icon={<MailIcon />}
+                          label={t("details.email")}
+                          value={t("details.emailValue")}
+                        />
                       </div>
                       <div className="py-4">
-                        <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
+                        <DetailRow
+                          icon={<PinIcon />}
+                          label={t("details.office")}
+                          value={t("details.officeValue")}
+                        />
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white/12 self-stretch" aria-hidden="true" />
+                  <div
+                    className="bg-white/12 self-stretch"
+                    aria-hidden="true"
+                  />
 
                   <div className="pl-6">
                     <MapEmbed heightClass="h-[280px] md:h-[320px]" />
@@ -477,13 +579,25 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
               <div className="hidden lg:block mt-4">
                 <div className="space-y-0 divide-y divide-white/12">
                   <div className="py-4">
-                    <DetailRow icon={<PhoneIcon />} label={t("details.phone")} value={t("details.phoneValue")} />
+                    <DetailRow
+                      icon={<PhoneIcon />}
+                      label={t("details.phone")}
+                      value={t("details.phoneValue")}
+                    />
                   </div>
                   <div className="py-4">
-                    <DetailRow icon={<MailIcon />} label={t("details.email")} value={t("details.emailValue")} />
+                    <DetailRow
+                      icon={<MailIcon />}
+                      label={t("details.email")}
+                      value={t("details.emailValue")}
+                    />
                   </div>
                   <div className="py-4">
-                    <DetailRow icon={<PinIcon />} label={t("details.office")} value={t("details.officeValue")} />
+                    <DetailRow
+                      icon={<PinIcon />}
+                      label={t("details.office")}
+                      value={t("details.officeValue")}
+                    />
                   </div>
                 </div>
 
@@ -510,7 +624,7 @@ function Field({
   onChange,
   placeholder,
   error,
-  inputMode
+  inputMode,
 }: {
   label: string;
   value: string;
@@ -521,7 +635,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-white/85">{label}</label>
+      <label className="block text-sm font-semibold text-white/85">
+        {label}
+      </label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -533,10 +649,16 @@ function Field({
           "outline-none transition",
           "focus:border-[color-mix(in_oklab,var(--accent),white_10%)]",
           "focus:ring-2 focus:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
-          error ? "border-[color-mix(in_oklab,var(--accent),white_12%)]" : "border-white/10"
+          error
+            ? "border-[color-mix(in_oklab,var(--accent),white_12%)]"
+            : "border-white/10",
         )}
       />
-      {error ? <p className="mt-2 text-xs font-semibold text-[var(--accent)]">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-xs font-semibold text-[var(--accent)]">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -547,7 +669,7 @@ function TextArea({
   onChange,
   placeholder,
   error,
-  rows = 5
+  rows = 5,
 }: {
   label: string;
   value: string;
@@ -558,7 +680,9 @@ function TextArea({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-white/85">{label}</label>
+      <label className="block text-sm font-semibold text-white/85">
+        {label}
+      </label>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -570,10 +694,16 @@ function TextArea({
           "outline-none transition",
           "focus:border-[color-mix(in_oklab,var(--accent),white_10%)]",
           "focus:ring-2 focus:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
-          error ? "border-[color-mix(in_oklab,var(--accent),white_12%)]" : "border-white/10"
+          error
+            ? "border-[color-mix(in_oklab,var(--accent),white_12%)]"
+            : "border-white/10",
         )}
       />
-      {error ? <p className="mt-2 text-xs font-semibold text-[var(--accent)]">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-xs font-semibold text-[var(--accent)]">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -586,7 +716,7 @@ function FileField({
   hint,
   chooseText,
   removeText,
-  noneText
+  noneText,
 }: {
   label: string;
   file: File | null;
@@ -599,13 +729,19 @@ function FileField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-white/85">{label}</label>
+      <label className="block text-sm font-semibold text-white/85">
+        {label}
+      </label>
 
       <div className="mt-2 rounded-xl border bg-white/5 border-white/10">
         <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <div className="text-sm text-white/85 truncate">{file ? file.name : noneText}</div>
-            {hint ? <div className="mt-1 text-xs text-white/45">{hint}</div> : null}
+            <div className="text-sm text-white/85 truncate">
+              {file ? file.name : noneText}
+            </div>
+            {hint ? (
+              <div className="mt-1 text-xs text-white/45">{hint}</div>
+            ) : null}
           </div>
 
           <div className="flex items-center gap-2">
@@ -615,7 +751,7 @@ function FileField({
                 "border border-white/10 bg-white/5",
                 "px-4 py-2 text-sm font-semibold text-white/85",
                 "hover:bg-white/10 hover:text-white transition-colors",
-                "focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]"
+                "focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
               )}
               style={{ cursor: "pointer" }}
             >
@@ -641,7 +777,11 @@ function FileField({
         </div>
       </div>
 
-      {error ? <p className="mt-2 text-xs font-semibold text-[var(--accent)]">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-xs font-semibold text-[var(--accent)]">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -649,7 +789,7 @@ function FileField({
 function DetailRow({
   icon,
   label,
-  value
+  value,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -670,7 +810,13 @@ function DetailRow({
 
 function PhoneIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1 .4 2.1.6 3.2.6.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C11.7 21.2 2.8 12.3 2.8 1.2 2.8.5 3.3 0 4 0h3.2c.7 0 1.2.5 1.2 1.2 0 1.1.2 2.2.6 3.2.1.4 0 .9-.2 1.2L6.6 10.8Z"
         fill="currentColor"
@@ -682,7 +828,13 @@ function PhoneIcon() {
 
 function MailIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2 8 5 8-5"
         stroke="currentColor"
@@ -697,7 +849,13 @@ function MailIcon() {
 
 function PinIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 22s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12Z"
         stroke="currentColor"
