@@ -146,7 +146,8 @@
       "email": "Enter a valid email.",
       "message": "Message should be at least 10 characters.",
       "letter": "Motivation letter should be at least 30 characters.",
-      "cv": "Please attach your CV."
+      "cv": "Please attach your CV.",
+      "tooManyRequests": "Too many requests. Please try again later."
     },
     "details": {
       "title": "Contact details",
