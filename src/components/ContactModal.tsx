@@ -87,6 +87,7 @@ function MapEmbed({
         interactive: false,
       }).addTo(map);
 
+      // Drži mapu stabilnom u modalu
       map.dragging.enable();
       mapRef.current = map;
     })();

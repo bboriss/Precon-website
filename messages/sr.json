@@ -146,7 +146,8 @@
       "email": "Unesite ispravan email.",
       "message": "Poruka treba da ima najmanje 10 karaktera.",
       "letter": "Motivaciono pismo treba da ima najmanje 30 karaktera.",
-      "cv": "Molimo priložite svoj CV."
+      "cv": "Molimo dodajte vaš CV.",
+      "tooManyRequests": "Previše zahteva. Molimo pokušajte ponovo kasnije."
     },
     "details": {
       "title": "Kontakt podaci",
