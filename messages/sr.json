@@ -111,52 +111,63 @@
     "title": "Naši klijenti"
   },
   "contactModal": {
-    "title": "Kontakt",
-    "help": "Obično odgovaramo u roku od 1–2 radna dana.",
-    "close": "Zatvori",
+    "title": "Contact",
+    "help": "Usually we reply within 1–2 business days.",
+    "close": "Close",
     "tabs": {
-      "work": "Hajde da sarađujemo",
-      "career": "Želite da budete deo PRECON-a?"
+      "work": "Let’s work together",
+      "career": "Want to be part of PRECON?"
     },
-    "send": "Pošalji",
-    "note": "Slanjem ovog formulara saglasni ste da vas možemo kontaktirati putem email-a.",
+    "send": "Send",
+    "note": "By sending this form you agree that we may contact you back via email.",
     "work": {
-      "fullName": "Ime i prezime",
-      "fullNamePh": "Vaše ime i prezime",
+      "fullName": "Full name",
+      "fullNamePh": "Your full name",
       "email": "Email",
-      "emailPh": "ime@firma.com",
-      "message": "Poruka",
-      "messagePh": "Recite nam nešto o svom projektu, roku i očekivanom obimu…"
+      "emailPh": "name@company.com",
+      "message": "Message",
+      "messagePh": "Tell us about your project, timeline and expected scope…"
     },
     "career": {
-      "fullName": "Ime i prezime",
-      "fullNamePh": "Vaše ime i prezime",
+      "fullName": "Full name",
+      "fullNamePh": "Your full name",
       "email": "Email",
-      "emailPh": "ime@email.com",
-      "letter": "Motivaciono pismo",
-      "letterPh": "Kratko predstavljanje, u čemu ste najbolji i zašto želite da nam se pridružite…",
-      "cv": "CV / Radna biografija",
-      "cvHint": "PDF ili DOCX, do 10MB.",
-      "chooseFile": "Izaberi fajl",
-      "removeFile": "Ukloni",
-      "noFile": "Nije izabran fajl"
+      "emailPh": "name@email.com",
+      "letter": "Motivation letter",
+      "letterPh": "Short intro, what you do best, and why you want to join…",
+      "cv": "CV / Resume",
+      "cvHint": "PDF or DOCX, up to 10MB.",
+      "chooseFile": "Choose file",
+      "removeFile": "Remove",
+      "noFile": "No file selected"
     },
     "errors": {
-      "fullName": "Unesite ime i prezime.",
-      "email": "Unesite ispravan email.",
-      "message": "Poruka treba da ima najmanje 10 karaktera.",
-      "letter": "Motivaciono pismo treba da ima najmanje 30 karaktera.",
-      "cv": "Molimo dodajte vaš CV.",
-      "tooManyRequests": "Previše zahteva. Molimo pokušajte ponovo kasnije."
+      "fullName": "Please enter first and last name.",
+      "email": "Enter a valid email.",
+      "message": "Message should be at least 10 characters.",
+      "letter": "Motivation letter should be at least 30 characters.",
+      "cv": "Please attach your CV.",
+      "tooManyRequests": "Too many requests. Please try again later."
     },
     "details": {
-      "title": "Kontakt podaci",
-      "phone": "Telefon",
+      "title": "Contact details",
+      "phone": "Phone",
       "email": "Email",
-      "office": "Kancelarija",
+      "office": "Address",
       "phoneValue": "+381 63 469 538",
       "emailValue": "info@precondesign.rs",
-      "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
+      "officeValue": "Blagoja Parovica 1b, Niš, Serbia"
+    },
+    "success": {
+      "work": "Your message has been sent successfully. Thank you, we will get back to you soon.",
+      "career": "Your application has been sent successfully. Thank you, we will get back to you soon."
+    },
+    "states": {
+      "sending": "Sending your message...",
+      "sendingSub": "Please wait a moment.",
+      "errorTitle": "Something went wrong",
+      "errorDefault": "Your message could not be sent right now. Please try again.",
+      "backToForm": "Back to form"
     }
   },
   "footer": {

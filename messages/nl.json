@@ -71,42 +71,42 @@
     }
   },
   "aboutPage": {
-  "heroTitle": "Wie wij zijn",
-  "heroLead": "Precon Design is een ingenieurspartner met focus op prefab betonconstructies, gewapend beton en staalconstructies, met een praktische BIM-gerichte aanpak voor coördinatie en productierijpe documentatie.",
-  "processTitle": "Hoe wij werken",
-  "processLead": "Onze werkwijze is gebaseerd op duidelijke technische communicatie, sterke coördinatie en documentatie die bruikbaar is voor zowel het ontwerpteam als de productie.",
-  "processItems": {
-    "item1": {
-      "title": "Concept en coördinatie",
-      "body": "In een vroege fase analyseren wij het systeem, de geometrie en de projectbeperkingen om een duidelijke en efficiënte ontwikkelingsrichting vast te leggen."
+    "heroTitle": "Wie wij zijn",
+    "heroLead": "Precon Design is een ingenieurspartner met focus op prefab betonconstructies, gewapend beton en staalconstructies, met een praktische BIM-gerichte aanpak voor coördinatie en productierijpe documentatie.",
+    "processTitle": "Hoe wij werken",
+    "processLead": "Onze werkwijze is gebaseerd op duidelijke technische communicatie, sterke coördinatie en documentatie die bruikbaar is voor zowel het ontwerpteam als de productie.",
+    "processItems": {
+      "item1": {
+        "title": "Concept en coördinatie",
+        "body": "In een vroege fase analyseren wij het systeem, de geometrie en de projectbeperkingen om een duidelijke en efficiënte ontwikkelingsrichting vast te leggen."
+      },
+      "item2": {
+        "title": "Modelleren en uitwerken",
+        "body": "Wij ontwikkelen de constructie via BIM en technische detaillering, met focus op samenhang tussen elementen, details en leveringsfasen."
+      },
+      "item3": {
+        "title": "Documentatie voor uitvoering",
+        "body": "Wij verzorgen tekeningen en technische documentatie die helder, praktisch en afgestemd zijn op de werkelijke productie- en uitvoeringsbehoeften."
+      },
+      "item4": {
+        "title": "BIM-coördinatie",
+        "body": "Wij stemmen constructie, architectuur, installaties en projectfasen op elkaar af zodat de uitwerking stabiel en overzichtelijk blijft."
+      },
+      "item5": {
+        "title": "Automatisering en tools",
+        "body": "Wij gebruiken interne tools en gestandaardiseerde workflows voor sneller werk, minder handmatige fouten en betere documentcontrole."
+      },
+      "item6": {
+        "title": "Efficiënte oplevering",
+        "body": "De focus ligt op duidelijke, bruikbare en productiegerichte deliverables die de volgende projectstappen versnellen."
+      }
     },
-    "item2": {
-      "title": "Modelleren en uitwerken",
-      "body": "Wij ontwikkelen de constructie via BIM en technische detaillering, met focus op samenhang tussen elementen, details en leveringsfasen."
-    },
-    "item3": {
-      "title": "Documentatie voor uitvoering",
-      "body": "Wij verzorgen tekeningen en technische documentatie die helder, praktisch en afgestemd zijn op de werkelijke productie- en uitvoeringsbehoeften."
-    },
-    "item4": {
-      "title": "BIM-coördinatie",
-      "body": "Wij stemmen constructie, architectuur, installaties en projectfasen op elkaar af zodat de uitwerking stabiel en overzichtelijk blijft."
-    },
-    "item5": {
-      "title": "Automatisering en tools",
-      "body": "Wij gebruiken interne tools en gestandaardiseerde workflows voor sneller werk, minder handmatige fouten en betere documentcontrole."
-    },
-    "item6": {
-      "title": "Efficiënte oplevering",
-      "body": "De focus ligt op duidelijke, bruikbare en productiegerichte deliverables die de volgende projectstappen versnellen."
-    }
+    "softwareTitle": "Software die wij gebruiken",
+    "softwareLead": "Wij vertrouwen op bewezen tools voor modellering, coördinatie, technische uitwerking en interne procesautomatisering.",
+    "ctaTitle": "Heeft u een project of aanvraag?",
+    "ctaBody": "Heeft u een partner nodig voor constructief ontwerp, BIM-coördinatie of productierijpe documentatie, neem dan contact met ons op.",
+    "ctaButton": "Neem contact op"
   },
-  "softwareTitle": "Software die wij gebruiken",
-  "softwareLead": "Wij vertrouwen op bewezen tools voor modellering, coördinatie, technische uitwerking en interne procesautomatisering.",
-  "ctaTitle": "Heeft u een project of aanvraag?",
-  "ctaBody": "Heeft u een partner nodig voor constructief ontwerp, BIM-coördinatie of productierijpe documentatie, neem dan contact met ons op.",
-  "ctaButton": "Neem contact op"
-},
   "clients": {
     "title": "Onze klanten"
   },
@@ -146,16 +146,28 @@
       "email": "Voer een geldig e-mailadres in.",
       "message": "Het bericht moet minimaal 10 tekens bevatten.",
       "letter": "De motivatiebrief moet minimaal 30 tekens bevatten.",
-      "cv": "Voeg uw CV toe."
+      "cv": "Voeg uw CV toe.",
+      "tooManyRequests": "Te veel verzoeken. Probeer het later opnieuw."
     },
     "details": {
       "title": "Contactgegevens",
       "phone": "Telefoon",
       "email": "E-mail",
-      "office": "Kantoor",
+      "office": "Adres",
       "phoneValue": "+381 63 469 538",
       "emailValue": "info@precondesign.rs",
       "officeValue": "Blagoja Parovica 1b, Niš, Servië"
+    },
+    "success": {
+      "work": "Je bericht is succesvol verzonden. Bedankt, we nemen snel contact met je op.",
+      "career": "Je sollicitatie is succesvol verzonden. Bedankt, we nemen snel contact met je op."
+    },
+    "states": {
+      "sending": "Je bericht wordt verzonden...",
+      "sendingSub": "Even geduld alstublieft.",
+      "errorTitle": "Er is iets misgegaan",
+      "errorDefault": "Je bericht kon op dit moment niet worden verzonden. Probeer het opnieuw.",
+      "backToForm": "Terug naar formulier"
     }
   },
   "footer": {
@@ -170,5 +182,16 @@
     "phoneLabel": "Telefoon",
     "contactCta": "Contact",
     "rights": "Alle rechten voorbehouden."
+  },
+  "success": {
+    "work": "Je bericht is succesvol verzonden. Bedankt, we nemen snel contact met je op.",
+    "career": "Je sollicitatie is succesvol verzonden. Bedankt, we nemen snel contact met je op."
+  },
+  "states": {
+    "sending": "Je bericht wordt verzonden...",
+    "sendingSub": "Even geduld alstublieft.",
+    "errorTitle": "Er is iets misgegaan",
+    "errorDefault": "Je bericht kon op dit moment niet worden verzonden. Probeer het opnieuw.",
+    "backToForm": "Terug naar formulier"
   }
 }

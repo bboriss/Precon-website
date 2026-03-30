@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 import { Container } from "@/components/Container";
 
 function IconLinkedIn(props: React.SVGProps<SVGSVGElement>) {
@@ -50,22 +51,57 @@ function FooterNavButton({
       type="button"
       onClick={onClick}
       className="appearance-none border-0 bg-transparent p-0 m-0 text-left text-sm font-medium text-white/80 transition-colors duration-300 hover:text-[var(--accent)] focus:outline-none"
+      style={{ cursor: "pointer" }}
     >
       {label}
     </button>
   );
 }
 
+type TooltipState = {
+  key: "facebook" | "instagram" | null;
+  x: number;
+  y: number;
+};
+
 export default function SiteFooter() {
   const t = useTranslations("footer");
   const locale = useLocale();
+
+  const [tooltip, setTooltip] = useState<TooltipState>({
+    key: null,
+    x: 0,
+    y: 0,
+  });
 
   const lineClass = "h-px w-full bg-white/10";
   const labelClass = "text-sm text-white/55";
   const valueClass = "text-sm text-white/80";
 
   const socialBtn =
-    "grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/85 transition duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--ink)]";
+    "grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/5 text-white/85 transition duration-300";
+
+  const activeSocialBtn =
+    `${socialBtn} cursor-pointer hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--ink)]`;
+
+  const disabledSocialBtn =
+    `${socialBtn} cursor-not-allowed hover:border-white/15 hover:bg-white/7 hover:text-white/85`;
+
+  const showTooltip = (
+    key: "facebook" | "instagram",
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({
+      key,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const hideTooltip = () => {
+    setTooltip({ key: null, x: 0, y: 0 });
+  };
 
   return (
     <footer id="site-footer" className="border-t border-white/10 bg-[var(--ink)] text-white">
@@ -93,16 +129,70 @@ export default function SiteFooter() {
                   <div className={lineClass} />
                 </div>
 
-                <div className="mt-4 flex items-center gap-3">
-                  <a className={socialBtn} href="#" aria-label="LinkedIn" rel="noreferrer">
+                <div className="mt-4 flex items-center gap-3 overflow-visible">
+                  <a
+                    className={activeSocialBtn}
+                    href="https://www.linkedin.com/company/precondesign/posts/?feedView=all"
+                    aria-label="LinkedIn"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <IconLinkedIn className="h-4 w-4" />
                   </a>
-                  <a className={socialBtn} href="#" aria-label="Facebook" rel="noreferrer">
-                    <IconFacebook className="h-4 w-4" />
-                  </a>
-                  <a className={socialBtn} href="#" aria-label="Instagram" rel="noreferrer">
-                    <IconInstagram className="h-4 w-4" />
-                  </a>
+
+                  <div className="relative overflow-visible">
+                    <button
+                      type="button"
+                      aria-label="Facebook"
+                      aria-disabled="true"
+                      onMouseEnter={(e) => showTooltip("facebook", e)}
+                      onMouseMove={(e) => showTooltip("facebook", e)}
+                      onMouseLeave={hideTooltip}
+                      onClick={(e) => e.preventDefault()}
+                      className={disabledSocialBtn}
+                    >
+                      <IconFacebook className="h-4 w-4" />
+                    </button>
+
+                    {tooltip.key === "facebook" ? (
+                      <span
+                        className="pointer-events-none absolute z-20 whitespace-nowrap rounded-md border border-white/10 bg-[rgba(10,14,22,0.88)] px-2 py-1 text-[11px] font-medium tracking-[0.01em] text-white/58 shadow-lg"
+                        style={{
+                          left: tooltip.x + 14,
+                          top: tooltip.y - 8,
+                        }}
+                      >
+                        In progress
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="relative overflow-visible">
+                    <button
+                      type="button"
+                      aria-label="Instagram"
+                      aria-disabled="true"
+                      onMouseEnter={(e) => showTooltip("instagram", e)}
+                      onMouseMove={(e) => showTooltip("instagram", e)}
+                      onMouseLeave={hideTooltip}
+                      onClick={(e) => e.preventDefault()}
+                      className={disabledSocialBtn}
+                    >
+                      <IconInstagram className="h-4 w-4" />
+                    </button>
+
+                    {tooltip.key === "instagram" ? (
+                      <span
+                        className="pointer-events-none absolute z-20 whitespace-nowrap rounded-md border border-white/10 bg-[rgba(10,14,22,0.88)] px-2 py-1 text-[11px] font-medium tracking-[0.01em] text-white/58 shadow-lg"
+                        style={{
+                          left: tooltip.x + 14,
+                          top: tooltip.y - 8,
+                        }}
+                      >
+                        In progress
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>

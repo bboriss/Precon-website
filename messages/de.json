@@ -71,42 +71,42 @@
     }
   },
   "aboutPage": {
-  "heroTitle": "Wer wir sind",
-  "heroLead": "Precon Design ist ein Ingenieurpartner mit Fokus auf Fertigteilbeton-, Stahlbeton- und Stahlkonstruktionen sowie auf einen praxisorientierten BIM-Ansatz für Koordination und produktionsgerechte Dokumentation.",
-  "processTitle": "Wie wir arbeiten",
-  "processLead": "Unsere Arbeitsweise basiert auf klarer technischer Kommunikation, starker Koordination und Dokumentation, die sowohl für das Planungsteam als auch für die Produktion nutzbar ist.",
-  "processItems": {
-    "item1": {
-      "title": "Konzept und Koordination",
-      "body": "Bereits in einer frühen Phase analysieren wir System, Geometrie und Projektgrenzen, um einen klaren und effizienten Entwicklungsweg festzulegen."
+    "heroTitle": "Wer wir sind",
+    "heroLead": "Precon Design ist ein Ingenieurpartner mit Fokus auf Fertigteilbeton-, Stahlbeton- und Stahlkonstruktionen sowie auf einen praxisorientierten BIM-Ansatz für Koordination und produktionsgerechte Dokumentation.",
+    "processTitle": "Wie wir arbeiten",
+    "processLead": "Unsere Arbeitsweise basiert auf klarer technischer Kommunikation, starker Koordination und Dokumentation, die sowohl für das Planungsteam als auch für die Produktion nutzbar ist.",
+    "processItems": {
+      "item1": {
+        "title": "Konzept und Koordination",
+        "body": "Bereits in einer frühen Phase analysieren wir System, Geometrie und Projektgrenzen, um einen klaren und effizienten Entwicklungsweg festzulegen."
+      },
+      "item2": {
+        "title": "Modellierung und Ausarbeitung",
+        "body": "Wir entwickeln die Konstruktion über BIM und technische Detaillierung mit Fokus auf Konsistenz von Bauteilen, Details und Lieferphasen."
+      },
+      "item3": {
+        "title": "Dokumentation für die Umsetzung",
+        "body": "Wir erstellen Zeichnungen und technische Unterlagen, die klar, praxisnah und auf reale Produktions- und Bauanforderungen abgestimmt sind."
+      },
+      "item4": {
+        "title": "BIM-Koordination",
+        "body": "Wir stimmen Tragwerk, Architektur, TGA und Projektphasen so ab, dass die Ausarbeitung stabil und klar bleibt."
+      },
+      "item5": {
+        "title": "Automatisierung und Tools",
+        "body": "Wir nutzen interne Werkzeuge und standardisierte Workflows für schnelleres Arbeiten, weniger manuelle Fehler und bessere Dokumentenkontrolle."
+      },
+      "item6": {
+        "title": "Effiziente Lieferung",
+        "body": "Der Fokus liegt auf klaren, nutzbaren und produktionsorientierten Ergebnissen, die die nächsten Projektphasen beschleunigen."
+      }
     },
-    "item2": {
-      "title": "Modellierung und Ausarbeitung",
-      "body": "Wir entwickeln die Konstruktion über BIM und technische Detaillierung mit Fokus auf Konsistenz von Bauteilen, Details und Lieferphasen."
-    },
-    "item3": {
-      "title": "Dokumentation für die Umsetzung",
-      "body": "Wir erstellen Zeichnungen und technische Unterlagen, die klar, praxisnah und auf reale Produktions- und Bauanforderungen abgestimmt sind."
-    },
-    "item4": {
-      "title": "BIM-Koordination",
-      "body": "Wir stimmen Tragwerk, Architektur, TGA und Projektphasen so ab, dass die Ausarbeitung stabil und klar bleibt."
-    },
-    "item5": {
-      "title": "Automatisierung und Tools",
-      "body": "Wir nutzen interne Werkzeuge und standardisierte Workflows für schnelleres Arbeiten, weniger manuelle Fehler und bessere Dokumentenkontrolle."
-    },
-    "item6": {
-      "title": "Effiziente Lieferung",
-      "body": "Der Fokus liegt auf klaren, nutzbaren und produktionsorientierten Ergebnissen, die die nächsten Projektphasen beschleunigen."
-    }
+    "softwareTitle": "Software, die wir nutzen",
+    "softwareLead": "Wir setzen auf bewährte Werkzeuge für Modellierung, Koordination, technische Ausarbeitung und interne Prozessautomatisierung.",
+    "ctaTitle": "Haben Sie ein Projekt oder eine Anfrage?",
+    "ctaBody": "Wenn Sie einen Partner für Tragwerksplanung, BIM-Koordination oder produktionsgerechte Dokumentation suchen, nehmen Sie Kontakt mit uns auf.",
+    "ctaButton": "Kontakt aufnehmen"
   },
-  "softwareTitle": "Software, die wir nutzen",
-  "softwareLead": "Wir setzen auf bewährte Werkzeuge für Modellierung, Koordination, technische Ausarbeitung und interne Prozessautomatisierung.",
-  "ctaTitle": "Haben Sie ein Projekt oder eine Anfrage?",
-  "ctaBody": "Wenn Sie einen Partner für Tragwerksplanung, BIM-Koordination oder produktionsgerechte Dokumentation suchen, nehmen Sie Kontakt mit uns auf.",
-  "ctaButton": "Kontakt aufnehmen"
-},
   "clients": {
     "title": "Unsere Kunden"
   },
@@ -124,7 +124,7 @@
       "fullName": "Vollständiger Name",
       "fullNamePh": "Ihr vollständiger Name",
       "email": "E-Mail",
-      "emailPh": "name@firma.com",
+      "emailPh": "name@company.com",
       "message": "Nachricht",
       "messagePh": "Erzählen Sie uns mehr über Ihr Projekt, den Zeitrahmen und den erwarteten Umfang…"
     },
@@ -146,16 +146,28 @@
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       "message": "Die Nachricht sollte mindestens 10 Zeichen lang sein.",
       "letter": "Das Motivationsschreiben sollte mindestens 30 Zeichen lang sein.",
-      "cv": "Bitte fügen Sie Ihren Lebenslauf bei."
+      "cv": "Bitte fügen Sie Ihren Lebenslauf bei.",
+      "tooManyRequests": "Zu viele Anfragen. Bitte versuchen Sie es später erneut."
     },
     "details": {
       "title": "Kontaktdaten",
       "phone": "Telefon",
       "email": "E-Mail",
-      "office": "Büro",
+      "office": "Adresse",
       "phoneValue": "+381 63 469 538",
       "emailValue": "info@precondesign.rs",
       "officeValue": "Blagoja Parovica 1b, Niš, Serbien"
+    },
+    "success": {
+      "work": "Ihre Nachricht wurde erfolgreich gesendet. Vielen Dank, wir melden uns in Kürze bei Ihnen.",
+      "career": "Ihre Bewerbung wurde erfolgreich gesendet. Vielen Dank, wir melden uns in Kürze bei Ihnen."
+    },
+    "states": {
+      "sending": "Ihre Nachricht wird gesendet...",
+      "sendingSub": "Bitte warten Sie einen Moment.",
+      "errorTitle": "Es ist ein Fehler aufgetreten",
+      "errorDefault": "Ihre Nachricht konnte derzeit nicht gesendet werden. Bitte versuchen Sie es erneut.",
+      "backToForm": "Zurück zum Formular"
     }
   },
   "footer": {
@@ -170,5 +182,16 @@
     "phoneLabel": "Telefon",
     "contactCta": "Kontakt",
     "rights": "Alle Rechte vorbehalten."
+  },
+  "success": {
+    "work": "Ihre Nachricht wurde erfolgreich gesendet. Vielen Dank, wir melden uns in Kürze bei Ihnen.",
+    "career": "Ihre Bewerbung wurde erfolgreich gesendet. Vielen Dank, wir melden uns in Kürze bei Ihnen."
+  },
+  "states": {
+    "sending": "Ihre Nachricht wird gesendet...",
+    "sendingSub": "Bitte warten Sie einen Moment.",
+    "errorTitle": "Es ist ein Fehler aufgetreten",
+    "errorDefault": "Ihre Nachricht konnte derzeit nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "backToForm": "Zurück zum Formular"
   }
 }

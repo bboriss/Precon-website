@@ -1,6 +1,12 @@
 "use client";
 
-import React, { use, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslations, useLocale } from "next-intl";
 
 type ContactModalProps = {
@@ -14,11 +20,8 @@ function cx(...a: Array<string | false | null | undefined>) {
   return a.filter(Boolean).join(" ");
 }
 
-/** ✅ Tačna lokacija */
 const OFFICE_LAT = 43.324709;
 const OFFICE_LON = 21.913458;
-
-/** ✅ Malo više zumirano nego ranije */
 const OFFICE_ZOOM = 16;
 
 function MapEmbed({
@@ -29,18 +32,17 @@ function MapEmbed({
   heightClass?: string;
 }) {
   const elRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<import("leaflet").Map | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      const L = (await import("leaflet")).default as any;
+      const L = (await import("leaflet")).default as typeof import("leaflet");
 
       if (cancelled) return;
       if (!elRef.current) return;
 
-      // Ako se komponenta remountuje (tab switch, modal close/open), očisti staru mapu
       if (mapRef.current) {
         try {
           mapRef.current.remove();
@@ -49,13 +51,12 @@ function MapEmbed({
       }
 
       const map = L.map(elRef.current, {
-        zoomControl: true, // ✅ nema +- gore levo
-        attributionControl: false, // dodaćemo sopstveni mali overlay
+        zoomControl: true,
+        attributionControl: false,
         scrollWheelZoom: true,
         doubleClickZoom: false,
         boxZoom: false,
         keyboard: false,
-        tap: false,
       }).setView([OFFICE_LAT, OFFICE_LON], OFFICE_ZOOM);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -69,19 +70,18 @@ function MapEmbed({
         tilePane.style.opacity = "0.98";
       }
 
-      // ✅ marker (narandžast + halo + beli border)
       const pinIcon = L.divIcon({
-        className: "", // bez leaflet default class styling-a
+        className: "",
         html: `
-    <div style="
-      position: relative;
-      width: 18px; height: 18px;
-      border-radius: 9999px;
-      background: rgb(249,115,22);
-      border: 2px solid rgba(255,255,255,0.9);
-      box-shadow: 0 0 0 10px rgba(249,115,22,0.22);
-    "></div>
-  `,
+          <div style="
+            position: relative;
+            width: 18px; height: 18px;
+            border-radius: 9999px;
+            background: rgb(249,115,22);
+            border: 2px solid rgba(255,255,255,0.9);
+            box-shadow: 0 0 0 10px rgba(249,115,22,0.22);
+          "></div>
+        `,
         iconSize: [18, 18],
         iconAnchor: [9, 9],
       });
@@ -91,9 +91,7 @@ function MapEmbed({
         interactive: false,
       }).addTo(map);
 
-      // Drži mapu stabilnom u modalu
       map.dragging.enable();
-
       mapRef.current = map;
     })();
 
@@ -112,16 +110,11 @@ function MapEmbed({
     <div
       className={cx("relative w-full overflow-hidden rounded-xl", className)}
       style={{
-        // ✅ “mnogo više siva”, bez jarkih boja
         filter: "saturate(0.3) contrast(1.09) brightness(0.9)",
       }}
     >
       <div ref={elRef} className={cx("w-full", heightClass ?? "h-full")} />
-
-      {/* suptilni dark overlay da se uklopi u UI */}
       <div className="pointer-events-none absolute inset-0 bg-[color-mix(in_oklab,var(--ink),transparent_65%)] opacity-[0.22]" />
-
-      {/* OSM attribution (minimalno, da bude korektno) */}
       <div className="pointer-events-none absolute bottom-2 right-2 rounded-lg bg-black/35 px-2 py-1 text-[10px] text-white/70">
         © OpenStreetMap contributors
       </div>
@@ -135,12 +128,10 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
   const [tab, setTab] = useState<TabKey>("work");
 
-  // form state (work)
   const [wName, setWName] = useState("");
   const [wEmail, setWEmail] = useState("");
   const [wMsg, setWMsg] = useState("");
 
-  // form state (career)
   const [cName, setCName] = useState("");
   const [cEmail, setCEmail] = useState("");
   const [cLetter, setCLetter] = useState("");
@@ -148,15 +139,65 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [successVisible, setSuccessVisible] = useState(false);
+  const [stateVisible, setStateVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
-  // close on ESC + lock scroll
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const helpLine = useMemo(() => t("help"), [t]);
+
+  const isLoadingView = isSubmitting;
+  const isSuccessView = !isSubmitting && !!successMessage;
+  const isErrorView = !isSubmitting && !!fetchError;
+
+  const clearStatus = () => {
+    setFetchError(null);
+    setSuccessMessage(null);
+    setSuccessVisible(false);
+    setStateVisible(false);
+  };
+
+  const resetForms = () => {
+    setWName("");
+    setWEmail("");
+    setWMsg("");
+
+    setCName("");
+    setCEmail("");
+    setCLetter("");
+    setCCv(null);
+
+    setErrors({});
+    setFetchError(null);
+    setFileInputKey((prev) => prev + 1);
+  };
+
+  const handleClose = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+
+    setErrors({});
+    setFetchError(null);
+    setSuccessMessage(null);
+    setSuccessVisible(false);
+    setStateVisible(false);
+    setIsSubmitting(false);
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     if (!open) return;
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
     };
+
     window.addEventListener("keydown", onKey);
 
     const prev = document.body.style.overflow;
@@ -167,10 +208,43 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
-    };
-  }, [open, onClose]);
 
-  const helpLine = useMemo(() => t("help"), [t]);
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+    };
+  }, [open, handleClose]);
+
+  useEffect(() => {
+    if (!open) {
+      setErrors({});
+      setFetchError(null);
+      setSuccessMessage(null);
+      setSuccessVisible(false);
+      setStateVisible(false);
+      setIsSubmitting(false);
+
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!isLoadingView && !isSuccessView && !isErrorView) {
+      setStateVisible(false);
+      return;
+    }
+
+    const raf = requestAnimationFrame(() => {
+      setStateVisible(true);
+      if (isSuccessView) setSuccessVisible(true);
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [isLoadingView, isSuccessView, isErrorView]);
 
   if (!open) return null;
 
@@ -186,18 +260,18 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     if (!validateFullName(wName)) e.wName = t("errors.fullName");
     if (!wEmail.trim() || !isValidEmail(wEmail)) e.wEmail = t("errors.email");
     if (!wMsg.trim() || wMsg.trim().length < 10) e.wMsg = t("errors.message");
+
     setErrors(e);
 
-    const data = {
-      name: wName.trim(),
-      email: wEmail.trim(),
-      message: wMsg.trim(),
-      cv: null,
-      type: "work",
-    };
     return {
       valid: Object.keys(e).length === 0,
-      data,
+      data: {
+        name: wName.trim(),
+        email: wEmail.trim(),
+        message: wMsg.trim(),
+        cv: null as File | null,
+        type: "work" as const,
+      },
     };
   };
 
@@ -209,32 +283,43 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       e.cLetter = t("errors.letter");
     if (!cCv) e.cCv = t("errors.cv");
 
-    console.log({ cCv });
     setErrors(e);
 
-    const data = {
-      name: cName.trim(),
-      email: cEmail.trim(),
-      message: cLetter.trim(),
-      cv: cCv,
-      type: "career",
-    };
     return {
       valid: Object.keys(e).length === 0,
-      data,
+      data: {
+        name: cName.trim(),
+        email: cEmail.trim(),
+        message: cLetter.trim(),
+        cv: cCv,
+        type: "career" as const,
+      },
     };
   };
 
   const onSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
+    clearStatus();
 
     const validationResult = tab === "work" ? validateWork() : validateCareer();
-
     if (!validationResult.valid) return;
 
-    const payload = { ...validationResult.data };
+    setIsSubmitting(true);
 
-    // Convert File to Base64 if it exists
+    const payload: {
+      name: string;
+      email: string;
+      message: string;
+      cv: string | null;
+      type: "work" | "career";
+    } = {
+      name: validationResult.data.name,
+      email: validationResult.data.email,
+      message: validationResult.data.message,
+      cv: null,
+      type: validationResult.data.type,
+    };
+
     if (tab === "career" && validationResult.data.cv instanceof File) {
       const file = validationResult.data.cv;
       const base64 = await new Promise<string>((resolve) => {
@@ -256,21 +341,37 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to send message");
+        let errorMessage = t("states.errorDefault");
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {}
+        throw new Error(errorMessage);
       }
-      onClose();
+
+      resetForms();
+      setSuccessMessage(
+        tab === "work" ? t("success.work") : t("success.career")
+      );
+
+      closeTimerRef.current = setTimeout(() => {
+        handleClose();
+      }, 3000);
     } catch (error) {
-      setFetchError(error instanceof Error ? error.message : String(error));
+      setFetchError(
+        error instanceof Error ? error.message : t("states.errorDefault")
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const switchTab = (k: TabKey) => {
     setErrors({});
+    clearStatus();
     setTab(k);
   };
 
-  // gasimo error za polje čim korisnik krene da kuca (po polju)
   const clearError = (key: string) => {
     setErrors((prev) => {
       if (!prev[key]) return prev;
@@ -280,10 +381,9 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
     });
   };
 
-  // ✅ Klik van panela zatvara modal (robustno)
   const onOverlayMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as Node;
-    if (panelRef.current && !panelRef.current.contains(target)) onClose();
+    if (panelRef.current && !panelRef.current.contains(target)) handleClose();
   };
 
   return (
@@ -292,7 +392,6 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
       onMouseDown={onOverlayMouseDown}
       role="presentation"
     >
-      {/* BACKDROP */}
       <div
         className={cx(
           "fixed inset-0",
@@ -301,9 +400,7 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
         )}
       />
 
-      {/* WRAP */}
       <div className="relative min-h-full px-4 py-6 sm:px-6 flex items-start sm:items-center justify-center">
-        {/* PANEL */}
         <div
           ref={panelRef}
           tabIndex={-1}
@@ -315,7 +412,6 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
           )}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          {/* glow */}
           <div
             className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
@@ -324,19 +420,19 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
             }}
           />
 
-          {/* HEADER */}
           <div className="relative flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-white/10">
             <div>
               <h3 className="text-lg sm:text-xl font-semibold tracking-tight">
                 {t("title")}
               </h3>
-              <p className="mt-1 text-sm text-white/70">{helpLine}</p>
+              {!isLoadingView && !isSuccessView && !isErrorView ? (
+                <p className="mt-1 text-sm text-white/70">{helpLine}</p>
+              ) : null}
             </div>
 
-            {/* X */}
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label={t("close")}
               className="text-white/70 hover:text-[var(--accent)] transition-colors text-[34px] leading-none px-2"
             >
@@ -344,279 +440,370 @@ export default function ContactModal({ open, onClose }: ContactModalProps) {
             </button>
           </div>
 
-          {/* BODY */}
-          <div className="relative grid gap-0 lg:grid-cols-[7fr_1px_4fr]">
-            {/* LEFT */}
-            <div className="p-5 sm:p-6">
-              {/* TABS */}
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-w-full">
-                <button
-                  type="button"
-                  onClick={() => switchTab("work")}
-                  className={cx(
-                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
-                    "text-left whitespace-normal break-words",
-                    tab === "work"
-                      ? "text-[var(--accent)]"
-                      : "text-white/85 hover:text-white",
-                  )}
-                >
-                  {t("tabs.work")}
-                </button>
+          {isLoadingView ? (
+            <div className="relative min-h-[440px] flex items-center justify-center px-6 py-10 sm:px-10 sm:py-14">
+              <div
+                className={cx(
+                  "mx-auto flex max-w-xl flex-col items-center text-center transition-all duration-500 ease-out",
+                  stateVisible
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 translate-y-3 scale-95"
+                )}
+              >
+                <div className="flex h-28 w-28 sm:h-32 sm:w-32 items-center justify-center rounded-full border border-[color-mix(in_oklab,var(--accent),white_10%)] bg-[color-mix(in_oklab,var(--accent),transparent_90%)] shadow-[0_0_0_12px_rgba(249,115,22,0.08),0_18px_50px_rgba(249,115,22,0.14)]">
+                  <LoadingSpinner />
+                </div>
 
-                <span className="h-5 w-px bg-white/20 justify-self-center" />
+                <p className="mt-8 text-base sm:text-lg font-semibold leading-relaxed text-white">
+                  {t("states.sending")}
+                </p>
 
-                <button
-                  type="button"
-                  onClick={() => switchTab("career")}
-                  className={cx(
-                    "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
-                    "text-left whitespace-normal break-words",
-                    tab === "career"
-                      ? "text-[var(--accent)]"
-                      : "text-white/85 hover:text-white",
-                  )}
-                >
-                  {t("tabs.career")}
-                </button>
+                <p className="mt-2 text-sm text-white/60">
+                  {t("states.sendingSub")}
+                </p>
               </div>
-
-              <form onSubmit={onSubmit} className="mt-5 space-y-4">
-                {tab === "work" ? (
-                  <>
-                    <Field
-                      label={t("work.fullName")}
-                      value={wName}
-                      onChange={(v) => {
-                        setWName(v);
-                        clearError("wName");
-                      }}
-                      placeholder={t("work.fullNamePh")}
-                      error={errors.wName}
-                    />
-                    <Field
-                      label={t("work.email")}
-                      value={wEmail}
-                      onChange={(v) => {
-                        setWEmail(v);
-                        clearError("wEmail");
-                      }}
-                      placeholder={t("work.emailPh")}
-                      error={errors.wEmail}
-                      inputMode="email"
-                    />
-                    <TextArea
-                      label={t("work.message")}
-                      value={wMsg}
-                      onChange={(v) => {
-                        setWMsg(v);
-                        clearError("wMsg");
-                      }}
-                      placeholder={t("work.messagePh")}
-                      error={errors.wMsg}
-                      rows={5}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Field
-                      label={t("career.fullName")}
-                      value={cName}
-                      onChange={(v) => {
-                        setCName(v);
-                        clearError("cName");
-                      }}
-                      placeholder={t("career.fullNamePh")}
-                      error={errors.cName}
-                    />
-                    <Field
-                      label={t("career.email")}
-                      value={cEmail}
-                      onChange={(v) => {
-                        setCEmail(v);
-                        clearError("cEmail");
-                      }}
-                      placeholder={t("career.emailPh")}
-                      error={errors.cEmail}
-                      inputMode="email"
-                    />
-                    <TextArea
-                      label={t("career.letter")}
-                      value={cLetter}
-                      onChange={(v) => {
-                        setCLetter(v);
-                        clearError("cLetter");
-                      }}
-                      placeholder={t("career.letterPh")}
-                      error={errors.cLetter}
-                      rows={6}
-                    />
-                    <FileField
-                      label={t("career.cv")}
-                      file={cCv}
-                      onPick={(f) => {
-                        setCCv(f);
-                        if (f) clearError("cCv");
-                      }}
-                      error={errors.cCv}
-                      hint={t("career.cvHint")}
-                      chooseText={t("career.chooseFile")}
-                      removeText={t("career.removeFile")}
-                      noneText={t("career.noFile")}
-                    />
-                  </>
+            </div>
+          ) : isSuccessView ? (
+            <div className="relative min-h-[440px] flex items-center justify-center px-6 py-10 sm:px-10 sm:py-14">
+              <div
+                className={cx(
+                  "mx-auto flex max-w-xl flex-col items-center text-center transition-all duration-500 ease-out",
+                  successVisible
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 translate-y-3 scale-95"
                 )}
+              >
+                <div
+                  className={cx(
+                    "relative flex h-28 w-28 sm:h-32 sm:w-32 items-center justify-center rounded-full",
+                    "border border-[color-mix(in_oklab,var(--accent),white_10%)]",
+                    "bg-[color-mix(in_oklab,var(--accent),transparent_86%)]",
+                    "shadow-[0_0_0_12px_rgba(249,115,22,0.10),0_18px_50px_rgba(249,115,22,0.18)]"
+                  )}
+                >
+                  <SuccessCheckIcon />
+                </div>
 
-                {fetchError && (
-                  <p className="text-sm font-semibold text-[var(--accent)]">
-                    {fetchError}
-                  </p>
+                <p className="mt-8 max-w-md text-base sm:text-lg font-semibold leading-relaxed text-white">
+                  {successMessage}
+                </p>
+              </div>
+            </div>
+          ) : isErrorView ? (
+            <div className="relative min-h-[440px] flex items-center justify-center px-6 py-10 sm:px-10 sm:py-14">
+              <div
+                className={cx(
+                  "mx-auto flex max-w-xl flex-col items-center text-center transition-all duration-500 ease-out",
+                  stateVisible
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 translate-y-3 scale-95"
                 )}
+              >
+                <div className="flex h-28 w-28 sm:h-32 sm:w-32 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-[0_18px_50px_rgba(0,0,0,0.18)]">
+                  <ErrorIcon />
+                </div>
 
-                <div className="pt-2">
+                <p className="mt-8 text-lg sm:text-xl font-semibold text-white">
+                  {t("states.errorTitle")}
+                </p>
+
+                <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-white/70">
+                  {fetchError}
+                </p>
+
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <button
-                    type="submit"
-                    className={cx(
-                      "rounded-xl bg-[var(--accent)] text-black",
-                      "px-7 py-3 text-sm font-semibold",
-                      "shadow-[0_10px_30px_rgba(249,115,22,0.25)]",
-                      "transition hover:scale-[1.06] hover:brightness-[1.02] active:scale-[1.02]",
-                    )}
-                    style={{
-                      cursor: "pointer",
-                      transformOrigin: "left center",
+                    type="button"
+                    onClick={() => {
+                      setFetchError(null);
+                      setStateVisible(false);
                     }}
+                    className="rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-black transition hover:scale-[1.03] active:scale-[1.01]"
+                    style={{ cursor: "pointer" }}
                   >
-                    {t("send")}
+                    {t("states.backToForm")}
                   </button>
 
-                  <p className="mt-4 text-xs text-white/50">{t("note")}</p>
-                </div>
-              </form>
-            </div>
-
-            {/* DESKTOP VERTICAL DIVIDER */}
-            <div className="hidden lg:block bg-white/10" aria-hidden="true" />
-
-            {/* RIGHT */}
-            <div className="p-5 sm:p-6">
-              <h4 className="text-sm font-semibold text-white/80">
-                {t("details.title")}
-              </h4>
-
-              {/* MOBILE */}
-              <div className="mt-4 lg:hidden sm:hidden">
-                <div className="divide-y divide-white/12">
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<PhoneIcon />}
-                      label={t("details.phone")}
-                      value={t("details.phoneValue")}
-                    />
-                  </div>
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<MailIcon />}
-                      label={t("details.email")}
-                      value={t("details.emailValue")}
-                    />
-                  </div>
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<PinIcon />}
-                      label={t("details.office")}
-                      value={t("details.officeValue")}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4 h-[280px]">
-                  <MapEmbed heightClass="h-[280px]" />
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {t("close")}
+                  </button>
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="relative grid gap-0 lg:grid-cols-[7fr_1px_4fr]">
+              <div className="p-5 sm:p-6">
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-w-full">
+                  <button
+                    type="button"
+                    onClick={() => switchTab("work")}
+                    className={cx(
+                      "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
+                      "text-left whitespace-normal break-words",
+                      tab === "work"
+                        ? "text-[var(--accent)]"
+                        : "text-white/85 hover:text-white"
+                    )}
+                  >
+                    {t("tabs.work")}
+                  </button>
 
-              {/* TABLET */}
-              <div className="hidden sm:block lg:hidden mt-4">
-                <div className="grid grid-cols-[1fr_1px_1fr] items-start">
-                  <div className="pr-6">
-                    <div className="divide-y divide-white/12">
-                      <div className="py-4">
-                        <DetailRow
-                          icon={<PhoneIcon />}
-                          label={t("details.phone")}
-                          value={t("details.phoneValue")}
-                        />
-                      </div>
-                      <div className="py-4">
-                        <DetailRow
-                          icon={<MailIcon />}
-                          label={t("details.email")}
-                          value={t("details.emailValue")}
-                        />
-                      </div>
-                      <div className="py-4">
-                        <DetailRow
-                          icon={<PinIcon />}
-                          label={t("details.office")}
-                          value={t("details.officeValue")}
-                        />
-                      </div>
+                  <span className="h-5 w-px bg-white/20 justify-self-center" />
+
+                  <button
+                    type="button"
+                    onClick={() => switchTab("career")}
+                    className={cx(
+                      "text-base sm:text-lg font-semibold transition-colors cursor-pointer",
+                      "text-left whitespace-normal break-words",
+                      tab === "career"
+                        ? "text-[var(--accent)]"
+                        : "text-white/85 hover:text-white"
+                    )}
+                  >
+                    {t("tabs.career")}
+                  </button>
+                </div>
+
+                <form onSubmit={onSubmit} className="mt-5 space-y-4">
+                  {tab === "work" ? (
+                    <>
+                      <Field
+                        label={t("work.fullName")}
+                        value={wName}
+                        onChange={(v) => {
+                          setWName(v);
+                          clearError("wName");
+                          clearStatus();
+                        }}
+                        placeholder={t("work.fullNamePh")}
+                        error={errors.wName}
+                      />
+                      <Field
+                        label={t("work.email")}
+                        value={wEmail}
+                        onChange={(v) => {
+                          setWEmail(v);
+                          clearError("wEmail");
+                          clearStatus();
+                        }}
+                        placeholder={t("work.emailPh")}
+                        error={errors.wEmail}
+                        inputMode="email"
+                      />
+                      <TextArea
+                        label={t("work.message")}
+                        value={wMsg}
+                        onChange={(v) => {
+                          setWMsg(v);
+                          clearError("wMsg");
+                          clearStatus();
+                        }}
+                        placeholder={t("work.messagePh")}
+                        error={errors.wMsg}
+                        rows={5}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Field
+                        label={t("career.fullName")}
+                        value={cName}
+                        onChange={(v) => {
+                          setCName(v);
+                          clearError("cName");
+                          clearStatus();
+                        }}
+                        placeholder={t("career.fullNamePh")}
+                        error={errors.cName}
+                      />
+                      <Field
+                        label={t("career.email")}
+                        value={cEmail}
+                        onChange={(v) => {
+                          setCEmail(v);
+                          clearError("cEmail");
+                          clearStatus();
+                        }}
+                        placeholder={t("career.emailPh")}
+                        error={errors.cEmail}
+                        inputMode="email"
+                      />
+                      <TextArea
+                        label={t("career.letter")}
+                        value={cLetter}
+                        onChange={(v) => {
+                          setCLetter(v);
+                          clearError("cLetter");
+                          clearStatus();
+                        }}
+                        placeholder={t("career.letterPh")}
+                        error={errors.cLetter}
+                        rows={6}
+                      />
+                      <FileField
+                        label={t("career.cv")}
+                        file={cCv}
+                        onPick={(f) => {
+                          setCCv(f);
+                          clearStatus();
+                          if (f) clearError("cCv");
+                        }}
+                        error={errors.cCv}
+                        hint={t("career.cvHint")}
+                        chooseText={t("career.chooseFile")}
+                        removeText={t("career.removeFile")}
+                        noneText={t("career.noFile")}
+                        inputKey={fileInputKey}
+                      />
+                    </>
+                  )}
+
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cx(
+                        "rounded-xl bg-[var(--accent)] text-black",
+                        "px-7 py-3 text-sm font-semibold",
+                        "shadow-[0_10px_30px_rgba(249,115,22,0.25)]",
+                        "transition hover:scale-[1.06] hover:brightness-[1.02] active:scale-[1.02]",
+                        isSubmitting &&
+                          "opacity-70 cursor-not-allowed hover:scale-100"
+                      )}
+                      style={{
+                        cursor: isSubmitting ? "not-allowed" : "pointer",
+                        transformOrigin: "left center",
+                      }}
+                    >
+                      {t("send")}
+                    </button>
+
+                    <p className="mt-4 text-xs text-white/50">{t("note")}</p>
+                  </div>
+                </form>
+              </div>
+
+              <div className="hidden lg:block bg-white/10" aria-hidden="true" />
+
+              <div className="p-5 sm:p-6">
+                <h4 className="text-sm font-semibold text-white/80">
+                  {t("details.title")}
+                </h4>
+
+                <div className="mt-4 lg:hidden sm:hidden">
+                  <div className="divide-y divide-white/12">
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<PhoneIcon />}
+                        label={t("details.phone")}
+                        value={t("details.phoneValue")}
+                      />
+                    </div>
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<MailIcon />}
+                        label={t("details.email")}
+                        value={t("details.emailValue")}
+                      />
+                    </div>
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<PinIcon />}
+                        label={t("details.office")}
+                        value={t("details.officeValue")}
+                      />
                     </div>
                   </div>
 
-                  <div
-                    className="bg-white/12 self-stretch"
-                    aria-hidden="true"
-                  />
-
-                  <div className="pl-6">
-                    <MapEmbed heightClass="h-[280px] md:h-[320px]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* DESKTOP */}
-              <div className="hidden lg:block mt-4">
-                <div className="space-y-0 divide-y divide-white/12">
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<PhoneIcon />}
-                      label={t("details.phone")}
-                      value={t("details.phoneValue")}
-                    />
-                  </div>
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<MailIcon />}
-                      label={t("details.email")}
-                      value={t("details.emailValue")}
-                    />
-                  </div>
-                  <div className="py-4">
-                    <DetailRow
-                      icon={<PinIcon />}
-                      label={t("details.office")}
-                      value={t("details.officeValue")}
-                    />
+                  <div className="mt-4 h-[280px]">
+                    <MapEmbed heightClass="h-[280px]" />
                   </div>
                 </div>
 
-                <div className="mt-4 h-px bg-white/12 w-full" />
+                <div className="hidden sm:block lg:hidden mt-4">
+                  <div className="grid grid-cols-[1fr_1px_1fr] items-start">
+                    <div className="pr-6">
+                      <div className="divide-y divide-white/12">
+                        <div className="py-4">
+                          <DetailRow
+                            icon={<PhoneIcon />}
+                            label={t("details.phone")}
+                            value={t("details.phoneValue")}
+                          />
+                        </div>
+                        <div className="py-4">
+                          <DetailRow
+                            icon={<MailIcon />}
+                            label={t("details.email")}
+                            value={t("details.emailValue")}
+                          />
+                        </div>
+                        <div className="py-4">
+                          <DetailRow
+                            icon={<PinIcon />}
+                            label={t("details.office")}
+                            value={t("details.officeValue")}
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="mt-4">
-                  <MapEmbed heightClass="h-[300px]" />
+                    <div
+                      className="bg-white/12 self-stretch"
+                      aria-hidden="true"
+                    />
+
+                    <div className="pl-6">
+                      <MapEmbed heightClass="h-[280px] md:h-[320px]" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hidden lg:block mt-4">
+                  <div className="space-y-0 divide-y divide-white/12">
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<PhoneIcon />}
+                        label={t("details.phone")}
+                        value={t("details.phoneValue")}
+                      />
+                    </div>
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<MailIcon />}
+                        label={t("details.email")}
+                        value={t("details.emailValue")}
+                      />
+                    </div>
+                    <div className="py-4">
+                      <DetailRow
+                        icon={<PinIcon />}
+                        label={t("details.office")}
+                        value={t("details.officeValue")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-4 h-px bg-white/12 w-full" />
+
+                  <div className="mt-4">
+                    <MapEmbed heightClass="h-[300px]" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* /body */}
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-/* ----------------- UI atoms ----------------- */
 
 function Field({
   label,
@@ -649,9 +836,15 @@ function Field({
           "outline-none transition",
           "focus:border-[color-mix(in_oklab,var(--accent),white_10%)]",
           "focus:ring-2 focus:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
+          "[&:-webkit-autofill]:[-webkit-text-fill-color:white]",
+          "[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill]:[caret-color:white]",
+          "[&:-webkit-autofill]:[transition:background-color_9999s_ease-out_0s]",
           error
             ? "border-[color-mix(in_oklab,var(--accent),white_12%)]"
-            : "border-white/10",
+            : "border-white/10"
         )}
       />
       {error ? (
@@ -694,9 +887,15 @@ function TextArea({
           "outline-none transition",
           "focus:border-[color-mix(in_oklab,var(--accent),white_10%)]",
           "focus:ring-2 focus:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
+          "[&:-webkit-autofill]:[-webkit-text-fill-color:white]",
+          "[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0px_1000px_rgba(255,255,255,0.05)_inset]",
+          "[&:-webkit-autofill]:[caret-color:white]",
+          "[&:-webkit-autofill]:[transition:background-color_9999s_ease-out_0s]",
           error
             ? "border-[color-mix(in_oklab,var(--accent),white_12%)]"
-            : "border-white/10",
+            : "border-white/10"
         )}
       />
       {error ? (
@@ -717,6 +916,7 @@ function FileField({
   chooseText,
   removeText,
   noneText,
+  inputKey,
 }: {
   label: string;
   file: File | null;
@@ -726,6 +926,7 @@ function FileField({
   chooseText: string;
   removeText: string;
   noneText: string;
+  inputKey: number;
 }) {
   return (
     <div>
@@ -751,12 +952,13 @@ function FileField({
                 "border border-white/10 bg-white/5",
                 "px-4 py-2 text-sm font-semibold text-white/85",
                 "hover:bg-white/10 hover:text-white transition-colors",
-                "focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]",
+                "focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--accent),transparent_65%)]"
               )}
               style={{ cursor: "pointer" }}
             >
               {chooseText}
               <input
+                key={inputKey}
                 type="file"
                 className="hidden"
                 accept=".pdf,.doc,.docx"
@@ -805,6 +1007,63 @@ function DetailRow({
         <div className="text-sm text-white/90">{value}</div>
       </div>
     </div>
+  );
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="relative h-12 w-12">
+      <div className="absolute inset-0 rounded-full border-4 border-white/10" />
+      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[var(--accent)] border-r-[var(--accent)] animate-spin" />
+    </div>
+  );
+}
+
+function SuccessCheckIcon() {
+  return (
+    <svg
+      width="62"
+      height="62"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className="text-[var(--accent)]"
+    >
+      <path
+        d="M20 7 10 17l-6-6"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ErrorIcon() {
+  return (
+    <svg
+      width="58"
+      height="58"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className="text-[var(--accent)]"
+    >
+      <path
+        d="M12 8v5"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="16.5" r="1.1" fill="currentColor" />
+      <path
+        d="M10.3 3.84 2.82 17a2 2 0 0 0 1.74 3h14.88a2 2 0 0 0 1.74-3L13.7 3.84a2 2 0 0 0-3.48 0Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
