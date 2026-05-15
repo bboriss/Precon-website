@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import Image, { StaticImageData } from "next/image";
 
 type ServiceKey = "precast" | "concrete" | "steel";
@@ -19,10 +25,11 @@ const TEXT_MS = 1000;
 const OFFSET_PX = 24;
 const AUTO_SLIDE_MS = 4600;
 const SECTION_STAGGER_MS = 850;
+const MANUAL_PAUSE_MS = 20000;
 
 function clampIndex(i: number, n: number) {
   if (n <= 0) return 0;
-  return (i % n + n) % n;
+  return ((i % n) + n) % n;
 }
 
 function useInView(options?: IntersectionObserverInit) {
@@ -74,7 +81,8 @@ function CarouselButton({
       aria-label={dir === "prev" ? "Previous slide" : "Next slide"}
       className={[
         "inline-flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full",
-        "border border-white/35 bg-white/72 text-black/75 backdrop-blur-sm",
+        "border border-white/45 bg-white/78 text-black/75 backdrop-blur-sm",
+        "shadow-[0_8px_24px_-14px_rgba(0,0,0,0.45)]",
         "transition duration-300 hover:bg-white hover:text-black"
       ].join(" ")}
     >
@@ -95,7 +103,63 @@ function ServiceCarousel({
   autoplayStartDelayMs?: number;
 }) {
   const [idx, setIdx] = useState(0);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
+
   const hasMany = images.length > 1;
+  const currentIdx = images.length ? clampIndex(idx, images.length) : 0;
+
+  const autoplayTimeoutRef = useRef<number | null>(null);
+  const autoplayIntervalRef = useRef<number | null>(null);
+  const resumeAutoplayTimeoutRef = useRef<number | null>(null);
+  const hasStartedAutoplayRef = useRef(false);
+
+  const clearAutoplayTimers = useCallback(() => {
+    if (autoplayTimeoutRef.current) {
+      window.clearTimeout(autoplayTimeoutRef.current);
+      autoplayTimeoutRef.current = null;
+    }
+
+    if (autoplayIntervalRef.current) {
+      window.clearInterval(autoplayIntervalRef.current);
+      autoplayIntervalRef.current = null;
+    }
+  }, []);
+
+  const pauseAutoplayAfterManualAction = useCallback(() => {
+    if (!hasMany) return;
+
+    hasStartedAutoplayRef.current = true;
+    clearAutoplayTimers();
+    setAutoplayPaused(true);
+
+    if (resumeAutoplayTimeoutRef.current) {
+      window.clearTimeout(resumeAutoplayTimeoutRef.current);
+      resumeAutoplayTimeoutRef.current = null;
+    }
+
+    resumeAutoplayTimeoutRef.current = window.setTimeout(() => {
+      setAutoplayPaused(false);
+      resumeAutoplayTimeoutRef.current = null;
+    }, MANUAL_PAUSE_MS);
+  }, [clearAutoplayTimers, hasMany]);
+
+  const goPrev = useCallback(() => {
+    pauseAutoplayAfterManualAction();
+    setIdx((v) => clampIndex(v - 1, images.length));
+  }, [images.length, pauseAutoplayAfterManualAction]);
+
+  const goNext = useCallback(() => {
+    pauseAutoplayAfterManualAction();
+    setIdx((v) => clampIndex(v + 1, images.length));
+  }, [images.length, pauseAutoplayAfterManualAction]);
+
+  const goToSlide = useCallback(
+    (slideIdx: number) => {
+      pauseAutoplayAfterManualAction();
+      setIdx(clampIndex(slideIdx, images.length));
+    },
+    [images.length, pauseAutoplayAfterManualAction]
+  );
 
   useEffect(() => {
     const reduce =
@@ -103,26 +167,47 @@ function ServiceCarousel({
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!hasMany || reduce) return;
+    clearAutoplayTimers();
 
-    let intervalId: number | undefined;
-    const firstTimeoutId = window.setTimeout(() => {
+    if (!hasMany || reduce || autoplayPaused) return;
+
+    const firstDelay = hasStartedAutoplayRef.current
+      ? AUTO_SLIDE_MS
+      : AUTO_SLIDE_MS + autoplayStartDelayMs;
+
+    autoplayTimeoutRef.current = window.setTimeout(() => {
+      hasStartedAutoplayRef.current = true;
+
       setIdx((v) => clampIndex(v + 1, images.length));
 
-      intervalId = window.setInterval(() => {
+      autoplayIntervalRef.current = window.setInterval(() => {
         setIdx((v) => clampIndex(v + 1, images.length));
       }, AUTO_SLIDE_MS);
-    }, AUTO_SLIDE_MS + autoplayStartDelayMs);
+    }, firstDelay);
 
+    return clearAutoplayTimers;
+  }, [
+    autoplayPaused,
+    autoplayStartDelayMs,
+    clearAutoplayTimers,
+    hasMany,
+    images.length
+  ]);
+
+  useEffect(() => {
     return () => {
-      window.clearTimeout(firstTimeoutId);
-      if (intervalId) window.clearInterval(intervalId);
+      clearAutoplayTimers();
+
+      if (resumeAutoplayTimeoutRef.current) {
+        window.clearTimeout(resumeAutoplayTimeoutRef.current);
+        resumeAutoplayTimeoutRef.current = null;
+      }
     };
-  }, [hasMany, images.length, autoplayStartDelayMs]);
+  }, [clearAutoplayTimers]);
 
   if (!images.length) {
     return (
-      <div className="grid h-[280px] sm:h-[360px] md:h-[420px] place-items-center rounded-[28px] bg-black/5 text-black/40">
+      <div className="grid h-[280px] sm:h-[360px] md:h-[420px] place-items-center bg-white text-black/40">
         No images
       </div>
     );
@@ -130,23 +215,29 @@ function ServiceCarousel({
 
   return (
     <div className="w-full">
-      <div className="relative overflow-hidden rounded-[28px] bg-black/5">
-        <div className="relative h-[280px] sm:h-[360px] md:h-[420px]">
+      <div className="relative overflow-hidden bg-white">
+        <div className="relative h-[280px] sm:h-[360px] md:h-[420px] bg-white">
           <div
             className="flex h-full transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
-            style={{ transform: `translate3d(-${idx * 100}%, 0, 0)` }}
+            style={{
+              transform: `translate3d(-${currentIdx * 100}%, 0, 0)`
+            }}
           >
             {images.map((img, slideIdx) => (
               <div
-                key={typeof img === "string" ? `${img}-${slideIdx}` : `${img.src}-${slideIdx}`}
-                className="relative h-full w-full shrink-0 grow-0 basis-full"
+                key={
+                  typeof img === "string"
+                    ? `${img}-${slideIdx}`
+                    : `${img.src}-${slideIdx}`
+                }
+                className="relative h-full w-full shrink-0 grow-0 basis-full bg-white"
               >
                 <Image
                   src={img}
                   alt={`${title} ${slideIdx + 1}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 60vw"
-                  className="object-cover"
+                  className="object-contain"
                   priority={slideIdx === 0}
                 />
               </div>
@@ -156,17 +247,11 @@ function ServiceCarousel({
           {hasMany && (
             <>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4">
-                <CarouselButton
-                  dir="prev"
-                  onClick={() => setIdx((v) => clampIndex(v - 1, images.length))}
-                />
+                <CarouselButton dir="prev" onClick={goPrev} />
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 md:pr-4">
-                <CarouselButton
-                  dir="next"
-                  onClick={() => setIdx((v) => clampIndex(v + 1, images.length))}
-                />
+                <CarouselButton dir="next" onClick={goNext} />
               </div>
             </>
           )}
@@ -177,13 +262,19 @@ function ServiceCarousel({
         <div className="mt-5 flex items-center justify-center gap-2.5">
           {images.map((img, dotIdx) => (
             <button
-              key={typeof img === "string" ? `dot-${img}-${dotIdx}` : `dot-${img.src}-${dotIdx}`}
+              key={
+                typeof img === "string"
+                  ? `dot-${img}-${dotIdx}`
+                  : `dot-${img.src}-${dotIdx}`
+              }
               type="button"
-              onClick={() => setIdx(dotIdx)}
+              onClick={() => goToSlide(dotIdx)}
               aria-label={`Go to slide ${dotIdx + 1}`}
               className={[
                 "h-2.5 w-2.5 rounded-full transition duration-300",
-                dotIdx === idx ? "scale-110 bg-black/75" : "bg-black/20 hover:bg-black/40"
+                dotIdx === currentIdx
+                  ? "scale-110 bg-black/75"
+                  : "bg-black/20 hover:bg-black/40"
               ].join(" ")}
             />
           ))}
@@ -235,7 +326,9 @@ function ServiceRow({
             ].join(" ")}
           >
             <div
-              className={inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
+              className={
+                inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+              }
               style={imageStyle}
             >
               <ServiceCarousel
@@ -246,14 +339,21 @@ function ServiceRow({
             </div>
           </div>
 
-          <div className={["md:col-span-5", reverse ? "md:order-1" : "md:order-2"].join(" ")}>
+          <div
+            className={[
+              "md:col-span-5",
+              reverse ? "md:order-1" : "md:order-2"
+            ].join(" ")}
+          >
             <div
               className={inView ? "opacity-100" : "opacity-0"}
               style={{
                 ...textStyle,
                 transform: inView
                   ? "translate3d(0,0,0)"
-                  : `translate3d(${reverse ? -OFFSET_PX : OFFSET_PX}px, 4px, 0)`
+                  : `translate3d(${
+                      reverse ? -OFFSET_PX : OFFSET_PX
+                    }px, 4px, 0)`
               }}
             >
               <div className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-black/35">

@@ -143,18 +143,18 @@ export default function SiteFooter() {
                   <div className="relative overflow-visible">
                     <button
                       type="button"
-                      aria-label="Facebook"
+                      aria-label="Instagram"
                       aria-disabled="true"
-                      onMouseEnter={(e) => showTooltip("facebook", e)}
-                      onMouseMove={(e) => showTooltip("facebook", e)}
+                      onMouseEnter={(e) => showTooltip("instagram", e)}
+                      onMouseMove={(e) => showTooltip("instagram", e)}
                       onMouseLeave={hideTooltip}
                       onClick={(e) => e.preventDefault()}
                       className={disabledSocialBtn}
                     >
-                      <IconFacebook className="h-4 w-4" />
+                      <IconInstagram className="h-4 w-4" />
                     </button>
 
-                    {tooltip.key === "facebook" ? (
+                    {tooltip.key === "instagram" ? (
                       <span
                         className="pointer-events-none absolute z-20 whitespace-nowrap rounded-md border border-white/10 bg-[rgba(10,14,22,0.88)] px-2 py-1 text-[11px] font-medium tracking-[0.01em] text-white/58 shadow-lg"
                         style={{
@@ -170,18 +170,18 @@ export default function SiteFooter() {
                   <div className="relative overflow-visible">
                     <button
                       type="button"
-                      aria-label="Instagram"
+                      aria-label="Facebook"
                       aria-disabled="true"
-                      onMouseEnter={(e) => showTooltip("instagram", e)}
-                      onMouseMove={(e) => showTooltip("instagram", e)}
+                      onMouseEnter={(e) => showTooltip("facebook", e)}
+                      onMouseMove={(e) => showTooltip("facebook", e)}
                       onMouseLeave={hideTooltip}
                       onClick={(e) => e.preventDefault()}
                       className={disabledSocialBtn}
                     >
-                      <IconInstagram className="h-4 w-4" />
+                      <IconFacebook className="h-4 w-4" />
                     </button>
 
-                    {tooltip.key === "instagram" ? (
+                    {tooltip.key === "facebook" ? (
                       <span
                         className="pointer-events-none absolute z-20 whitespace-nowrap rounded-md border border-white/10 bg-[rgba(10,14,22,0.88)] px-2 py-1 text-[11px] font-medium tracking-[0.01em] text-white/58 shadow-lg"
                         style={{

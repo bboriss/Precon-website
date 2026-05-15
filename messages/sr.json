@@ -11,7 +11,7 @@
   },
   "stats": {
     "projects": "Uspešni projekti",
-    "rebarArea": "Detaljisanje armature (m²)",
+    "rebarArea": "Planovi armature",
     "clients": "Zadovoljni klijenti"
   },
   "expertise": {
@@ -108,7 +108,7 @@
     "ctaButton": "Kontaktirajte nas"
   },
   "clients": {
-    "title": "Naši klijenti"
+    "title": "Naši partneri"
   },
   "contactModal": {
     "title": "Contact",

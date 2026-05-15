@@ -59,8 +59,8 @@ export default async function Page({
         title={t("hero.title")}
         subtitle={t("hero.subtitle")}
         stats={[
-          { value: 120, label: t("stats.projects"), suffix: "+" },
-          { value: 150000, label: t("stats.rebarArea"), suffix: "m²" },
+          { value: 60, label: t("stats.projects"), suffix: "+" },
+          { value: 120000, label: t("stats.rebarArea"), suffix: "m²" },
           { value: 10, label: t("stats.clients"), suffix: "+" }
         ]}
       />
