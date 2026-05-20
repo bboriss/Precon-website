@@ -25,8 +25,9 @@ export const metadata: Metadata = {
     }
   },
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png"
+    icon: "/icon.png?v=5",
+    shortcut: "/icon.png?v=5",
+    apple: "/Logo2.png?v=5"
   },
   openGraph: {
     siteName: SITE_NAME,
