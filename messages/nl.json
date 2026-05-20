@@ -11,7 +11,7 @@
   },
   "stats": {
     "projects": "Succesvolle projecten",
-    "rebarArea": "Wapeningsdetailering (m²)",
+    "rebarArea": "Wapeningsdetaillering (m²)",
     "clients": "Tevreden klanten"
   },
   "expertise": {
@@ -23,7 +23,7 @@
         "body": "Ontwerp van prefab elementen zoals wanden, vloeren, liggers en kolommen met BIM-coördinatie en detaillering van wapening, verbindingen en montage. Focus: produceerbaarheid, toleranties en snelle montage."
       },
       "concrete": {
-        "title": "Gewapende betonconstructies",
+        "title": "Gewapendbetonconstructies",
         "body": "Constructief ontwerp in gewapend beton met heldere berekeningen, rationele detaillering en betrouwbare documentatie. Optimalisatie van doorsneden en wapening in afstemming met andere disciplines."
       },
       "steel": {
@@ -35,20 +35,20 @@
         "body": "Leveringsplanning, taakopvolging en duidelijke communicatieworkflows. Focus: deadlines, transparantie en kwaliteitsbewaking gedurende het hele project."
       },
       "software": {
-        "title": "Maatwerk softwareoplossingen",
-        "body": "Automatisering en tools voor engineeringworkflows: AutoLISP voor hogere productiviteit in AutoCAD, C#/.NET-plugins en utilities, en JavaScript-oplossingen (Node.js + web) voor dashboards, calculators en bestandsverwerking."
+        "title": "Softwareoplossingen op maat",
+        "body": "Automatisering en tools voor technische workflows: AutoLISP voor hogere productiviteit in AutoCAD, C#/.NET-plugins en utilities, en JavaScript-oplossingen (Node.js + web) voor dashboards, rekentools en bestandsverwerking."
       }
     }
   },
   "about": {
     "title": "Over ons",
-    "p1": "PRECON Design is een ingenieursbureau gevestigd in Niš (Servië), gericht op constructief ontwerp, wapeningsdetailering en BIM-ondersteuning voor internationale partners.",
+    "p1": "PRECON Design is een ingenieursbureau gevestigd in Niš (Servië), gericht op constructief ontwerp, wapeningsdetaillering en BIM-ondersteuning voor internationale partners.",
     "p2": "Geografisch zijn wij goed gepositioneerd om samen te werken met Europese teams — met snelle communicatie, duidelijke standaarden en verzorgde documentatie gedurende de volledige projectcyclus.",
     "p3": "Niš is een universiteitsstad met een sterke technische basis en een constante instroom van jong talent, wat zorgt voor stabiele teamgroei en betrouwbare levering, ook onder strakke planningen."
   },
   "servicesPage": {
     "title": "Diensten",
-    "lead": "Wij bieden constructief ontwerp, detaillering en BIM-ondersteuning voor prefab beton-, beton- en staalconstructies — met focus op duidelijkheid, coördinatie en productierijpe documentatie.",
+    "lead": "Wij bieden constructief ontwerp, detaillering en BIM-ondersteuning voor prefab beton-, gewapendbeton- en staalconstructies — met focus op duidelijkheid, coördinatie en productierijpe documentatie.",
     "items": {
       "precast": {
         "title": "Prefab betonconstructies",
@@ -57,8 +57,8 @@
         "p2": "Het doel is niet alleen om een constructieve oplossing te leveren, maar om heldere, gecoördineerde en praktische documentatie op te stellen die aansluit op echte productie- en projectprocessen."
       },
       "concrete": {
-        "title": "Betonconstructies",
-        "lead": "Uitwerking van gewapend-betonsystemen met focus op constructieve logica, wapeningsdetailering, multidisciplinaire coördinatie en betrouwbare technische documentatie.",
+        "title": "Gewapendbetonconstructies",
+        "lead": "Uitwerking van gewapendbetonsystemen met focus op constructieve logica, wapeningsdetaillering, multidisciplinaire coördinatie en betrouwbare technische documentatie.",
         "p1": "Onze werkzaamheden omvatten constructieve analyse, technische uitwerking, wapeningsplanning en afstemming met architectuur en MEP-disciplines gedurende verschillende projectfasen.",
         "p2": "Wij streven naar documentatie die technisch consistent, overzichtelijk en afgestemd is op de praktische eisen van de uitvoering op de bouwplaats."
       },
@@ -72,7 +72,7 @@
   },
   "aboutPage": {
     "heroTitle": "Wie wij zijn",
-    "heroLead": "Precon Design is een ingenieurspartner met focus op prefab betonconstructies, gewapend beton en staalconstructies, met een praktische BIM-gerichte aanpak voor coördinatie en productierijpe documentatie.",
+    "heroLead": "PRECON Design is een ingenieurspartner met focus op prefab beton-, gewapendbeton- en staalconstructies, met een praktische BIM-gerichte aanpak voor coördinatie en productierijpe documentatie.",
     "processTitle": "Hoe wij werken",
     "processLead": "Onze werkwijze is gebaseerd op duidelijke technische communicatie, sterke coördinatie en documentatie die bruikbaar is voor zowel het ontwerpteam als de productie.",
     "processItems": {
@@ -94,11 +94,11 @@
       },
       "item5": {
         "title": "Automatisering en tools",
-        "body": "Wij gebruiken interne tools en gestandaardiseerde workflows voor sneller werk, minder handmatige fouten en betere documentcontrole."
+        "body": "Wij gebruiken interne tools en gestandaardiseerde workflows om sneller te werken, handmatige fouten te verminderen en documentatie beter te controleren."
       },
       "item6": {
         "title": "Efficiënte oplevering",
-        "body": "De focus ligt op duidelijke, bruikbare en productiegerichte deliverables die de volgende projectstappen versnellen."
+        "body": "De focus ligt op duidelijke, bruikbare en productiegerichte resultaten die de volgende projectstappen versnellen."
       }
     },
     "softwareTitle": "Software die wij gebruiken",
@@ -135,8 +135,8 @@
       "emailPh": "naam@email.com",
       "letter": "Motivatiebrief",
       "letterPh": "Korte introductie, waar je in uitblinkt en waarom je bij ons wilt komen werken…",
-      "cv": "CV / Resume",
-      "cvHint": "PDF of DOCX, tot 10MB.",
+      "cv": "CV",
+      "cvHint": "PDF of DOCX, tot 10 MB.",
       "chooseFile": "Bestand kiezen",
       "removeFile": "Verwijderen",
       "noFile": "Geen bestand geselecteerd"
@@ -146,7 +146,7 @@
       "email": "Voer een geldig e-mailadres in.",
       "message": "Het bericht moet minimaal 10 tekens bevatten.",
       "letter": "De motivatiebrief moet minimaal 30 tekens bevatten.",
-      "cv": "Voeg uw CV toe.",
+      "cv": "Voeg uw cv toe.",
       "tooManyRequests": "Te veel verzoeken. Probeer het later opnieuw."
     },
     "details": {

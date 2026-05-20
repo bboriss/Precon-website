@@ -31,6 +31,8 @@ export default function HeroVideo({
             loop
             playsInline
             preload="metadata"
+            poster="/hero-poster.webp"
+            aria-hidden="true"
           >
             <source src={src} type="video/mp4" />
           </video>

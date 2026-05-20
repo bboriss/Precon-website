@@ -392,7 +392,7 @@ export default function ServicesShowcase({
   items: ServiceShowcaseItem[];
 }) {
   return (
-    <section className="bg-[var(--section-bg)] pt-8 pb-14 md:pt-10 md:pb-20">
+    <section className="bg-[var(--section-bg)] pt-8 pb-8 md:pt-10 md:pb-10">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="max-w-4xl">
           <h1 className="text-[2rem] md:text-[2.6rem] font-semibold tracking-tight text-[var(--ink)] leading-[1.06]">

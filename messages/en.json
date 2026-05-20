@@ -11,7 +11,7 @@
   },
   "stats": {
     "projects": "Successful projects",
-    "rebarArea": "Rebar detailing (m²)",
+    "rebarArea": "Reinforcement detailing (m²)",
     "clients": "Satisfied clients"
   },
   "expertise": {
@@ -42,13 +42,13 @@
   },
   "about": {
     "title": "About us",
-    "p1": "PRECON Design is an engineering office based in Niš (Serbia), focused on structural design, reinforcement detailing and BIM support for international partners.",
+    "p1": "PRECON Design is an engineering firm based in Niš (Serbia), focused on structural design, reinforcement detailing and BIM support for international partners.",
     "p2": "Geographically, we are well positioned to collaborate with European teams — fast communication, clear standards and clean documentation throughout the project lifecycle.",
     "p3": "Niš is a university city with a strong engineering base and a steady inflow of young talent, enabling stable team growth and reliable delivery even on tight schedules."
   },
   "servicesPage": {
     "title": "Services",
-    "lead": "We provide structural engineering, detailing and BIM support for precast concrete, concrete and steel structures — with a focus on clarity, coordination and production-ready documentation.",
+    "lead": "We provide structural engineering, detailing and BIM support for precast concrete, reinforced concrete and steel structures — with a focus on clarity, coordination and production-ready documentation.",
     "items": {
       "precast": {
         "title": "Precast concrete structures",
@@ -57,7 +57,7 @@
         "p2": "The goal is not only to deliver a structural solution, but to prepare clear, coordinated and practical documentation that fits real production and project workflows."
       },
       "concrete": {
-        "title": "Concrete structures",
+        "title": "Reinforced concrete structures",
         "lead": "Development of reinforced concrete systems with a focus on structural logic, reinforcement detailing, multidisciplinary coordination and dependable technical documentation.",
         "p1": "Our work includes structural analysis, technical development, reinforcement planning and coordination with architecture and MEP disciplines throughout different project stages.",
         "p2": "We aim to produce documentation that is technically consistent, easy to follow and aligned with practical execution requirements on site."
@@ -72,7 +72,7 @@
   },
   "aboutPage": {
     "heroTitle": "Who we are",
-    "heroLead": "Precon Design is an engineering partner focused on precast concrete, reinforced concrete and steel structures, with a practical BIM-oriented approach to coordination and production-ready documentation.",
+    "heroLead": "PRECON Design is an engineering partner focused on precast concrete, reinforced concrete and steel structures, with a practical BIM-oriented approach to coordination and production-ready documentation.",
     "processTitle": "How we work",
     "processLead": "Our workflow is built around clear technical communication, strong coordination and documentation that is useful both for the design team and for production.",
     "processItems": {
@@ -112,14 +112,14 @@
   },
   "contactModal": {
     "title": "Contact",
-    "help": "Usually we reply within 1–2 business days.",
+    "help": "We usually reply within 1–2 business days.",
     "close": "Close",
     "tabs": {
       "work": "Let’s work together",
       "career": "Want to be part of PRECON?"
     },
     "send": "Send",
-    "note": "By sending this form you agree that we may contact you back via email.",
+    "note": "By sending this form, you agree that we may contact you by email.",
     "work": {
       "fullName": "Full name",
       "fullNamePh": "Your full name",
@@ -136,7 +136,7 @@
       "letter": "Motivation letter",
       "letterPh": "Short intro, what you do best, and why you want to join…",
       "cv": "CV / Resume",
-      "cvHint": "PDF or DOCX, up to 10MB.",
+      "cvHint": "PDF or DOCX, up to 10 MB.",
       "chooseFile": "Choose file",
       "removeFile": "Remove",
       "noFile": "No file selected"

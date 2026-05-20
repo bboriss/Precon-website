@@ -48,7 +48,7 @@
   },
   "servicesPage": {
     "title": "Leistungen",
-    "lead": "Wir bieten Tragwerksplanung, Detaillierung und BIM-Unterstützung für Fertigteilbeton-, Beton- und Stahlkonstruktionen — mit Fokus auf Klarheit, Koordination und produktionsgerechte Dokumentation.",
+    "lead": "Wir bieten Tragwerksplanung, Detaillierung und BIM-Unterstützung für Fertigteilbeton-, Stahlbeton- und Stahlkonstruktionen — mit Fokus auf Klarheit, Koordination und produktionsgerechte Dokumentation.",
     "items": {
       "precast": {
         "title": "Vorgefertigte Betonkonstruktionen",
@@ -57,7 +57,7 @@
         "p2": "Ziel ist nicht nur die Lieferung einer statischen Lösung, sondern die Erstellung klarer, koordinierter und praxisnaher Unterlagen für reale Produktions- und Projektabläufe."
       },
       "concrete": {
-        "title": "Betonkonstruktionen",
+        "title": "Stahlbetonkonstruktionen",
         "lead": "Entwicklung von Stahlbetonsystemen mit Fokus auf Tragwerkslogik, Bewehrungsdetaillierung, interdisziplinäre Koordination und verlässliche technische Dokumentation.",
         "p1": "Unsere Leistungen umfassen Tragwerksanalyse, technische Ausarbeitung, Bewehrungsplanung und die Abstimmung mit Architektur und TGA über verschiedene Projektphasen hinweg.",
         "p2": "Unser Ziel ist eine Dokumentation, die technisch konsistent, leicht nachvollziehbar und auf die praktischen Anforderungen der Ausführung abgestimmt ist."
@@ -72,7 +72,7 @@
   },
   "aboutPage": {
     "heroTitle": "Wer wir sind",
-    "heroLead": "Precon Design ist ein Ingenieurpartner mit Fokus auf Fertigteilbeton-, Stahlbeton- und Stahlkonstruktionen sowie auf einen praxisorientierten BIM-Ansatz für Koordination und produktionsgerechte Dokumentation.",
+    "heroLead": "PRECON Design ist ein Ingenieurpartner mit Fokus auf Fertigteilbeton-, Stahlbeton- und Stahlkonstruktionen sowie auf einen praxisorientierten BIM-Ansatz für Koordination und produktionsgerechte Dokumentation.",
     "processTitle": "Wie wir arbeiten",
     "processLead": "Unsere Arbeitsweise basiert auf klarer technischer Kommunikation, starker Koordination und Dokumentation, die sowohl für das Planungsteam als auch für die Produktion nutzbar ist.",
     "processItems": {
@@ -136,7 +136,7 @@
       "letter": "Motivationsschreiben",
       "letterPh": "Kurze Vorstellung, Ihre Stärken und warum Sie Teil unseres Teams werden möchten…",
       "cv": "CV / Lebenslauf",
-      "cvHint": "PDF oder DOCX, bis 10MB.",
+      "cvHint": "PDF oder DOCX, bis 10 MB.",
       "chooseFile": "Datei auswählen",
       "removeFile": "Entfernen",
       "noFile": "Keine Datei ausgewählt"

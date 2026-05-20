@@ -1,17 +1,29 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 import AboutUsSection from "@/components/AboutUsSection";
 import AboutFlowSection from "@/components/AboutFlowSection";
 import AboutPageHero from "@/components/AboutPageHero";
-import SoftwareLogoStrip, { type SoftwareItem } from "@/components/SoftwareLogoStrip";
 import ContactCtaButton from "@/components/ContactCtaButton";
+import { isLocale } from "@/i18n/locales";
+import { pageMetadata } from "@/lib/seo";
 
-export default async function AboutPage({
-  params
-}: {
+type AboutPageProps = {
   params: Promise<{ locale: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
+
+  return pageMetadata(locale, "about", "about");
+}
+
+export default async function AboutPage({ params }: AboutPageProps) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
   const t = await getTranslations({ locale });
 
   const gridItems = [
@@ -41,18 +53,6 @@ export default async function AboutPage({
     }
   ];
 
-  const softwareItems: SoftwareItem[] = [
-    { name: "Autocad", src: "/softwares/Autocad.png", logoClassName: "scale-[0.9]" },
-    { name: "BIMcollab", src: "/softwares/BIMcollab.png" },
-    { name: "Dlubal", src: "/softwares/Dlubal.png", logoClassName: "scale-[1.00]" },
-    { name: "FINEC", src: "/softwares/FINEC.png", logoClassName: "scale-[1.58]" },
-    { name: "Matrix", src: "/softwares/Matrix.png", logoClassName: "scale-[1.12]" },
-    { name: "Radimpex Software", src: "/softwares/RadimpexSoftware.png", logoClassName: "scale-[1.85]" },
-    { name: "Revit", src: "/softwares/Revit.png", logoClassName: "scale-[1.1]" },
-    { name: "Rootsoft", src: "/softwares/rootsoft.nl.png", logoClassName: "scale-[1.00]" },
-    { name: "SketchUp", src: "/softwares/Sketchup.png" }
-  ];
-
   return (
     <div className="bg-[var(--section-bg)]">
       <AboutPageHero
@@ -71,12 +71,6 @@ export default async function AboutPage({
         title={t("aboutPage.processTitle")}
         lead={t("aboutPage.processLead")}
         items={gridItems}
-      />
-
-      <SoftwareLogoStrip
-        title={t("aboutPage.softwareTitle")}
-        lead={t("aboutPage.softwareLead")}
-        items={softwareItems}
       />
 
       <section className="bg-[var(--section-bg)] pt-8 pb-14 md:pt-9 md:pb-18">

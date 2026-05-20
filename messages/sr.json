@@ -11,7 +11,7 @@
   },
   "stats": {
     "projects": "Uspešni projekti",
-    "rebarArea": "Planovi armature",
+    "rebarArea": "Detaljisanje armature (m²)",
     "clients": "Zadovoljni klijenti"
   },
   "expertise": {
@@ -36,7 +36,7 @@
       },
       "software": {
         "title": "Prilagođena softverska rešenja",
-        "body": "Automatizacija i alati za inženjerske procese: AutoLISP za veću produktivnost u AutoCAD-u, C#/.NET dodaci i alati, kao i JavaScript rešenja (Node.js + web) za dashboarde, kalkulatore i obradu fajlova."
+        "body": "Automatizacija i alati za inženjerske procese: AutoLISP za veću produktivnost u AutoCAD-u, C#/.NET dodaci i alati, kao i JavaScript rešenja (Node.js + web) za kontrolne table, kalkulatore i obradu fajlova."
       }
     }
   },
@@ -48,7 +48,7 @@
   },
   "servicesPage": {
     "title": "Usluge",
-    "lead": "Pružamo usluge projektovanja konstrukcija, detaljisanja i BIM podrške za prefabrikovane betonske, betonske i čelične konstrukcije — sa fokusom na jasnoću, koordinaciju i dokumentaciju spremnu za proizvodnju.",
+    "lead": "Pružamo usluge projektovanja konstrukcija, detaljisanja i BIM podrške za prefabrikovane betonske, armiranobetonske i čelične konstrukcije — sa fokusom na jasnoću, koordinaciju i dokumentaciju spremnu za proizvodnju.",
     "items": {
       "precast": {
         "title": "Prefabrikovane betonske konstrukcije",
@@ -57,7 +57,7 @@
         "p2": "Cilj nije samo da se isporuči statičko rešenje, već da se pripremi jasna, koordinisana i praktična dokumentacija prilagođena realnoj proizvodnji i toku projekta."
       },
       "concrete": {
-        "title": "Betonske konstrukcije",
+        "title": "Armiranobetonske konstrukcije",
         "lead": "Razrada armiranobetonskih sistema sa fokusom na statičku logiku, detaljisanje armature, multidisciplinarnu koordinaciju i pouzdanu tehničku dokumentaciju.",
         "p1": "Naš rad obuhvata statičke analize, tehničku razradu, planiranje armature i koordinaciju sa arhitekturom i MEP strukama kroz različite faze projekta.",
         "p2": "Cilj nam je da pripremimo dokumentaciju koja je tehnički dosledna, pregledna i usklađena sa praktičnim zahtevima izvođenja na gradilištu."
@@ -72,7 +72,7 @@
   },
   "aboutPage": {
     "heroTitle": "Ko smo mi",
-    "heroLead": "Precon Design je inženjerski partner fokusiran na prefabrikovane betonske, armiranobetonske i čelične konstrukcije, sa praktičnim BIM pristupom koordinaciji i dokumentaciji spremnoj za proizvodnju.",
+    "heroLead": "PRECON Design je inženjerski partner fokusiran na prefabrikovane betonske, armiranobetonske i čelične konstrukcije, sa praktičnim BIM pristupom koordinaciji i dokumentaciji spremnoj za proizvodnju.",
     "processTitle": "Kako radimo",
     "processLead": "Naš način rada zasniva se na jasnoj tehničkoj komunikaciji, dobroj koordinaciji i dokumentaciji koja je upotrebljiva i za projektni tim i za proizvodnju.",
     "processItems": {
@@ -94,11 +94,11 @@
       },
       "item5": {
         "title": "Automatizacija i alati",
-        "body": "Koristimo interne alate i standardizovane workflow-e za brži rad, manje ručnih grešaka i lakšu kontrolu dokumentacije."
+        "body": "Koristimo interne alate i standardizovane tokove rada za brži rad, manje ručnih grešaka i lakšu kontrolu dokumentacije."
       },
       "item6": {
         "title": "Efikasna isporuka",
-        "body": "Fokus je na jasnim, upotrebljivim i proizvodno orijentisanim deliverable-ima koji ubrzavaju sledeće korake projekta."
+        "body": "Fokus je na jasnim, upotrebljivim i proizvodno orijentisanim isporukama koje ubrzavaju sledeće korake projekta."
       }
     },
     "softwareTitle": "Softveri koje koristimo",
@@ -111,63 +111,63 @@
     "title": "Naši partneri"
   },
   "contactModal": {
-    "title": "Contact",
-    "help": "Usually we reply within 1–2 business days.",
-    "close": "Close",
+    "title": "Kontakt",
+    "help": "Obično odgovaramo u roku od 1–2 radna dana.",
+    "close": "Zatvori",
     "tabs": {
-      "work": "Let’s work together",
-      "career": "Want to be part of PRECON?"
+      "work": "Hajde da sarađujemo",
+      "career": "Želite da postanete deo PRECON-a?"
     },
-    "send": "Send",
-    "note": "By sending this form you agree that we may contact you back via email.",
+    "send": "Pošalji",
+    "note": "Slanjem ovog formulara saglasni ste da vas kontaktiramo putem e-maila.",
     "work": {
-      "fullName": "Full name",
-      "fullNamePh": "Your full name",
-      "email": "Email",
-      "emailPh": "name@company.com",
-      "message": "Message",
-      "messagePh": "Tell us about your project, timeline and expected scope…"
+      "fullName": "Ime i prezime",
+      "fullNamePh": "Vaše ime i prezime",
+      "email": "E-mail",
+      "emailPh": "ime@kompanija.com",
+      "message": "Poruka",
+      "messagePh": "Recite nam više o projektu, rokovima i očekivanom obimu posla…"
     },
     "career": {
-      "fullName": "Full name",
-      "fullNamePh": "Your full name",
-      "email": "Email",
-      "emailPh": "name@email.com",
-      "letter": "Motivation letter",
-      "letterPh": "Short intro, what you do best, and why you want to join…",
-      "cv": "CV / Resume",
-      "cvHint": "PDF or DOCX, up to 10MB.",
-      "chooseFile": "Choose file",
-      "removeFile": "Remove",
-      "noFile": "No file selected"
+      "fullName": "Ime i prezime",
+      "fullNamePh": "Vaše ime i prezime",
+      "email": "E-mail",
+      "emailPh": "ime@email.com",
+      "letter": "Motivaciono pismo",
+      "letterPh": "Kratko predstavljanje, vaše glavne veštine i zašto želite da se pridružite našem timu…",
+      "cv": "CV / biografija",
+      "cvHint": "PDF ili DOCX, do 10 MB.",
+      "chooseFile": "Izaberite fajl",
+      "removeFile": "Ukloni",
+      "noFile": "Nije izabran nijedan fajl"
     },
     "errors": {
-      "fullName": "Please enter first and last name.",
-      "email": "Enter a valid email.",
-      "message": "Message should be at least 10 characters.",
-      "letter": "Motivation letter should be at least 30 characters.",
-      "cv": "Please attach your CV.",
-      "tooManyRequests": "Too many requests. Please try again later."
+      "fullName": "Unesite ime i prezime.",
+      "email": "Unesite važeću e-mail adresu.",
+      "message": "Poruka treba da ima najmanje 10 karaktera.",
+      "letter": "Motivaciono pismo treba da ima najmanje 30 karaktera.",
+      "cv": "Priložite svoj CV.",
+      "tooManyRequests": "Previše zahteva. Pokušajte ponovo kasnije."
     },
     "details": {
-      "title": "Contact details",
-      "phone": "Phone",
-      "email": "Email",
-      "office": "Address",
+      "title": "Kontakt podaci",
+      "phone": "Telefon",
+      "email": "E-mail",
+      "office": "Adresa",
       "phoneValue": "+381 63 469 538",
       "emailValue": "info@precondesign.rs",
-      "officeValue": "Blagoja Parovica 1b, Niš, Serbia"
+      "officeValue": "Blagoja Parovića 1b, Niš, Srbija"
     },
     "success": {
-      "work": "Your message has been sent successfully. Thank you, we will get back to you soon.",
-      "career": "Your application has been sent successfully. Thank you, we will get back to you soon."
+      "work": "Vaša poruka je uspešno poslata. Hvala vam, javićemo vam se uskoro.",
+      "career": "Vaša prijava je uspešno poslata. Hvala vam, javićemo vam se uskoro."
     },
     "states": {
-      "sending": "Sending your message...",
-      "sendingSub": "Please wait a moment.",
-      "errorTitle": "Something went wrong",
-      "errorDefault": "Your message could not be sent right now. Please try again.",
-      "backToForm": "Back to form"
+      "sending": "Slanje poruke...",
+      "sendingSub": "Sačekajte trenutak.",
+      "errorTitle": "Došlo je do greške",
+      "errorDefault": "Vaša poruka trenutno nije mogla da bude poslata. Pokušajte ponovo.",
+      "backToForm": "Nazad na formular"
     }
   },
   "footer": {
@@ -178,9 +178,20 @@
     "contactTitle": "Kontakt",
     "locationLabel": "Lokacija",
     "locationValue": "Niš, Srbija",
-    "emailLabel": "Email",
+    "emailLabel": "E-mail",
     "phoneLabel": "Telefon",
     "contactCta": "Kontakt",
     "rights": "Sva prava zadržana."
+  },
+  "success": {
+    "work": "Vaša poruka je uspešno poslata. Hvala vam, javićemo vam se uskoro.",
+    "career": "Vaša prijava je uspešno poslata. Hvala vam, javićemo vam se uskoro."
+  },
+  "states": {
+    "sending": "Slanje poruke...",
+    "sendingSub": "Sačekajte trenutak.",
+    "errorTitle": "Došlo je do greške",
+    "errorDefault": "Vaša poruka trenutno nije mogla da bude poslata. Pokušajte ponovo.",
+    "backToForm": "Nazad na formular"
   }
 }

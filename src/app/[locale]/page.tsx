@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 import HeroVideo from "@/components/HeroVideo";
 import ExpertiseSection, { ExpertiseItem } from "@/components/ExpertiseSection";
@@ -6,13 +8,23 @@ import AboutUsSection from "@/components/AboutUsSection";
 import OurClientsSection from "@/components/OurClientsSection";
 
 import { PREFAB_IMAGES, BETON_IMAGES, CELIK_IMAGES } from "@/assets/expertise";
+import { isLocale } from "@/i18n/locales";
+import { organizationJsonLd, pageMetadata, safeJsonLd } from "@/lib/seo";
 
-export default async function Page({
-  params
-}: {
+type PageProps = {
   params: Promise<{ locale: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
+
+  return pageMetadata(locale, "home");
+}
+
+export default async function Page({ params }: PageProps) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
 
   const t = await getTranslations({ locale });
 
@@ -54,6 +66,11 @@ export default async function Page({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd(locale)) }}
+      />
+
       <HeroVideo
         src="/hero.mp4"
         title={t("hero.title")}
