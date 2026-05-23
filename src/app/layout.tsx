@@ -21,38 +21,42 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
-      "max-video-preview": -1
-    }
+      "max-video-preview": -1,
+    },
   },
   icons: {
     icon: "/icon.png?v=5",
     shortcut: "/icon.png?v=5",
-    apple: "/Logo2.png?v=5"
+    apple: "/Logo2.png?v=5",
   },
   openGraph: {
     siteName: SITE_NAME,
     type: "website",
     images: [
       {
-        url: absoluteUrl("/og-image.png"),
+        url: absoluteUrl("/Logo2.png"),
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — structural engineering and BIM support`
-      }
-    ]
+        alt: `${SITE_NAME} — structural engineering and BIM support`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    images: [absoluteUrl("/og-image.png")]
-  }
+    images: [absoluteUrl("/Logo2.png")],
+  },
 };
 
 export const viewport: Viewport = {
   themeColor: "#1e2430",
-  colorScheme: "light"
+  colorScheme: "light",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>{children}</body>
