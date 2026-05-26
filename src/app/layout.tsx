@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
+// import
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
