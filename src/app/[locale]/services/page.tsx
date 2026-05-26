@@ -34,7 +34,7 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
     { name: "Radimpex Software", src: "/softwares/RadimpexSoftware.png", logoClassName: "scale-[1.85]" },
     { name: "Revit", src: "/softwares/Revit.png", logoClassName: "scale-[1.1]" },
     { name: "Rootsoft", src: "/softwares/rootsoft.nl.png", logoClassName: "scale-[1.00]" },
-    // { name: "SketchUp", src: "/softwares/sketchup1.png" }
+    { name: "SketchUp", src: "/softwares/sketchup.png" }
   ];
 
   const items: ServiceShowcaseItem[] = [
